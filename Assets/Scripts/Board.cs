@@ -26,19 +26,39 @@ public class Board : MonoBehaviour
     {
 
 
-      /*  for (int t = 0; t < numbers.Length; t++)
-        {
-            string tmp = numbers[t];
-            int r = Random.Range(t, numbers.Length);
-            numbers[t] = numbers[r];
-            numbers[r] = tmp;
-        }*/
+      int[,] numbers = new int[width, height];
+     
+     for (int i = 0; i < width; i++)
+      { 
+       for (int j = 0; j < height; j++)
+        { 
+        numbers[i, j] = j + 1;
+        
+       // Console.Write(numbers[i,j]);
+        }
+     //   Console.Write("\n");
+      }
+      
+ //Console.Write("\n");    
+for (int tp = 0; tp < numbers.Length; tp++)
+      {  
+for (int t = 0; t < numbers.Length; t++)
+  { 
+  int tmp = numbers[tp,t]; 
+  int r = Random.Range(t, numbers.Length);
+  numbers[tp,t] = numbers[tp,r];
+  numbers[tp,r] = tmp;
+  
+  //Console.Write(numbers[tp,t]);
+        }
+        //Console.Write("\n");
+      } 
     }
 
     private void SetUp()
     {
-        int[,] numbers = new int[width, height];
-;
+       // int[,] numbers = new int[width, height];
+
         for (int i = 0; i < width; i++)
         {
              for (int j = 0; j < height; j++)
