@@ -232,14 +232,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02904d9bf06021441829f899ac8091b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 3
-  height: 3
+  width: 9
+  height: 9
   tilePrefab: {fileID: 8861097465063249931, guid: 4b72e076d4a700445922ed697ded8bf7,
     type: 3}
   dots:
   - {fileID: 4369894751642725644, guid: d06d01bb8bd24814f909fce639af06b8, type: 3}
   - {fileID: 576136662354486289, guid: 97eb1a44a1ad1844393ea6c1ba902eea, type: 3}
   - {fileID: 918242463621734876, guid: 34e99723e22e17d4085cd1e24aa575ee, type: 3}
+  - {fileID: 6969605966214038746, guid: 91634162f4a809a45b2e4330678ef1ab, type: 3}
+  - {fileID: 8668271125072984541, guid: 71aa23a4f55253c4d9bf98fb13fde290, type: 3}
+  - {fileID: 9047347265665729659, guid: cc3fcaa3bd86886479d4c04c865a841a, type: 3}
+  - {fileID: 4721215829417802721, guid: d8da2f04ed6dd3340a15af8adc4a09da, type: 3}
+  - {fileID: 2344109698101105054, guid: 9b440783695360c429d4c2f97f9f5097, type: 3}
+  - {fileID: 590946992983873115, guid: 07d64942121175346a8adeae0284dea9, type: 3}
 --- !u!4 &891968231
 Transform:
   m_ObjectHideFlags: 0

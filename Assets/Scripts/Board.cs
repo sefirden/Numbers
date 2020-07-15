@@ -11,6 +11,7 @@ public class Board : MonoBehaviour
     public GameObject[] dots;
 
     private BackgroundTile[,] allTiles;
+    private int[,] numbers;
     public GameObject[,] allDots; 
     
     // Start is called before the first frame update
@@ -18,6 +19,7 @@ public class Board : MonoBehaviour
     {
         allTiles = new BackgroundTile[width, height];
         allDots = new GameObject[width, height];
+        numbers = new int[width, height];
         Shuffle();
         SetUp();
     }
@@ -25,48 +27,36 @@ public class Board : MonoBehaviour
     private void Shuffle()
     {
 
-
-      int[,] numbers = new int[width, height];
-     
-     for (int i = 0; i < width; i++)
-      { 
-       for (int j = 0; j < height; j++)
+    for (int i = 0; i < width; i++)
         { 
-        numbers[i, j] = j + 1;
+            for (int j = 0; j < height; j++)
+            { 
+                numbers[i, j] = j;
         
-       // Console.Write(numbers[i,j]);
+            }
         }
-     //   Console.Write("\n");
-      }
-      
- //Console.Write("\n");    
-for (int tp = 0; tp < numbers.Length; tp++)
-      {  
-for (int t = 0; t < numbers.Length; t++)
-  { 
-  int tmp = numbers[tp,t]; 
-  int r = Random.Range(t, numbers.Length);
-  numbers[tp,t] = numbers[tp,r];
-  numbers[tp,r] = tmp;
+       
+    for (int tp = 0; tp < width; tp++)
+        {  
+            for (int t = 0; t < height; t++)
+            { 
+                int tmp = numbers[tp,t]; 
+                int r = UnityEngine.Random.Range(t, height);
+                int rp = UnityEngine.Random.Range(tp, width);
+                numbers[tp,t] = numbers[rp,r];
+                numbers[rp,r] = tmp;
   
-  //Console.Write(numbers[tp,t]);
-        }
-        //Console.Write("\n");
-      } 
+            }
+        } 
     }
 
     private void SetUp()
     {
-       // int[,] numbers = new int[width, height];
 
         for (int i = 0; i < width; i++)
         {
              for (int j = 0; j < height; j++)
             {
-
-                numbers[i, j] = j + 1;
-                Debug.LogWarning(numbers[i, j]);
-
                 Vector2 tempPosition = new Vector2(i, j);
                 GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
                 backgroundTile.transform.parent = this.transform;
