@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ public class Dot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         targetX = column;
         targetY = row;
@@ -40,7 +41,7 @@ public class Dot : MonoBehaviour
         }
         else
         {
-            //Directly set the popsition
+            //Directly set the position
             tempPosition = new Vector2(targetX, transform.position.y);
             transform.position = tempPosition;
             board.allDots[column, row] = this.gameObject;
@@ -54,20 +55,31 @@ public class Dot : MonoBehaviour
         }
         else
         {
-            //Directly set the popsition
+            //Directly set the position
             tempPosition = new Vector2(transform.position.x, targetY);
             transform.position = tempPosition;
             board.allDots[column, row] = this.gameObject;
         }
 
 
-    }
+    }*/
+
+    //OnMouseDown()
+    //нажимаем мышку - записываем первую точку в список, при свайпе считаем угол и кидаем в ту сторону райкастер и проверяем "совместимость" цифр по порядку,
+    //если совместимо записываем вторую точку в список, и уже при свайпе проверяем от этой точки как от начальной
+
+    //OnMouseUp()
+    //при отпускании мышки отдельным методом записываем очки - суммируем числа в списке [1;2;3;4] и множим на количество в списке (*4)
+    //следующим отдельным методом убираем цифры с доски и заполняем пустое место
+    //следкющий отдельный метод проверяет есть ли комбинации и и если их нет то конец игры
+
 
     private void OnMouseDown()
     {
         firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //Debug.Log(firstTouchPosition);
+        Debug.Log(firstTouchPosition);
 
+        //тут добавляем первый элемент в список
     }
 
     private void OnMouseUp()
@@ -79,9 +91,18 @@ public class Dot : MonoBehaviour
     void CalculateAngle()
     {
         swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
-        //Debug.Log(swipeAngle);
-        MovePieces();
+        Debug.Log(swipeAngle);
+       // MovePieces();
+        CollectNumbers();
     }
+
+    //выделять цифру и добавлять в отдельный масив, и потом проверять правильный порядок цифр и если порядок ок, то засчитывать очки и очищать масив
+    private void CollectNumbers()
+    {
+        throw new NotImplementedException();
+    }
+
+
 
     void MovePieces()
     {
