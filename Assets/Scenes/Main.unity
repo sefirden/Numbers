@@ -246,6 +246,7 @@ MonoBehaviour:
   - {fileID: 4721215829417802721, guid: d8da2f04ed6dd3340a15af8adc4a09da, type: 3}
   - {fileID: 2344109698101105054, guid: 9b440783695360c429d4c2f97f9f5097, type: 3}
   - {fileID: 590946992983873115, guid: 07d64942121175346a8adeae0284dea9, type: 3}
+  CollectedNumbers: []
 --- !u!4 &891968231
 Transform:
   m_ObjectHideFlags: 0
