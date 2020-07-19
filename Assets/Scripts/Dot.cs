@@ -6,8 +6,8 @@ using UnityEngine;
 public class Dot : MonoBehaviour
 {
 
-    public int column;
-    public int row;
+    public float column;
+    public float row;
     public int targetX;
     public int targetY;
     private Board board;
@@ -19,15 +19,14 @@ public class Dot : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<Board>();
-        row = targetY;
-        column = targetX;
+        row = transform.position.y;
+        column = transform.position.x;
     }
      
     void Update()
     {
-        targetX = column;
-        targetY = row;
-
+        //transform.Translate.x = column;
+        //transform.position.y = row;
     }
 
     //--------------------------

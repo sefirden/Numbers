@@ -20,6 +20,8 @@ public class Board : MonoBehaviour
     private int index;
     private int score;
 
+    private bool move;
+
 
     // Start is called before the first frame update
     void Start()
@@ -81,21 +83,47 @@ public class Board : MonoBehaviour
                 }
 
         }
-        
-
         else if (Input.GetMouseButtonUp(0))//отпускаем кнопку мышки
         {
+            tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             // _checkInput = false;
             Score(); //считаем очки
             Destroy(); //удаляем собранные цифры
+            Invoke("Decrease", 0.4f); //только через инвок срабатывает при первом дестрое
 
+            Invoke("Refilling", 1f); //заполняем пустое место вниз
 
-            tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             Array.Clear(CollectedNumbers,0,CollectedNumbers.Length); //обнуляем собранные цифры
             index = 0;
         }
 
     }
+
+    private void Refilling()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
+                    Debug.LogWarning("start refilling");
+                    Vector2 tempPosition = new Vector2(i, j);
+                    GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
+                    backgroundTile.transform.parent = this.transform;
+                    backgroundTile.name = "( " + i + ", " + j + " )";
+
+                    int dotToUse = UnityEngine.Random.Range(1, width);
+                    GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
+                    dot.transform.parent = this.transform;
+                    dot.name = "( " + i + ", " + j + " )";
+
+                    allDots[i, j] = dot;
+                }
+            }
+        }
+    }
+
     private void Score()
     {
         int quantity = 0;
@@ -111,20 +139,48 @@ public class Board : MonoBehaviour
         }
         score += tempScore * quantity;
         Debug.LogWarning("Score: " + score);
-    }
+    } //считает очки
 
-    private void Destroy()
+    private void Destroy() //удаляем собранные элементы
     {
         for (int i = 0; i < CollectedNumbers.Length; i++)
         {
             Destroy(CollectedNumbers[i]);
             CollectedNumbers[i] = null;
         }
+
     }
 
+    private void Decrease() //запускает короутин
+    {
+        StartCoroutine(DecreaseRow()); //отпускаем ряды, пока не работает
+    }
 
+    private IEnumerator DecreaseRow()
+    {
+        Debug.LogWarning("START COROUTINE");
+        float nullCount = 0;
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i,j] == null)
+                {
+                    nullCount ++;
+                }
+                else if(nullCount > 0)
+                {
+                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z);
+                    //Debug.LogError("Translate " + allDots[i, j]);
+                }
+            }
+            nullCount = 0;
+        }
+        yield return new WaitForSeconds(0.4f);
+        Debug.LogWarning("END COROUTINE");
+    }
 
-    GameObject ClickSelect()
+    private void ClickSelect()
     {
         //Converting Mouse Pos to 2D (vector2) World Pos
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
@@ -141,10 +197,11 @@ public class Board : MonoBehaviour
             hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
             tempObject = hit.transform.gameObject;
 
-
-            return hit.transform.gameObject;
         }
-        else return null;
+        else
+        {
+            Debug.Log("not item");
+        }
     }
 
     private void Shuffle() //перемешиваем доску
@@ -179,7 +236,7 @@ public class Board : MonoBehaviour
         for (int i = 0; i < width; i++)
         {
              for (int j = 0; j < height; j++)
-            {
+             {
                 Vector2 tempPosition = new Vector2(i, j);
                 GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
                 backgroundTile.transform.parent = this.transform;
@@ -191,7 +248,7 @@ public class Board : MonoBehaviour
                 dot.name = "( " + i + ", " + j + " )";
 
                 allDots[i, j] = dot;
-            }
+             }
         }
     }
 
