@@ -89,9 +89,10 @@ public class Board : MonoBehaviour
             // _checkInput = false;
             Score(); //считаем очки
             Destroy(); //удаляем собранные цифры
+
             Invoke("Decrease", 0.4f); //только через инвок срабатывает при первом дестрое
 
-            Invoke("Refilling", 1f); //заполняем пустое место вниз
+           // Invoke("Refilling", 1f); //заполняем пустое место вниз
 
             Array.Clear(CollectedNumbers,0,CollectedNumbers.Length); //обнуляем собранные цифры
             index = 0;
@@ -109,9 +110,6 @@ public class Board : MonoBehaviour
                 {
                     Debug.LogWarning("start refilling");
                     Vector2 tempPosition = new Vector2(i, j);
-                    GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
-                    backgroundTile.transform.parent = this.transform;
-                    backgroundTile.name = "( " + i + ", " + j + " )";
 
                     int dotToUse = UnityEngine.Random.Range(1, width);
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
@@ -159,7 +157,9 @@ public class Board : MonoBehaviour
     private IEnumerator DecreaseRow()
     {
         Debug.LogWarning("START COROUTINE");
-        float nullCount = 0;
+        int nullCount = 0;
+        GameObject temp;
+        GameObject tempNull;
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -167,11 +167,18 @@ public class Board : MonoBehaviour
                 if (allDots[i,j] == null)
                 {
                     nullCount ++;
+                    tempNull = allDots[i, j];
+                    //Debug.LogWarning("tempNull: " + tempNull + i + j);
                 }
                 else if(nullCount > 0)
                 {
-                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z);
-                    //Debug.LogError("Translate " + allDots[i, j]);
+                    temp = allDots[i, j];
+                    Debug.LogWarning("temp: " + temp);
+                    allDots[i, j - nullCount] = temp;
+
+                    //allDots[i, j].GetComponent<Dot>()
+                    //allDots[i, j].transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z);
+
                 }
             }
             nullCount = 0;
@@ -240,12 +247,12 @@ public class Board : MonoBehaviour
                 Vector2 tempPosition = new Vector2(i, j);
                 GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
                 backgroundTile.transform.parent = this.transform;
-                backgroundTile.name = "( " + i + ", " + j + " )";
+                backgroundTile.name = "n ( " + i + ", " + j + " )";
 
                 int dotToUse = numbers[i,j]; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
                 GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                 dot.transform.parent = this.transform;
-                dot.name = "( " + i + ", " + j + " )";
+                dot.name = "t ( " + i + ", " + j + " )";
 
                 allDots[i, j] = dot;
              }
