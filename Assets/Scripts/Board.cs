@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Board : MonoBehaviour
     public int height;
     public GameObject tilePrefab;
     public GameObject[] dots;
+
+    public Text scoreText;
 
     private BackgroundTile[,] allTiles;
     private int[,] numbers;
@@ -38,6 +41,7 @@ public class Board : MonoBehaviour
 
     void Update()
     {
+        scoreText.text = Convert.ToString(score);
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
@@ -59,9 +63,6 @@ public class Board : MonoBehaviour
                 {
                     if(Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1) //если текущая цифра больше предыдущей на 1
                     {
-                    CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив
-                    index++;
-
 
                     tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
 
@@ -90,12 +91,11 @@ public class Board : MonoBehaviour
             Score(); //считаем очки
             Destroy(); //удаляем собранные цифры
 
-            Invoke("Decrease", 0.4f); //только через инвок срабатывает при первом дестрое
+           // Invoke("Decrease", 0.4f); //только через инвок срабатывает при первом дестрое
 
-           // Invoke("Refilling", 1f); //заполняем пустое место вниз
+            Invoke("Refilling", 1f); //заполняем пустое место вниз
 
-            Array.Clear(CollectedNumbers,0,CollectedNumbers.Length); //обнуляем собранные цифры
-            index = 0;
+
         }
 
     }
@@ -106,15 +106,18 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                if (allDots[i, j] == null)
+                if (allDots[i, j].GetComponent<Dot>().transform.tag == "null")
                 {
+                    GameObject toDelete = allDots[i, j].GetComponent<Dot>().transform.gameObject;
                     Debug.LogWarning("start refilling");
-                    Vector2 tempPosition = new Vector2(i, j);
+                    Vector2 tempPosition = new Vector2(allDots[i, j].GetComponent<Dot>().transform.position.x, allDots[i, j].GetComponent<Dot>().transform.position.y);
 
                     int dotToUse = UnityEngine.Random.Range(1, width);
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                     dot.transform.parent = this.transform;
                     dot.name = "( " + i + ", " + j + " )";
+
+                    Destroy(toDelete);
 
                     allDots[i, j] = dot;
                 }
@@ -141,11 +144,20 @@ public class Board : MonoBehaviour
 
     private void Destroy() //удаляем собранные элементы
     {
-        for (int i = 0; i < CollectedNumbers.Length; i++)
-        {
+        for (int i = 0; i < index; i++)
+        {                      
+            GameObject dot = Instantiate(dots[9], CollectedNumbers[i].transform.position, Quaternion.identity);
+            dot.transform.parent = this.transform;
+            dot.name = "new ( " + Convert.ToInt32(CollectedNumbers[i].transform.position.x) + ", " + Convert.ToInt32(CollectedNumbers[i].transform.position.y) + " )";
+
+            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)] = dot;
+
             Destroy(CollectedNumbers[i]);
             CollectedNumbers[i] = null;
         }
+
+        Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
+        index = 0;
 
     }
 
@@ -157,31 +169,36 @@ public class Board : MonoBehaviour
     private IEnumerator DecreaseRow()
     {
         Debug.LogWarning("START COROUTINE");
-        int nullCount = 0;
-        GameObject temp;
-        GameObject tempNull;
+        float nullCount = 0;
+        float temp = 0;
+
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                if (allDots[i,j] == null)
+
+                if (allDots[i,j].GetComponent<Dot>().transform.tag == "null")
                 {
-                    nullCount ++;
-                    tempNull = allDots[i, j];
-                    //Debug.LogWarning("tempNull: " + tempNull + i + j);
+                    nullCount++;
                 }
                 else if(nullCount > 0)
                 {
-                    temp = allDots[i, j];
-                    Debug.LogWarning("temp: " + temp);
-                    allDots[i, j - nullCount] = temp;
-
-                    //allDots[i, j].GetComponent<Dot>()
-                    //allDots[i, j].transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z);
-
+                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z,Space.World);
+                    temp++;
                 }
             }
+
+            for (int j = 0; j < height; j++)
+            {
+
+                if (allDots[i, j].GetComponent<Dot>().transform.tag == "null")
+                {
+                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y + temp, transform.position.z, Space.World);
+                }
+            }
+
             nullCount = 0;
+            temp = 0;
         }
         yield return new WaitForSeconds(0.4f);
         Debug.LogWarning("END COROUTINE");
@@ -200,9 +217,11 @@ public class Board : MonoBehaviour
             startPosition = hit.transform.position;
             Debug.Log("first click position " + startPosition);
 
-
             hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
             tempObject = hit.transform.gameObject;
+
+            CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив
+            index++;
 
         }
         else
