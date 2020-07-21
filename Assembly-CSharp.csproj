@@ -65,7 +65,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BackgroundTile.cs" />
     <Compile Include="Assets\Scripts\Board.cs" />
-    <Compile Include="Assets\Scripts\Dot.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

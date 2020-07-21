@@ -234,7 +234,7 @@ public class Board : MonoBehaviour
                 else if (nullCount > 0)
                 {
 
-                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z, Space.World);
+                    allDots[i, j].transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z, Space.World);
                     allDots[i, j - nullCount] = allDots[i, j];
 
                     allDots[i, j] = null;
@@ -258,7 +258,7 @@ public class Board : MonoBehaviour
                 {
                     Vector2 tempPosition = new Vector2(i, j);
 
-                    int dotToUse = UnityEngine.Random.Range(1, width);
+                    int dotToUse = UnityEngine.Random.Range(0, width);
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                     dot.transform.parent = this.transform;
                     dot.name = "( " + i + ", " + j + " )";
@@ -273,10 +273,10 @@ public class Board : MonoBehaviour
 
     private void CheckEndGame()
     {
-        Debug.LogWarning(allDots[0, 0].transform.position);
-        Vector3 startCheck = allDots[0, 0].transform.position;
+        Debug.LogWarning(allDots[1, 1].transform.position);
+        Vector3 startCheck = allDots[1, 1].transform.position;
 
-        Collider[] hitColliders = Physics.OverlapSphere(startCheck, 20f);
+        Collider[] hitColliders = Physics.OverlapSphere(startCheck, 1.2f, 0);
         Debug.Log(hitColliders.Length);
 
         for (var i = 0; i < hitColliders.Length; i++)
@@ -284,6 +284,6 @@ public class Board : MonoBehaviour
             Debug.Log(hitColliders[i].transform.parent.tag);
             // collect information on the hits here
         }
-
     }
+
 }
