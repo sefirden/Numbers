@@ -17,6 +17,7 @@ public class Board : MonoBehaviour
     private int[,] numbers;
     public GameObject[,] allDots;
     public GameObject[] CollectedNumbers;
+    public GameObject[,] Destroyed;
 
     private Vector2 startPosition, endPosition;
     private GameObject tempObject;
@@ -31,6 +32,7 @@ public class Board : MonoBehaviour
     {
         allTiles = new BackgroundTile[width, height];
         allDots = new GameObject[width, height];
+        Destroyed = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[9]; //максимальная длина цепочки - 9
         index = 0;
@@ -53,21 +55,21 @@ public class Board : MonoBehaviour
             // _selectedTiles.Clear();
             //_checkInput = true;
         }
-        else if(Input.GetMouseButton(0)) //когда мышь зажата
+        else if (Input.GetMouseButton(0)) //когда мышь зажата
         {
             Debug.DrawRay(startPosition, endPosition); //для отладки
 
-                RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
+            RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
 
-                if (hit2) //если что-то поймали лайнкастом
+            if (hit2) //если что-то поймали лайнкастом
+            {
+                if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1) //если текущая цифра больше предыдущей на 1
                 {
-                    if(Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1) //если текущая цифра больше предыдущей на 1
-                    {
 
                     tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
 
                     Debug.Log(hit2.transform.tag);
-                
+
                     hit2.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем у текущего тайла колайдер, чтобы лайнкаст его не цеплял
                     tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер
 
@@ -77,11 +79,11 @@ public class Board : MonoBehaviour
                     CollectedNumbers[index] = hit2.transform.gameObject; //записываем в массив
                     index++;
                 }
-                    else
-                    {
+                else
+                {
                     Debug.LogWarning("wrong number");
-                    }
                 }
+            }
 
         }
         else if (Input.GetMouseButtonUp(0))//отпускаем кнопку мышки
@@ -89,119 +91,62 @@ public class Board : MonoBehaviour
             tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             // _checkInput = false;
             Score(); //считаем очки
-            Destroy(); //удаляем собранные цифры
 
-           // Invoke("Decrease", 0.4f); //только через инвок срабатывает при первом дестрое
 
-            Invoke("Refilling", 1f); //заполняем пустое место вниз
+            // Decrease();
+            // Refilling();
+            //Invoke("Decrease", 0.4f); //только через инвок срабатывает при первом дестрое
+
+            //Invoke("Refilling", 1f); //заполняем пустое место вниз
 
 
         }
 
     }
 
-    private void Refilling()
+    private void Shuffle() //перемешиваем доску
     {
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                if (allDots[i, j].GetComponent<Dot>().transform.tag == "null")
-                {
-                    GameObject toDelete = allDots[i, j].GetComponent<Dot>().transform.gameObject;
-                    Debug.LogWarning("start refilling");
-                    Vector2 tempPosition = new Vector2(allDots[i, j].GetComponent<Dot>().transform.position.x, allDots[i, j].GetComponent<Dot>().transform.position.y);
-
-                    int dotToUse = UnityEngine.Random.Range(1, width);
-                    GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
-                    dot.transform.parent = this.transform;
-                    dot.name = "( " + i + ", " + j + " )";
-
-                    Destroy(toDelete);
-
-                    allDots[i, j] = dot;
-                }
-            }
-        }
-    }
-
-    private void Score()
-    {
-        int quantity = 0;
-        int tempScore = 0;
-
-        for (int i = 0; i < CollectedNumbers.Length; i++)
-        {
-            if (CollectedNumbers[i] != null && Convert.ToInt32(CollectedNumbers[i].tag) > 0)
-            {
-                tempScore += Convert.ToInt32(CollectedNumbers[i].tag);
-                quantity++;
-            }
-        }
-        score += tempScore * quantity;
-        Debug.LogWarning("Score: " + score);
-    } //считает очки
-
-    private void Destroy() //удаляем собранные элементы
-    {
-        for (int i = 0; i < index; i++)
-        {                      
-            GameObject dot = Instantiate(dots[9], CollectedNumbers[i].transform.position, Quaternion.identity);
-            dot.transform.parent = this.transform;
-            dot.name = "new ( " + Convert.ToInt32(CollectedNumbers[i].transform.position.x) + ", " + Convert.ToInt32(CollectedNumbers[i].transform.position.y) + " )";
-
-            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)] = dot;
-
-            Destroy(CollectedNumbers[i]);
-            CollectedNumbers[i] = null;
-        }
-
-        Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
-        index = 0;
-
-    }
-
-    private void Decrease() //запускает короутин
-    {
-        StartCoroutine(DecreaseRow()); //отпускаем ряды, пока не работает
-    }
-
-    private IEnumerator DecreaseRow()
-    {
-        Debug.LogWarning("START COROUTINE");
-        float nullCount = 0;
-        float temp = 0;
 
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
+                numbers[i, j] = j;
 
-                if (allDots[i,j].GetComponent<Dot>().transform.tag == "null")
-                {
-                    nullCount++;
-                }
-                else if(nullCount > 0)
-                {
-                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z,Space.World);
-                    temp++;
-                }
             }
+        }
 
+        for (int tp = 0; tp < width; tp++)
+        {
+            for (int t = 0; t < height; t++)
+            {
+                int tmp = numbers[tp, t];
+                int r = UnityEngine.Random.Range(t, height);
+                int rp = UnityEngine.Random.Range(tp, width);
+                numbers[tp, t] = numbers[rp, r];
+                numbers[rp, r] = tmp;
+
+            }
+        }
+    }
+
+    private void SetUp() //заполняем доску
+    {
+
+        for (int i = 0; i < width; i++)
+        {
             for (int j = 0; j < height; j++)
             {
+                Vector2 tempPosition = new Vector2(i, j);
 
-                if (allDots[i, j].GetComponent<Dot>().transform.tag == "null")
-                {
-                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y + temp, transform.position.z, Space.World);
-                }
+                int dotToUse = numbers[i, j]; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
+                GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
+                dot.transform.parent = this.transform;
+                dot.name = "t ( " + i + ", " + j + " )";
+
+                allDots[i, j] = dot;
             }
-
-            nullCount = 0;
-            temp = 0;
         }
-        yield return new WaitForSeconds(0.4f);
-        Debug.LogWarning("END COROUTINE");
     }
 
     private void ClickSelect()
@@ -230,53 +175,115 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void Shuffle() //перемешиваем доску
+    private void Score() //считает очки
     {
+        int quantity = 0;
+        int tempScore = 0;
 
-    for (int i = 0; i < width; i++)
-        { 
-            for (int j = 0; j < height; j++)
-            { 
-                numbers[i, j] = j;
-        
+        for (int i = 0; i < CollectedNumbers.Length; i++)
+        {
+            if (CollectedNumbers[i] != null && Convert.ToInt32(CollectedNumbers[i].tag) > 0)
+            {
+                tempScore += Convert.ToInt32(CollectedNumbers[i].tag);
+                quantity++;
             }
         }
-       
-    for (int tp = 0; tp < width; tp++)
-        {  
-            for (int t = 0; t < height; t++)
-            { 
-                int tmp = numbers[tp,t]; 
-                int r = UnityEngine.Random.Range(t, height);
-                int rp = UnityEngine.Random.Range(tp, width);
-                numbers[tp,t] = numbers[rp,r];
-                numbers[rp,r] = tmp;
-  
-            }
-        } 
+        if (quantity > 1) //если выбрана больше чем 1 цифра
+        {
+            score += tempScore * quantity;
+            Debug.LogWarning("Score: " + score);
+            Destroy(); //удаляем собранные цифры
+        }
+        else
+        {
+            Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
+            index = 0;
+        }
+
     }
 
-    private void SetUp() //заполняем доску
+
+    private void Destroy() //удаляем собранные элементы
     {
+        //удаляем собранные--------------------------------------------
+        for (int i = 0; i < index; i++)
+        {
+            Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)]); //удаляем все собранные объекты
+            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)] = null;
+            // CollectedNumbers[i] = null; //очищаем список собранных цифр
+        }
+        Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
+        index = 0;
+
+        //двигаем ряды вниз--------------------------------------------
+        StartCoroutine(DecreaseRow());
+    }
+    private IEnumerator DecreaseRow() //private IEnumerator DecreaseRow()
+    {
+        Debug.LogWarning("START COROUTINE");
+        int nullCount = 0;
 
         for (int i = 0; i < width; i++)
         {
-             for (int j = 0; j < height; j++)
-             {
-                Vector2 tempPosition = new Vector2(i, j);
-                GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
-                backgroundTile.transform.parent = this.transform;
-                backgroundTile.name = "n ( " + i + ", " + j + " )";
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
+                    nullCount++;
+                }
+                else if (nullCount > 0)
+                {
 
-                int dotToUse = numbers[i,j]; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
-                GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
-                dot.transform.parent = this.transform;
-                dot.name = "t ( " + i + ", " + j + " )";
+                    allDots[i, j].GetComponent<Dot>().transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z, Space.World);
+                    allDots[i, j - nullCount] = allDots[i, j];
 
-                allDots[i, j] = dot;
-             }
+                    allDots[i, j] = null;
+                }
+            }
+            nullCount = 0;
         }
+        yield return new WaitForSeconds(0.4f);
+        Debug.LogWarning("END COROUTINE");
+
+        Refilling();
     }
 
+    private void Refilling()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
+                    Vector2 tempPosition = new Vector2(i, j);
 
+                    int dotToUse = UnityEngine.Random.Range(1, width);
+                    GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
+                    dot.transform.parent = this.transform;
+                    dot.name = "( " + i + ", " + j + " )";
+
+                    allDots[i, j] = dot;
+                }
+            }
+
+        }
+        CheckEndGame();
+    }
+
+    private void CheckEndGame()
+    {
+        Debug.LogWarning(allDots[0, 0].transform.position);
+        Vector3 startCheck = allDots[0, 0].transform.position;
+
+        Collider[] hitColliders = Physics.OverlapSphere(startCheck, 20f);
+        Debug.Log(hitColliders.Length);
+
+        for (var i = 0; i < hitColliders.Length; i++)
+        {
+            Debug.Log(hitColliders[i].transform.parent.tag);
+            // collect information on the hits here
+        }
+
+    }
 }
