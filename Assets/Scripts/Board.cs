@@ -8,16 +8,15 @@ public class Board : MonoBehaviour
 {
     public int width;
     public int height;
-    public GameObject tilePrefab;
+
     public GameObject[] dots;
 
     public Text scoreText;
-
-    private BackgroundTile[,] allTiles;
+    public Text endGame;
+    public bool countStep;
     private int[,] numbers;
     public GameObject[,] allDots;
     public GameObject[] CollectedNumbers;
-    public GameObject[,] Destroyed;
 
     private Vector2 startPosition, endPosition;
     private GameObject tempObject;
@@ -30,11 +29,11 @@ public class Board : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        allTiles = new BackgroundTile[width, height];
+
         allDots = new GameObject[width, height];
-        Destroyed = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[9]; //максимальная длина цепочки - 9
+
         index = 0;
         score = 0;
         Shuffle();
@@ -273,17 +272,37 @@ public class Board : MonoBehaviour
 
     private void CheckEndGame()
     {
-        Debug.LogWarning(allDots[1, 1].transform.position);
-        Vector3 startCheck = allDots[1, 1].transform.position;
+        countStep = false;
 
-        Collider[] hitColliders = Physics.OverlapSphere(startCheck, 1.2f, 0);
-        Debug.Log(hitColliders.Length);
-
-        for (var i = 0; i < hitColliders.Length; i++)
+        for (int i = 0; i < width; i++)
         {
-            Debug.Log(hitColliders[i].transform.parent.tag);
-            // collect information on the hits here
+            for (int j = 0; j < height; j++)
+            {
+                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
+
+                for (var k = 0; k < hitColliders.Length; k++)
+                {
+                    if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                    {
+                        Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
+                        countStep = true;
+                        break;
+                    }
+                    else if(Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == -1)
+                    {
+                        Debug.LogWarning("есть возможный ход: " + hitColliders[k].transform.tag + ">" + allDots[i, j].transform.tag);
+                        countStep = true;
+                        break;
+                    }
+                }
+                Array.Clear(hitColliders, 0, hitColliders.Length);
+            }
         }
+        if(countStep == false)
+        {
+            endGame.text = "GAME OVER";
+        }
+
     }
 
 }
