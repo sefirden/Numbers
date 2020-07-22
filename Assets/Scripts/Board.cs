@@ -13,7 +13,7 @@ public class Board : MonoBehaviour
 
     public Text scoreText;
     public Text endGame;
-    public bool countStep;
+    private bool countStep;
     private int[,] numbers;
     public GameObject[,] allDots;
     public GameObject[] CollectedNumbers;

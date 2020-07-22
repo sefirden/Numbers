@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Board.cs" />
+    <Compile Include="Assets\Scripts\CameraScale.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
