@@ -32,7 +32,7 @@ public class Board : MonoBehaviour
 
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
-        CollectedNumbers = new GameObject[9]; //максимальная длина цепочки - 9
+        CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
 
         index = 0;
         score = 0;
@@ -56,7 +56,6 @@ public class Board : MonoBehaviour
         }
         else if (Input.GetMouseButton(0)) //когда мышь зажата
         {
-            Debug.DrawRay(startPosition, endPosition); //для отладки
 
             RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
 
@@ -76,6 +75,7 @@ public class Board : MonoBehaviour
                     startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
 
                     CollectedNumbers[index] = hit2.transform.gameObject; //записываем в массив
+                    CollectedNumbers[index].transform.localScale *= 1.25f;
                     index++;
                 }
                 else
@@ -90,13 +90,14 @@ public class Board : MonoBehaviour
             tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             // _checkInput = false;
             Score(); //считаем очки
+        }
 
+    }
 
-            // Decrease();
-            // Refilling();
-            //Invoke("Decrease", 0.4f); //только через инвок срабатывает при первом дестрое
-
-            //Invoke("Refilling", 1f); //заполняем пустое место вниз
+    private void Draw()
+    {
+        for (int i = 0; i < index; i++)
+        {
 
 
         }
@@ -165,6 +166,7 @@ public class Board : MonoBehaviour
             tempObject = hit.transform.gameObject;
 
             CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив
+            CollectedNumbers[index].transform.localScale *= 1.25f;
             index++;
 
         }
@@ -195,13 +197,13 @@ public class Board : MonoBehaviour
         }
         else
         {
+            CollectedNumbers[0].transform.localScale = Vector3.one;
             Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
             index = 0;
         }
 
     }
-
-
+    
     private void Destroy() //удаляем собранные элементы
     {
         //удаляем собранные--------------------------------------------
@@ -209,7 +211,6 @@ public class Board : MonoBehaviour
         {
             Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)]); //удаляем все собранные объекты
             allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)] = null;
-            // CollectedNumbers[i] = null; //очищаем список собранных цифр
         }
         Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
         index = 0;
@@ -217,6 +218,7 @@ public class Board : MonoBehaviour
         //двигаем ряды вниз--------------------------------------------
         StartCoroutine(DecreaseRow());
     }
+    
     private IEnumerator DecreaseRow() //private IEnumerator DecreaseRow()
     {
         Debug.LogWarning("START COROUTINE");
