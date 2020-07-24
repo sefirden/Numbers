@@ -23,6 +23,8 @@ public class Board : MonoBehaviour
     private int index;
     private int score;
 
+    private LineRenderer ChainLine;
+
     private bool move;
 
 
@@ -33,6 +35,9 @@ public class Board : MonoBehaviour
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
+
+        ChainLine = GetComponent<LineRenderer>();
+        ChainLine.enabled = false;
 
         index = 0;
         score = 0;
@@ -65,7 +70,7 @@ public class Board : MonoBehaviour
                 {
 
                     tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
-
+                    
                     Debug.Log(hit2.transform.tag);
 
                     hit2.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем у текущего тайла колайдер, чтобы лайнкаст его не цеплял
@@ -75,7 +80,15 @@ public class Board : MonoBehaviour
                     startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
 
                     CollectedNumbers[index] = hit2.transform.gameObject; //записываем в массив
+                    //visual
                     CollectedNumbers[index].transform.localScale *= 1.25f;
+                    CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f,0.6f);
+
+                    ChainLine.enabled = true;
+                    ChainLine.positionCount = index+1;
+                    //ChainLine.SetPosition(0, CollectedNumbers[0].transform.position);
+                    ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
+
                     index++;
                 }
                 else
@@ -88,18 +101,14 @@ public class Board : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))//отпускаем кнопку мышки
         {
             tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
-            // _checkInput = false;
+
+            if (ChainLine.enabled == true)
+            {
+                ChainLine.enabled = false;
+                ChainLine.positionCount = 1;
+                ChainLine.SetPosition(0, Vector3.zero);
+            }
             Score(); //считаем очки
-        }
-
-    }
-
-    private void Draw()
-    {
-        for (int i = 0; i < index; i++)
-        {
-
-
         }
 
     }
@@ -166,7 +175,11 @@ public class Board : MonoBehaviour
             tempObject = hit.transform.gameObject;
 
             CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив
+
             CollectedNumbers[index].transform.localScale *= 1.25f;
+            CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+            ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
+
             index++;
 
         }
