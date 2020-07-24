@@ -66,41 +66,47 @@ public class Board : MonoBehaviour
 
             if (hit2) //если что-то поймали лайнкастом
             {
-                if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1 && tempObject != null) //если текущая цифра больше предыдущей на 1
+                if (tempObject != null)
                 {
+                    if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1) //если текущая цифра больше предыдущей на 1
+                    {
 
-                    tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
-                    
-                    Debug.Log(hit2.transform.tag);
+                        tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
 
-                    hit2.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем у текущего тайла колайдер, чтобы лайнкаст его не цеплял
-                    tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер
+                        Debug.Log(hit2.transform.tag);
 
-                    endPosition = hit2.transform.position; //последнюю позицию ставим по центру тайла
-                    startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
+                        hit2.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем у текущего тайла колайдер, чтобы лайнкаст его не цеплял
+                        tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер
 
-                    CollectedNumbers[index] = hit2.transform.gameObject; //записываем в массив
-                    //visual
-                    CollectedNumbers[index].transform.localScale *= 1.25f;
-                    CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f,0.6f);
+                        endPosition = hit2.transform.position; //последнюю позицию ставим по центру тайла
+                        startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
 
-                    ChainLine.enabled = true;
-                    ChainLine.positionCount = index+1;
-                    //ChainLine.SetPosition(0, CollectedNumbers[0].transform.position);
-                    ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
+                        CollectedNumbers[index] = hit2.transform.gameObject; //записываем в массив
+                                                                             //visual
+                        CollectedNumbers[index].transform.localScale *= 1.25f;
+                        CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
 
-                    index++;
-                }
-                else
-                {
-                    Debug.LogWarning("wrong number");
+                        ChainLine.enabled = true;
+                        ChainLine.positionCount = index + 1;
+                        //ChainLine.SetPosition(0, CollectedNumbers[0].transform.position);
+                        ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
+
+                        index++;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("wrong number");
+                    }
                 }
             }
 
         }
         else if (Input.GetMouseButtonUp(0))//отпускаем кнопку мышки
         {
-            tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
+            if (tempObject != null)
+            {
+                tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
+            }
 
             if (ChainLine.enabled == true)
             {
@@ -210,7 +216,10 @@ public class Board : MonoBehaviour
         }
         else
         {
-            CollectedNumbers[0].transform.localScale = Vector3.one;
+            if (CollectedNumbers[0] != null)
+            { 
+                CollectedNumbers[0].transform.localScale = Vector3.one;
+            }
             Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
             index = 0;
         }
