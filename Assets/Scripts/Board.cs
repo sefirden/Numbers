@@ -66,7 +66,7 @@ public class Board : MonoBehaviour
 
             if (hit2) //если что-то поймали лайнкастом
             {
-                if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1) //если текущая цифра больше предыдущей на 1
+                if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1 && tempObject != null) //если текущая цифра больше предыдущей на 1
                 {
 
                     tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
