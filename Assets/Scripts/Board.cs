@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class Board : MonoBehaviour
+public class Board : MonoBehaviour, IPointerClickHandler
 {
     public int width;
     public int height;
@@ -22,6 +23,11 @@ public class Board : MonoBehaviour
     private GameObject tempObject;
     private int index;
     private int score;
+
+    private int hintCount;
+    private bool hint;
+    private int refillCount;
+
 
     private LineRenderer ChainLine;
 
@@ -51,15 +57,16 @@ public class Board : MonoBehaviour
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
-        if (Input.GetMouseButtonDown(0))//клик кнопки мышки вниз
+        if (Input.GetMouseButtonDown(0))//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
         {
+
             ClickSelect(); //ищем стартовую точку
 
             //_lastTile = null;
             // _selectedTiles.Clear();
             //_checkInput = true;
         }
-        else if (Input.GetMouseButton(0)) //когда мышь зажата
+        else if (Input.GetMouseButton(0)) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
         {
 
             RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
@@ -300,27 +307,37 @@ public class Board : MonoBehaviour
 
         for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < height; j++)
+            if (countStep != true)
             {
-                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
-
-                for (var k = 0; k < hitColliders.Length; k++)
+                for (int j = 0; j < height; j++)
                 {
-                    if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                    if (countStep != true)
                     {
-                        Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
-                        countStep = true;
-                        break;
+                        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
+
+                        for (var k = 0; k < hitColliders.Length; k++)
+                        {
+                            if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                            {
+                                Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
+                                countStep = true;
+                                break;
+                            }
+                            else if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == -1)
+                            {
+                                Debug.LogWarning("есть возможный ход: " + hitColliders[k].transform.tag + ">" + allDots[i, j].transform.tag);
+                                countStep = true;
+                                break;
+                            }
+                        }
+                        Array.Clear(hitColliders, 0, hitColliders.Length);
                     }
-                    else if(Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == -1)
-                    {
-                        Debug.LogWarning("есть возможный ход: " + hitColliders[k].transform.tag + ">" + allDots[i, j].transform.tag);
-                        countStep = true;
+                    else
                         break;
-                    }
                 }
-                Array.Clear(hitColliders, 0, hitColliders.Length);
             }
+            else
+                break;
         }
         if(countStep == false)
         {
@@ -329,4 +346,100 @@ public class Board : MonoBehaviour
 
     }
 
+    public void Hint()
+    {
+        Debug.LogWarning("Hint");
+
+        hint = false;
+
+        for (int i = 0; i < width; i++)
+        {
+            if (hint != true)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    if (hint != true)
+                    {
+                        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
+
+                        for (var k = 0; k < hitColliders.Length; k++)
+                        {
+                            if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                            {
+                                Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
+
+                                allDots[i, j].transform.localScale *= 1.25f;
+                                allDots[i, j].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+
+                                hitColliders[k].transform.localScale *= 1.25f;
+                                hitColliders[k].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+
+                                ChainLine.enabled = true;
+                                ChainLine.positionCount = 2;
+                                ChainLine.SetPosition(0, allDots[i, j].transform.position);
+                                ChainLine.SetPosition(1, hitColliders[k].transform.position);
+
+                                hint = true;
+                                break;
+                            }
+                            else if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == -1)
+                            {
+                                Debug.LogWarning("есть возможный ход: " + hitColliders[k].transform.tag + ">" + allDots[i, j].transform.tag);
+
+                                allDots[i, j].transform.localScale *= 1.25f;
+                                allDots[i, j].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+
+                                hitColliders[k].transform.localScale *= 1.25f;
+                                hitColliders[k].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+
+                                ChainLine.enabled = true;
+                                ChainLine.positionCount = 2;
+                                ChainLine.SetPosition(0, hitColliders[k].transform.position);
+                                ChainLine.SetPosition(1, allDots[i, j].transform.position);
+
+                                hint = true;
+                                break;
+                            }
+                        }
+                        Array.Clear(hitColliders, 0, hitColliders.Length);
+                    }
+                    else
+                        break;
+                }
+            }
+            else
+                break;
+        }
+        if (hint == false)
+        {
+            endGame.text = "GAME OVER";
+        }
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData) //чтобы работало UI
+    {
+        //Debug.LogWarning("Refill");
+    }
+
+
+    public void Refill()
+    {
+        Debug.LogWarning("Refill");
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] != null)
+                {
+                    Destroy(allDots[i, j]); //удаляем все собранные объекты
+                    allDots[i, j] = null;
+                }
+            }
+
+        }
+       Shuffle();
+       SetUp();
+    }
 }
