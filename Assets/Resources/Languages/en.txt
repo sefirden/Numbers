@@ -1,0 +1,18 @@
+new_game:NEW GAME
+resume:RESUME
+settings:SETTINGS
+quit:QUIT
+test:TEST
+game_label:Pizzeria Escape
+music_off:off
+sfx_off:off
+music_vol:Music volume
+sfx_vol:SFX volume
+language:Language
+back:BACK
+menu:MENU
+restart:TAP FOR RESTART
+game_over:GAME OVER! TAP TO RETURN TO PIZZERIA
+ui_Top_Down:User interface
+ui_Top:Top
+ui_Down:Down

@@ -65,6 +65,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Board.cs" />
     <Compile Include="Assets\Scripts\CameraScale.cs" />
+    <None Include="Assets\Resources\Languages\ua.txt" />
+    <None Include="Assets\Resources\Languages\en.txt" />
+    <None Include="Assets\Resources\Languages\ru.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

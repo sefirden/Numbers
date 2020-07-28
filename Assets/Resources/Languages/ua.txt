@@ -1,0 +1,18 @@
+new_game:НОВА ГРА
+resume:ПРОДОВЖИТИ
+settings:НАЛАШТУВАННЯ
+quit:ВИХІД
+test:ТЕСТ
+game_label:Втеча з піцерії
+music_off:викл
+sfx_off:викл
+music_vol:Гучність Музики
+sfx_vol:Гучність Ефектів
+language:Мова
+back:НАЗАД
+menu:МЕНЮ
+restart:ТАПНІТЬ ДЛЯ РЕСТАРТУ
+game_over:КІНЕЦЬ ГРИ! ТАПНІТЬ ДЛЯ ПОВЕРНЕННЯ В ПІЦЕРІЮ
+ui_Top_Down:Інтерфейс гравця
+ui_Top:Вгорі
+ui_Down:Внизу
