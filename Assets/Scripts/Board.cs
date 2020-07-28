@@ -123,13 +123,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             }
 
-            if (ChainLine.enabled == true)
-            {
-                ChainLine.enabled = false;
-                ChainLine.positionCount = 1;
-                ChainLine.SetPosition(0, Vector3.zero);
-            }
-
             Score(); //считаем очки
         }
 
@@ -193,6 +186,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
         if (hit)
         {
+            Draw(false);
             Debug.LogWarning("first click tag " + hit.transform.tag);
 
             startPosition = hit.transform.position;
@@ -234,6 +228,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
             score += tempScore * quantity;
             Debug.LogWarning("Score: " + score);
             Destroy(); //удаляем собранные цифры
+
+            if (ChainLine.enabled == true)
+            {
+                ChainLine.enabled = false;
+                ChainLine.positionCount = 1;
+                ChainLine.SetPosition(0, Vector3.zero);
+            }
         }
         else
         {
@@ -366,14 +367,15 @@ public class Board : MonoBehaviour, IPointerClickHandler
         if (hintCount > 0)
         {
             Debug.LogWarning("Hint");
+            Draw(false);
 
             hint = false;
 
-            for (int i = 0; i < width; i++)
+            for (int i = UnityEngine.Random.Range(0, width-1); i < width; i++)
             {
                 if (hint != true)
                 {
-                    for (int j = 0; j < height; j++)
+                    for (int j = UnityEngine.Random.Range(0, height - 1); j < height; j++)
                     {
                         if (hint != true)
                         {
@@ -406,7 +408,40 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
             if (hint == false)
             {
-                endGame.text = "GAME OVER";
+                for (int i = 0; i < width; i++)
+                {
+                    if (hint != true)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            if (hint != true)
+                            {
+                                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
+
+                                for (var k = 0; k < hitColliders.Length; k++)
+                                {
+                                    if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                                    {
+                                        Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
+                                        HintNumbers[count] = allDots[i, j];
+                                        count++;
+                                        HintNumbers[count] = hitColliders[k].transform.gameObject;
+                                        count++;
+                                        hint = true;
+
+                                        HintSearch(count, hitColliders[k].transform.gameObject, hint);
+                                        break;
+                                    }
+                                }
+                                Array.Clear(hitColliders, 0, hitColliders.Length);
+                            }
+                            else
+                                break;
+                        }
+                    }
+                    else
+                        break;
+                };
             }
 
             hintCount--;
@@ -443,17 +478,16 @@ public class Board : MonoBehaviour, IPointerClickHandler
         else if (hint == false)
         {
             Debug.LogWarning("Конец подсказки");
-
-            Draw(hint);
-
+            Draw(true);
         }
 
 
     }
 
-    private void Draw(bool hint)
+    private void Draw(bool draw)
     {
-        if (hint == false) //рисуем
+        int count = 0;
+        if (draw == true) //рисуем
         {
             for (int i = 0; i < HintNumbers.Length; i++)
             {
@@ -461,10 +495,38 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 {
                     HintNumbers[i].transform.localScale *= 1.25f;
                     HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+                    count++;
                 }
             }
 
+            ChainLine.enabled = true;
+            ChainLine.positionCount = count;
+            for (int j = 0; j < count; j++)
+            {
+                ChainLine.SetPosition(j, HintNumbers[j].transform.position);
+            }
 
+        }
+        else if (draw == false) //убираем нарисованное
+        {
+            for (int i = 0; i < HintNumbers.Length; i++)
+            {
+                if (HintNumbers[i] != null)
+                {
+                    HintNumbers[i].transform.localScale = Vector3.one;
+                    HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
+                    count++;
+                }
+            }
+
+            Array.Clear(HintNumbers, 0, HintNumbers.Length);
+
+            if (ChainLine.enabled == true)
+            {
+                ChainLine.enabled = false;
+                ChainLine.positionCount = 1;
+                ChainLine.SetPosition(0, Vector3.zero);
+            }
         }
     }
 
@@ -473,6 +535,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
         if (refillCount > 0)
         {
             Debug.LogWarning("Refill");
+
+            if (ChainLine.enabled == true)
+            {
+                ChainLine.enabled = false;
+                ChainLine.positionCount = 1;
+                ChainLine.SetPosition(0, Vector3.zero);
+            }
 
             for (int i = 0; i < width; i++)
             {

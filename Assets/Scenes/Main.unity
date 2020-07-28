@@ -623,8 +623,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02904d9bf06021441829f899ac8091b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 5
-  height: 5
+  width: 9
+  height: 9
   dots:
   - {fileID: 4369894751642725644, guid: d06d01bb8bd24814f909fce639af06b8, type: 3}
   - {fileID: 576136662354486289, guid: 97eb1a44a1ad1844393ea6c1ba902eea, type: 3}
@@ -641,7 +641,8 @@ MonoBehaviour:
   hintcount: {fileID: 252851908}
   refillcount: {fileID: 1270513733}
   CollectedNumbers: []
-  hintCount: 5
+  HintNumbers: []
+  hintCount: 15
   refillCount: 5
 --- !u!4 &891968231
 Transform:
