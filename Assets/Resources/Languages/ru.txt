@@ -3,7 +3,7 @@ resume:ПРОДОЛЖИТЬ
 settings:НАСТРОЙКИ
 quit:ВЫХОД
 test:ТЕСТ
-game_label:Побег из пиццерии
+game_label:Numbers_alpha
 music_off:выкл
 sfx_off:выкл
 music_vol:Громкость Музыки

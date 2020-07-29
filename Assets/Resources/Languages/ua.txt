@@ -3,7 +3,7 @@ resume:ПРОДОВЖИТИ
 settings:НАЛАШТУВАННЯ
 quit:ВИХІД
 test:ТЕСТ
-game_label:Втеча з піцерії
+game_label:Numbers_alpha
 music_off:викл
 sfx_off:викл
 music_vol:Гучність Музики

@@ -27,10 +27,9 @@ public class Board : MonoBehaviour, IPointerClickHandler
     private GameObject tempObject;
     private int index;
     private int score;
-
-    public int hintCount;
+    
     private bool hint;
-    public int refillCount;
+
 
 
     private LineRenderer ChainLine;
@@ -60,13 +59,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
     void Update()
     {
         scoreText.text = Convert.ToString(score);
-        hintcount.text = Convert.ToString(hintCount);
-        refillcount.text = Convert.ToString(refillCount);
+        hintcount.text = Convert.ToString(PlayerResource.Instance.hint);
+        refillcount.text = Convert.ToString(PlayerResource.Instance.refill);
 
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
-        if (Input.GetMouseButtonDown(0))//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
+        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
         {
 
             ClickSelect(); //ищем стартовую точку
@@ -74,7 +73,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
            // Draw(true); //выключаем подсказку
 
         }
-        else if (Input.GetMouseButton(0)) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
+        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
         {
 
             RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
@@ -116,7 +115,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
         }
-        else if (Input.GetMouseButtonUp(0))//отпускаем кнопку мышки
+        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true)//отпускаем кнопку мышки
         {
             if (tempObject != null)
             {
@@ -364,7 +363,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public void Hint()
     {
         int count = 0;
-        if (hintCount > 0)
+        if (PlayerResource.Instance.hint > 0 && PlayerResource.Instance.GameIsPaused != true)
         {
             Debug.LogWarning("Hint");
             Draw(false);
@@ -444,7 +443,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 };
             }
 
-            hintCount--;
+            PlayerResource.Instance.hint--;
         }
 
     }
@@ -532,7 +531,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     public void Refill()
     {
-        if (refillCount > 0)
+        if (PlayerResource.Instance.refill > 0 && PlayerResource.Instance.GameIsPaused != true)
         {
             Debug.LogWarning("Refill");
 
@@ -557,7 +556,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
             Shuffle();
             SetUp();
-            refillCount--;
+            PlayerResource.Instance.refill--;
         }
     }
 }

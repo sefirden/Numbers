@@ -3,7 +3,7 @@ resume:RESUME
 settings:SETTINGS
 quit:QUIT
 test:TEST
-game_label:Pizzeria Escape
+game_label:Numbers_alpha
 music_off:off
 sfx_off:off
 music_vol:Music volume
