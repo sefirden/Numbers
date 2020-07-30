@@ -29,6 +29,8 @@ public class Settings : MonoBehaviour
         {
             Destroy(gameObject); //то ломаем его к херам
         }
+ 
+
     }
 
     private void Start()

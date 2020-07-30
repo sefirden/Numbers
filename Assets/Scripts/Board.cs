@@ -26,21 +26,20 @@ public class Board : MonoBehaviour, IPointerClickHandler
     private Vector2 startPosition, endPosition;
     private GameObject tempObject;
     private int index;
-    private int score;
     
     private bool hint;
-
-
-
+       
     private LineRenderer ChainLine;
 
-    private bool move;
-
+    private void Awake()
+    {
+        width = PlayerResource.Instance.width;
+        height = PlayerResource.Instance.height;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
@@ -51,14 +50,14 @@ public class Board : MonoBehaviour, IPointerClickHandler
         hint = false;
 
         index = 0;
-        score = 0;
+        PlayerResource.Instance.score = 0;
         Shuffle();
         SetUp();
     }
 
     void Update()
     {
-        scoreText.text = Convert.ToString(score);
+        scoreText.text = "Score: " + Convert.ToString(PlayerResource.Instance.score);
         hintcount.text = Convert.ToString(PlayerResource.Instance.hint);
         refillcount.text = Convert.ToString(PlayerResource.Instance.refill);
 
@@ -224,8 +223,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
         }
         if (quantity > 1) //если выбрана больше чем 1 цифра
         {
-            score += tempScore * quantity;
-            Debug.LogWarning("Score: " + score);
+            PlayerResource.Instance.score += tempScore * quantity;
+            Debug.LogWarning("Score: " + PlayerResource.Instance.score);
             Destroy(); //удаляем собранные цифры
 
             if (ChainLine.enabled == true)

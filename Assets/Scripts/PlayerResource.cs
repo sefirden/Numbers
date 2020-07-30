@@ -15,13 +15,18 @@ public class PlayerResource : MonoBehaviour
 
     public int score; //количество здоровья, пока 4
     public int hiScore; //количество ячеек здоровья
+
     public int hint; //количество монеток у игрока, нужны для магазина поверапов
     public int refill; //количество спасенных кусков пиццы, за каждый кусок противники сложнее
+
+    public int height;
+    public int width;
+
+    public string gameMode;
 
     public float time; //
 
     public bool GameIsPaused; //если игра на паузе
-
     public bool EndGame; //true если конец игры
 
     private void Awake() //запускается до всех стартов

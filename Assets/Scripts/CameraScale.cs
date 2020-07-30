@@ -13,7 +13,7 @@ public class CameraScale : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<Board>();
-        if(board!=null)
+        if (board != null)
         {
             RepositionCamera(board.width - 1, board.height - 1);
         }
@@ -31,11 +31,5 @@ public class CameraScale : MonoBehaviour
         {
             Camera.main.orthographicSize = board.height / 2 + padding;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

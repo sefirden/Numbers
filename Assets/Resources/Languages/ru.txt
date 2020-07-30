@@ -11,8 +11,9 @@ sfx_vol:Громкость Эффектов
 language:Язык
 back:НАЗАД
 menu:МЕНЮ
-restart:ТАПНИТЕ ДЛЯ РЕСТАРТА
-game_over:КОНЕЦ ИГРЫ! ТАПНИТЕ ДЛЯ ВОЗВРАТА В ПИЦЦЕРИЮ
-ui_Top_Down:Интерфейс игрока
-ui_Top:Вверху
-ui_Down:Внизу
+game_over:КОНЕЦ ИГРЫ!
+normal:Нормальный
+time_trial:Лимит времени
+restart:Рестарт
+hint:Подсказки
+refill:Смешать

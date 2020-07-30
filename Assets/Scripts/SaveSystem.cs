@@ -30,7 +30,6 @@ public class SaveSystem : MonoBehaviour
         SettingsLoad();
     }
 
-
     private void LoadLanguage(string lang)
     {
 

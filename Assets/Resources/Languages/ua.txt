@@ -11,8 +11,9 @@ sfx_vol:Гучність Ефектів
 language:Мова
 back:НАЗАД
 menu:МЕНЮ
-restart:ТАПНІТЬ ДЛЯ РЕСТАРТУ
-game_over:КІНЕЦЬ ГРИ! ТАПНІТЬ ДЛЯ ПОВЕРНЕННЯ В ПІЦЕРІЮ
-ui_Top_Down:Інтерфейс гравця
-ui_Top:Вгорі
-ui_Down:Внизу
+game_over:КІНЕЦЬ ГРИ!
+normal:Нормальний
+time_trial:Ліміт часу
+restart:Рестарт
+hint:Підказка
+refill:Змішати
