@@ -17,3 +17,6 @@ time_trial:Time limit
 restart:Restart
 hint:Hint
 refill:Refill
+nopair:No possible moves, mixed field?
+yes:Yes
+no:No

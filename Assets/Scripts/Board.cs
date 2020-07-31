@@ -13,9 +13,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public GameObject[] dots;
 
     public Text scoreText;
-    public Text endGame;
     public Text hintcount;
     public Text refillcount;
+    public Text refillcountLayer;
+    public GameObject EndGameLayer;
+    public GameObject NoMatchLayer;
     private bool countStep;
     private int[,] numbers;
     public GameObject[,] allDots;
@@ -60,11 +62,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
         scoreText.text = "Score: " + Convert.ToString(PlayerResource.Instance.score);
         hintcount.text = Convert.ToString(PlayerResource.Instance.hint);
         refillcount.text = Convert.ToString(PlayerResource.Instance.refill);
+        refillcountLayer.text = Convert.ToString(PlayerResource.Instance.refill);
 
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
-        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
+        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true && PlayerResource.Instance.EndGame != false)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
         {
 
             ClickSelect(); //ищем стартовую точку
@@ -72,7 +75,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
            // Draw(true); //выключаем подсказку
 
         }
-        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
+        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != false) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
         {
 
             RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
@@ -114,7 +117,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
         }
-        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true)//отпускаем кнопку мышки
+        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != false)//отпускаем кнопку мышки
         {
             if (tempObject != null)
             {
@@ -354,9 +357,38 @@ public class Board : MonoBehaviour, IPointerClickHandler
         }
         if(countStep == false)
         {
-            endGame.text = "GAME OVER";
+            if (PlayerResource.Instance.refill == 0)
+            {
+                EndGame();
+            }
+            else if (PlayerResource.Instance.refill > 0)
+            {
+                NoMatch();
+            }
         }
 
+    }
+
+    private void NoMatch()
+    {
+        Time.timeScale = 0f;
+        NoMatchLayer.SetActive(true);
+        PlayerResource.Instance.GameIsPaused = true;
+    }
+
+    public void EndGame()
+    {
+        Time.timeScale = 0f;
+        NoMatchLayer.SetActive(false);
+        EndGameLayer.SetActive(true);
+        PlayerResource.Instance.GameIsPaused = true;
+        PlayerResource.Instance.EndGame = true;
+
+        // PlayServicesGoogle.Instance.CollectData(); //собираем данные
+        // PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
+        // PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
+
+        // AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
     }
 
     public void Hint()
@@ -528,34 +560,70 @@ public class Board : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void Refill()
+    public void Refill(bool layer)
     {
-        if (PlayerResource.Instance.refill > 0 && PlayerResource.Instance.GameIsPaused != true)
+        if (layer == false)
         {
-            Debug.LogWarning("Refill");
-
-            if (ChainLine.enabled == true)
+            if (PlayerResource.Instance.refill > 0 && PlayerResource.Instance.GameIsPaused != true)
             {
-                ChainLine.enabled = false;
-                ChainLine.positionCount = 1;
-                ChainLine.SetPosition(0, Vector3.zero);
-            }
+                Debug.LogWarning("Refill");
 
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
+                if (ChainLine.enabled == true)
                 {
-                    if (allDots[i, j] != null)
-                    {
-                        Destroy(allDots[i, j]); //удаляем все собранные объекты
-                        allDots[i, j] = null;
-                    }
+                    ChainLine.enabled = false;
+                    ChainLine.positionCount = 1;
+                    ChainLine.SetPosition(0, Vector3.zero);
                 }
 
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        if (allDots[i, j] != null)
+                        {
+                            Destroy(allDots[i, j]); //удаляем все собранные объекты
+                            allDots[i, j] = null;
+                        }
+                    }
+
+                }
+                Shuffle();
+                SetUp();
+                PlayerResource.Instance.refill--;
             }
-            Shuffle();
-            SetUp();
-            PlayerResource.Instance.refill--;
         }
+
+        if (layer == true)
+        {
+            if (PlayerResource.Instance.refill > 0)
+            {
+                NoMatchLayer.SetActive(false);
+                Debug.LogWarning("Refill");
+
+                if (ChainLine.enabled == true)
+                {
+                    ChainLine.enabled = false;
+                    ChainLine.positionCount = 1;
+                    ChainLine.SetPosition(0, Vector3.zero);
+                }
+
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        if (allDots[i, j] != null)
+                        {
+                            Destroy(allDots[i, j]); //удаляем все собранные объекты
+                            allDots[i, j] = null;
+                        }
+                    }
+
+                }
+                Shuffle();
+                SetUp();
+                PlayerResource.Instance.refill--;
+            }
+        }
+
     }
 }

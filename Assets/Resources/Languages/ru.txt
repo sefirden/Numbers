@@ -11,9 +11,12 @@ sfx_vol:Громкость Эффектов
 language:Язык
 back:НАЗАД
 menu:МЕНЮ
-game_over:КОНЕЦ ИГРЫ!
+game_over:Нет возможных ходов, конец игры!
 normal:Нормальный
 time_trial:Лимит времени
 restart:Рестарт
 hint:Подсказки
 refill:Смешать
+nopair:Нет возможных ходов, смешать поле?
+yes:Да
+no:Нет
