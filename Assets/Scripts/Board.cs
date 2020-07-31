@@ -67,7 +67,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
-        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true && PlayerResource.Instance.EndGame != false)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
+        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true && PlayerResource.Instance.EndGame != true)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
         {
 
             ClickSelect(); //ищем стартовую точку
@@ -75,7 +75,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
            // Draw(true); //выключаем подсказку
 
         }
-        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != false) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
+        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != true) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
         {
 
             RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
@@ -117,7 +117,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
         }
-        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != false)//отпускаем кнопку мышки
+        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != true)//отпускаем кнопку мышки
         {
             if (tempObject != null)
             {
@@ -597,7 +597,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
         {
             if (PlayerResource.Instance.refill > 0)
             {
+                Time.timeScale = 1f;
                 NoMatchLayer.SetActive(false);
+                PlayerResource.Instance.GameIsPaused = false;
+
                 Debug.LogWarning("Refill");
 
                 if (ChainLine.enabled == true)
