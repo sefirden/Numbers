@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Settings.cs" />
     <Compile Include="Assets\Scripts\SettingsMenu.cs" />
     <Compile Include="Assets\Scripts\SettingsPause.cs" />
+    <Compile Include="Assets\Scripts\Timer.cs" />
     <None Include="Assets\Resources\Languages\ua.txt" />
     <None Include="Assets\Resources\Languages\en.txt" />
     <None Include="Assets\Resources\Languages\ru.txt" />

@@ -20,3 +20,4 @@ refill:Refill
 nopair:No possible moves, mixed field?
 yes:Yes
 no:No
+no_time:Time is up, game over!

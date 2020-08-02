@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class Board : MonoBehaviour, IPointerClickHandler
 {
@@ -22,6 +23,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     private int[,] numbers;
     public GameObject[,] allDots;
     public GameObject[] CollectedNumbers;
+    public int[] TagForRandomRefill;
 
     public GameObject[] HintNumbers;
 
@@ -45,6 +47,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
+        TagForRandomRefill = new int[width*height];
         HintNumbers = new GameObject[width];
 
         ChainLine = GetComponent<LineRenderer>();
@@ -88,6 +91,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                     {
 
                         tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
+                        tempObject.transform.name = "owned";
 
                         Debug.Log(hit2.transform.tag);
 
@@ -101,6 +105,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                                                                              //visual
                         CollectedNumbers[index].transform.localScale *= 1.25f;
                         CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+                        CollectedNumbers[index].transform.name = "owned";
 
                         ChainLine.enabled = true;
                         ChainLine.positionCount = index + 1;
@@ -108,6 +113,30 @@ public class Board : MonoBehaviour, IPointerClickHandler
                         ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
 
                         index++;
+                    }
+                    else if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == 1 && hit2.transform.name == "owned")
+                    {
+                        tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
+
+                        Debug.Log(hit2.transform.tag);
+
+                        hit2.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем у текущего тайла колайдер, чтобы лайнкаст его не цеплял
+                        tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер
+
+                        endPosition = hit2.transform.position; //последнюю позицию ставим по центру тайла
+                        startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
+                        
+                        index--;
+
+                        CollectedNumbers[index].transform.localScale = Vector3.one;
+                        CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
+                        CollectedNumbers[index].transform.name = "ok";
+                        CollectedNumbers[index] = null;
+
+                        ChainLine.positionCount = index;
+
+
+
                     }
                     else
                     {
@@ -200,6 +229,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
             CollectedNumbers[index].transform.localScale *= 1.25f;
             CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+
             ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
 
             index++;
@@ -227,6 +257,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
         if (quantity > 1) //если выбрана больше чем 1 цифра
         {
             PlayerResource.Instance.score += tempScore * quantity;
+
+            if (PlayerResource.Instance.gameMode == "timetrial")
+                {
+                PlayerResource.Instance.time += quantity * (1f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 1,5 до 1,9 сек
+                }
+            
             Debug.LogWarning("Score: " + PlayerResource.Instance.score);
             Destroy(); //удаляем собранные цифры
 
@@ -242,6 +278,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
             if (CollectedNumbers[0] != null)
             { 
                 CollectedNumbers[0].transform.localScale = Vector3.one;
+                CollectedNumbers[0].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
+                CollectedNumbers[0].transform.name = "ok";
             }
             Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
             index = 0;
@@ -257,6 +295,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)]); //удаляем все собранные объекты
             allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)] = null;
         }
+
         Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
         index = 0;
 
@@ -294,17 +333,60 @@ public class Board : MonoBehaviour, IPointerClickHandler
         Refilling();
     }
 
-    private void Refilling()
+    private int[] Scan()
     {
+        int indx = 0;
+        int[] temp = new int [width];
+        int count = 0;
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
                 if (allDots[i, j] == null)
                 {
-                    Vector2 tempPosition = new Vector2(i, j);
+                    TagForRandomRefill[count] = 0;
+                    count++;
+                }
+                else
+                {
+                    TagForRandomRefill[count] = Convert.ToInt32(allDots[i, j].transform.tag);
+                    count++;
+                }
+            }
+        }
 
-                    int dotToUse = UnityEngine.Random.Range(0, width);
+        var g = TagForRandomRefill.GroupBy(i => i);
+        foreach (var k in g)
+        {
+            if (k.Count() < width) //тут править вероятность
+            {
+                temp[indx] = k.Key;
+                indx++;
+            }
+            Debug.LogError(temp[indx]);
+
+
+        }
+
+        return temp;
+
+    }
+
+    private void Refilling()
+    {
+        int dotToUse;
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
+                    //каждый раз цикла проверяем количество цифр на поле и те цифры, которые втречаються на поле width+2 и больше раз не попадают в выборку для рандома
+                    //Scan();
+
+                    Vector2 tempPosition = new Vector2(i, j);
+                    dotToUse = UnityEngine.Random.Range(0, width); //тут переписать
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                     dot.transform.parent = this.transform;
                     dot.name = "( " + i + ", " + j + " )";
@@ -314,6 +396,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
         }
+        //Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры
+
         CheckEndGame();
     }
 
@@ -371,6 +455,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     private void NoMatch()
     {
+        //AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
         Time.timeScale = 0f;
         NoMatchLayer.SetActive(true);
         PlayerResource.Instance.GameIsPaused = true;
@@ -378,6 +463,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     public void EndGame()
     {
+
         Time.timeScale = 0f;
         NoMatchLayer.SetActive(false);
         EndGameLayer.SetActive(true);
@@ -393,6 +479,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     public void Hint()
     {
+
         int count = 0;
         if (PlayerResource.Instance.hint > 0 && PlayerResource.Instance.GameIsPaused != true)
         {
@@ -413,7 +500,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
                             for (var k = 0; k < hitColliders.Length; k++)
                             {
-                                if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                                if (Convert.ToInt32(allDots[i, j].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1)
                                 {
                                     Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
                                     HintNumbers[count] = allDots[i, j];
@@ -422,7 +509,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                                     count++;
                                     hint = true;
 
-                                    HintSearch(count, hitColliders[k].transform.gameObject, hint);
+                                    HintSearchMinus(count, hitColliders[k].transform.gameObject, hint);
                                     break;
                                 }
                             }
@@ -459,7 +546,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                                         count++;
                                         hint = true;
 
-                                        HintSearch(count, hitColliders[k].transform.gameObject, hint);
+                                        HintSearchMinus(count, hitColliders[k].transform.gameObject, hint);
                                         break;
                                     }
                                 }
@@ -479,7 +566,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     }
 
-    private void HintSearch(int count, GameObject TempHintItem, bool hint)
+    private void HintSearchPlus(int count, GameObject TempHintItem, bool hint)
     {
         if (hint == true)
         {
@@ -502,13 +589,58 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
             }
 
-            HintSearch(count, HintNumbers[count-1], hint);
+            HintSearchPlus(count, HintNumbers[count-1], hint);
             Array.Clear(hitColliders, 0, hitColliders.Length);
         }
         else if (hint == false)
         {
             Debug.LogWarning("Конец подсказки");
             Draw(true);
+        }
+
+
+    }
+
+    private void HintSearchMinus(int count, GameObject TempHintItem, bool hint)
+    {
+        if (hint == true)
+        {
+            hint = false;
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f);
+
+            for (var k = 0; k < hitColliders.Length; k++)
+            {
+                if (Convert.ToInt32(TempHintItem.transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1)
+                {
+                    hint = true;
+
+                    Debug.LogWarning("есть возможный ход: " + TempHintItem.transform.tag + ">" + hitColliders[k].transform.tag);
+
+                    HintNumbers[count] = hitColliders[k].transform.gameObject;
+                    count++;
+
+                    break;
+                }
+
+            }
+
+            HintSearchMinus(count, HintNumbers[count - 1], hint);
+            Array.Clear(hitColliders, 0, hitColliders.Length);
+        }
+        else if (hint == false)
+        {
+
+
+            Array.Reverse(HintNumbers, 0, count);
+
+            for(int i = 0; i < count; i++)
+            {
+                Debug.LogWarning(HintNumbers[i].transform.tag);
+            }
+
+            Debug.LogWarning("Запускаем в +");
+            hint = true;
+            HintSearchPlus(count, HintNumbers[count - 1], hint);
         }
 
 
