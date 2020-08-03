@@ -44,11 +44,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  hiScore: 0
+  hiScore: 1000
   hint: 3
   refill: 1
   height: 5
   width: 5
+  gameMode: 
   time: 0
   GameIsPaused: 0
   EndGame: 0

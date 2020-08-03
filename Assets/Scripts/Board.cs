@@ -14,6 +14,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public GameObject[] dots;
 
     public Text scoreText;
+    public Text HighscoreText;
     public Text hintcount;
     public Text refillcount;
     public Text refillcountLayer;
@@ -23,8 +24,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
     private int[,] numbers;
     public GameObject[,] allDots;
     public GameObject[] CollectedNumbers;
-    public int[] TagForRandomRefill;
 
+    public int[] TagForRandomRefill;
     public GameObject[] HintNumbers;
 
     private Vector2 startPosition, endPosition;
@@ -48,6 +49,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
         TagForRandomRefill = new int[width*height];
+
         HintNumbers = new GameObject[width];
 
         ChainLine = GetComponent<LineRenderer>();
@@ -66,6 +68,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         hintcount.text = Convert.ToString(PlayerResource.Instance.hint);
         refillcount.text = Convert.ToString(PlayerResource.Instance.refill);
         refillcountLayer.text = Convert.ToString(PlayerResource.Instance.refill);
+        HighscoreText.text = "High Score: " + Convert.ToString(PlayerResource.Instance.hiScore);
 
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
@@ -258,6 +261,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
         {
             PlayerResource.Instance.score += tempScore * quantity;
 
+            if (PlayerResource.Instance.score > PlayerResource.Instance.hiScore)
+            {
+                PlayerResource.Instance.hiScore = PlayerResource.Instance.score;
+            }
+
             if (PlayerResource.Instance.gameMode == "timetrial")
                 {
                 PlayerResource.Instance.time += quantity * (1f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 1,5 до 1,9 сек
@@ -335,9 +343,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     private int[] Scan()
     {
-        int indx = 0;
+
         int[] temp = new int [width];
         int count = 0;
+        int indx  = 0;
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -355,21 +364,24 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
         }
 
+        Array.Sort(TagForRandomRefill);
+
         var g = TagForRandomRefill.GroupBy(i => i);
+
         foreach (var k in g)
         {
-            if (k.Count() < width) //тут править вероятность
+
+            if (k.Count() <= width && k.Key != 0)
             {
+               // Debug.Log("цифр количеством меньше " + (width+1) + " - "  + k.Key);
                 temp[indx] = k.Key;
                 indx++;
-            }
-            Debug.LogError(temp[indx]);
-
-
+            }                
         }
+        
+        Array.Resize(ref temp, indx);
 
         return temp;
-
     }
 
     private void Refilling()
@@ -383,10 +395,15 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 if (allDots[i, j] == null)
                 {
                     //каждый раз цикла проверяем количество цифр на поле и те цифры, которые втречаються на поле width+2 и больше раз не попадают в выборку для рандома
-                    //Scan();
+                    
+
+                    var temp = Scan();
 
                     Vector2 tempPosition = new Vector2(i, j);
-                    dotToUse = UnityEngine.Random.Range(0, width); //тут переписать
+                    dotToUse = temp[UnityEngine.Random.Range(0, temp.Length)]-1; //тут переписать
+
+                   // Debug.LogError("Добавлена цифра - " + (dotToUse+1));
+
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                     dot.transform.parent = this.transform;
                     dot.name = "( " + i + ", " + j + " )";
@@ -396,7 +413,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
         }
-        //Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры
+        Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры
 
         CheckEndGame();
     }
@@ -488,11 +505,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
             hint = false;
 
-            for (int i = UnityEngine.Random.Range(0, width-1); i < width; i++)
+            for (int i = UnityEngine.Random.Range(0, width); i < width; i++)
             {
                 if (hint != true)
                 {
-                    for (int j = UnityEngine.Random.Range(0, height - 1); j < height; j++)
+                    for (int j = UnityEngine.Random.Range(0, height); j < height; j++)
                     {
                         if (hint != true)
                         {
@@ -537,7 +554,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
                                 for (var k = 0; k < hitColliders.Length; k++)
                                 {
-                                    if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                                    if (Convert.ToInt32(allDots[i, j].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1)
                                     {
                                         Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
                                         HintNumbers[count] = allDots[i, j];
