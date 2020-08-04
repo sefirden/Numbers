@@ -251,9 +251,9 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
         for (int i = 0; i < CollectedNumbers.Length; i++)
         {
-            if (CollectedNumbers[i] != null && Convert.ToInt32(CollectedNumbers[i].tag) > 0)
+            if (CollectedNumbers[i] != null)
             {
-                tempScore += Convert.ToInt32(CollectedNumbers[i].tag);
+                tempScore += width;
                 quantity++;
             }
         }
@@ -378,8 +378,34 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 indx++;
             }                
         }
-        
-        Array.Resize(ref temp, indx);
+
+        if (indx != 0)
+        {
+            Array.Resize(ref temp, indx);
+        }
+        else if (indx == 0)
+        {
+            int[] Board = new int[width];
+
+            for (int i = 0; i < width; i++)
+            {
+                Board[i] = i + 1;                
+            }
+
+            var tag = TagForRandomRefill.Distinct();
+
+            var result = Board.Except(TagForRandomRefill);
+
+            foreach (var k in result)
+            {
+                temp[0] = k;
+            }
+            //тут подставлять цифру, которой нет на поле
+            indx++;
+            Array.Resize(ref temp, indx);
+
+            //Debug.LogError("Scan пошел в 0");
+        }
 
         return temp;
     }
