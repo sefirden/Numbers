@@ -371,7 +371,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         foreach (var k in g)
         {
 
-            if (k.Count() <= width && k.Key != 0)
+            if (k.Count() <= width+1 && k.Key != 0)
             {
                // Debug.Log("цифр количеством меньше " + (width+1) + " - "  + k.Key);
                 temp[indx] = k.Key;
@@ -379,12 +379,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }                
         }
 
-        if (indx != 0)
-        {
-            Array.Resize(ref temp, indx);
-        }
-        else if (indx == 0)
-        {
+
             int[] Board = new int[width];
 
             for (int i = 0; i < width; i++)
@@ -394,18 +389,17 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
             var tag = TagForRandomRefill.Distinct();
 
-            var result = Board.Except(TagForRandomRefill);
+            var result = Board.Except(tag);
 
             foreach (var k in result)
             {
-                temp[0] = k;
+                temp[indx] = k;
+                //Debug.LogError("temp[indx] = " + temp[indx]);
+                indx++;
+
             }
             //тут подставлять цифру, которой нет на поле
-            indx++;
             Array.Resize(ref temp, indx);
-
-            //Debug.LogError("Scan пошел в 0");
-        }
 
         return temp;
     }
