@@ -170,10 +170,10 @@ public class SaveSystem : MonoBehaviour
 #endif
     private void OnApplicationQuit()
     {
-       // PlayServicesGoogle.Instance.CollectData(); //собираем данные
-       // PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
+        PlayServicesGoogle.Instance.CollectData(); //собираем данные
+        PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
 
-      //  PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако true
+        PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако true
         SettingsSave();
     }
 }

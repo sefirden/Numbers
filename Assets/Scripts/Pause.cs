@@ -11,6 +11,7 @@ public class Pause : MonoBehaviour
 
     public GameObject pauseMenuUI;
     public GameObject SettingsLayer;
+    private Board board;
 
 
     public void PauseClick()
@@ -19,11 +20,11 @@ public class Pause : MonoBehaviour
         pauseMenuUI.SetActive(true);
         PlayerResource.Instance.GameIsPaused = true;
 
-        // PlayServicesGoogle.Instance.CollectData(); //собираем данные
-        // PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
-        // PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
+        PlayServicesGoogle.Instance.CollectData(); //собираем данные
+        PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
+        PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
 
-        //   AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
+        //AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
 
     }
 
@@ -32,35 +33,41 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1f;
         Invoke("ResumeToGame", 0.1f);
         
-       //  AdMob_baner.Instance.Hide(Settings.Instance.ad_top_down);
+       //AdMob_baner.Instance.Hide(Settings.Instance.ad_top_down);
 
     }
 
     public void Restart()
     {
-        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
-        PlayerResource.Instance.GameIsPaused = false; //убираем паузу
-        Time.timeScale = 1f;        //убираем паузу
-        PlayerResource.Instance.EndGame = false; //ставим что конец игры не тру
-        PlayerResource.Instance.hint = 3;
-        PlayerResource.Instance.refill = 1;
-        PlayerResource.Instance.score = 0;
 
-        if (PlayerResource.Instance.gameMode == "normal")
+        board = FindObjectOfType<Board>();
+
+        if (PlayerResource.Instance.gameMode == "normal" && board != null)
         {
-            PlayerResource.Instance.time = 0f;
+            Debug.LogError("restart normal");
+            board.endGame = false; //ставим что конец игры не тру
+            board.hints = 3;
+            board.refill = 1;
+            board.score = 0;
         }
-        else if (PlayerResource.Instance.gameMode == "timetrial")
+        else if (PlayerResource.Instance.gameMode == "timetrial" && board != null)
         {
             PlayerResource.Instance.time = 120f;
+            board.endGame = false; //ставим что конец игры не тру
+            board.hints = 3;
+            board.refill = 1;
+            board.score = 0;
         }
 
+        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
+        PlayerResource.Instance.GameIsPaused = false; //убираем паузу
+        Time.timeScale = 1f;//убираем паузу
     }
 
     public void Menu()
     {
         SceneManager.LoadScene("Menu");
-        // AdMob_baner.Instance.Hide(Settings.Instance.ad_top_down);
+        //AdMob_baner.Instance.Hide(Settings.Instance.ad_top_down);
     }
 
     public void Setting()

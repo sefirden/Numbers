@@ -10,6 +10,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
 {
     public int width;
     public int height;
+    public int hints;
+    public int refill;
+    public int score;
+    public int hiScore;
+    public string loadedBoard;
+    public bool endGame;
 
     public GameObject[] dots;
 
@@ -38,8 +44,30 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     private void Awake()
     {
-        width = PlayerResource.Instance.width;
-        height = PlayerResource.Instance.height;
+        if (PlayerResource.Instance.gameMode == "normal")
+        {
+            width = PlayerResource.Instance.widthN;
+            height = PlayerResource.Instance.heightN;
+            hints = PlayerResource.Instance.hintN;
+            refill = PlayerResource.Instance.refillN;
+            score = PlayerResource.Instance.scoreN;
+            hiScore = PlayerResource.Instance.hiScoreN;
+            loadedBoard = PlayerResource.Instance.loadedBoardN;
+            endGame = PlayerResource.Instance.EndGameN;
+
+        }
+        else if(PlayerResource.Instance.gameMode == "timetrial")
+        {
+            width = PlayerResource.Instance.widthT;
+            height = PlayerResource.Instance.heightT;
+            hints = PlayerResource.Instance.hintT;
+            refill = PlayerResource.Instance.refillT;
+            score = PlayerResource.Instance.scoreT;
+            hiScore = PlayerResource.Instance.hiScoreT;
+            loadedBoard = PlayerResource.Instance.loadedBoardT;
+            endGame = PlayerResource.Instance.EndGameT;
+        }
+
     }
 
     // Start is called before the first frame update
@@ -57,23 +85,54 @@ public class Board : MonoBehaviour, IPointerClickHandler
         hint = false;
 
         index = 0;
-        PlayerResource.Instance.score = 0;
-        Shuffle();
-        SetUp();
+
+        if (PlayerResource.Instance.isLoaded == true)
+        {
+            SetUpLoaded();
+            PlayerResource.Instance.isLoaded = false;
+        }
+        else
+        {
+            Shuffle();
+            SetUp();
+        }
     }
 
     void Update()
     {
-        scoreText.text = "Score: " + Convert.ToString(PlayerResource.Instance.score);
-        hintcount.text = Convert.ToString(PlayerResource.Instance.hint);
-        refillcount.text = Convert.ToString(PlayerResource.Instance.refill);
-        refillcountLayer.text = Convert.ToString(PlayerResource.Instance.refill);
-        HighscoreText.text = "High Score: " + Convert.ToString(PlayerResource.Instance.hiScore);
+
+        if (PlayerResource.Instance.gameMode == "normal")
+        {
+            PlayerResource.Instance.hintN = hints;
+            PlayerResource.Instance.refillN = refill;
+            PlayerResource.Instance.scoreN = score;
+            PlayerResource.Instance.hiScoreN = hiScore;
+            PlayerResource.Instance.loadedBoardN = loadedBoard;
+            PlayerResource.Instance.EndGameN = endGame;
+
+        }
+        else if (PlayerResource.Instance.gameMode == "timetrial")
+        {
+            PlayerResource.Instance.hintT = hints;
+            PlayerResource.Instance.refillT = refill;
+            PlayerResource.Instance.scoreT = score;
+            PlayerResource.Instance.hiScoreT = hiScore;
+            PlayerResource.Instance.loadedBoardT = loadedBoard;
+            PlayerResource.Instance.EndGameT = endGame;
+        }
+                          
+        scoreText.text = "Score: " + Convert.ToString(score);
+        hintcount.text = Convert.ToString(hints);
+        refillcount.text = Convert.ToString(refill);
+        refillcountLayer.text = Convert.ToString(refill);
+        HighscoreText.text = "High Score: " + Convert.ToString(hiScore);
+
+
 
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
-        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true && PlayerResource.Instance.EndGame != true)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
+        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
         {
 
             ClickSelect(); //ищем стартовую точку
@@ -81,7 +140,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
            // Draw(true); //выключаем подсказку
 
         }
-        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != true) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
+        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
         {
 
             RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
@@ -149,7 +208,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
         }
-        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true && PlayerResource.Instance.EndGame != true)//отпускаем кнопку мышки
+        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true)//отпускаем кнопку мышки
         {
             if (tempObject != null)
             {
@@ -164,6 +223,32 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData) //чтобы работало UI
     {
         //Debug.LogWarning("Refill");
+    }
+
+    private void SetUpLoaded()
+    {
+        int indx = 0;
+        string[] a = loadedBoard.Split(new char[] { '*' });
+
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                Vector2 tempPosition = new Vector2(i, j);
+
+                int dotToUse = Convert.ToInt32(a[indx]) - 1; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
+                
+                Debug.LogError(loadedBoard + " and " + dotToUse);
+
+                GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
+                dot.transform.parent = this.transform;
+                dot.name = "t ( " + i + ", " + j + " )";
+
+                allDots[i, j] = dot;
+                indx++;
+            }
+        }
     }
 
     private void Shuffle() //перемешиваем доску
@@ -259,11 +344,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
         }
         if (quantity > 1) //если выбрана больше чем 1 цифра
         {
-            PlayerResource.Instance.score += tempScore * quantity;
+            score += tempScore * quantity;
 
-            if (PlayerResource.Instance.score > PlayerResource.Instance.hiScore)
+            if (score > hiScore)
             {
-                PlayerResource.Instance.hiScore = PlayerResource.Instance.score;
+                hiScore = score;
             }
 
             if (PlayerResource.Instance.gameMode == "timetrial")
@@ -271,7 +356,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 PlayerResource.Instance.time += quantity * (1f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 1,5 до 1,9 сек
                 }
             
-            Debug.LogWarning("Score: " + PlayerResource.Instance.score);
+            Debug.LogWarning("Score: " + score);
             Destroy(); //удаляем собранные цифры
 
             if (ChainLine.enabled == true)
@@ -435,7 +520,22 @@ public class Board : MonoBehaviour, IPointerClickHandler
         }
         Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры
 
+        CollectBoardToSave();
         CheckEndGame();
+
+    }
+
+    private void CollectBoardToSave()
+    {
+        loadedBoard = null;
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                loadedBoard += allDots[i, j].transform.tag + "*";
+            }
+        }
     }
 
     private void CheckEndGame()
@@ -478,11 +578,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
         }
         if(countStep == false)
         {
-            if (PlayerResource.Instance.refill == 0)
+            if (refill == 0)
             {
                 EndGame();
             }
-            else if (PlayerResource.Instance.refill > 0)
+            else if (refill > 0)
             {
                 NoMatch();
             }
@@ -505,11 +605,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
         NoMatchLayer.SetActive(false);
         EndGameLayer.SetActive(true);
         PlayerResource.Instance.GameIsPaused = true;
-        PlayerResource.Instance.EndGame = true;
+        endGame = true;
 
-        // PlayServicesGoogle.Instance.CollectData(); //собираем данные
-        // PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
-        // PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
+        PlayServicesGoogle.Instance.CollectData(); //собираем данные
+        PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
+        PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
 
         // AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
     }
@@ -518,7 +618,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
 
         int count = 0;
-        if (PlayerResource.Instance.hint > 0 && PlayerResource.Instance.GameIsPaused != true)
+        if (hints > 0 && PlayerResource.Instance.GameIsPaused != true)
         {
             Debug.LogWarning("Hint");
             Draw(false);
@@ -598,7 +698,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 };
             }
 
-            PlayerResource.Instance.hint--;
+            hints--;
         }
 
     }
@@ -733,7 +833,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
         if (layer == false)
         {
-            if (PlayerResource.Instance.refill > 0 && PlayerResource.Instance.GameIsPaused != true)
+            if (refill > 0 && PlayerResource.Instance.GameIsPaused != true)
             {
                 Debug.LogWarning("Refill");
 
@@ -758,13 +858,14 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 }
                 Shuffle();
                 SetUp();
-                PlayerResource.Instance.refill--;
+                CollectBoardToSave();
+                refill--;
             }
         }
 
         if (layer == true)
         {
-            if (PlayerResource.Instance.refill > 0)
+            if (refill > 0)
             {
                 Time.timeScale = 1f;
                 NoMatchLayer.SetActive(false);
@@ -793,7 +894,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 }
                 Shuffle();
                 SetUp();
-                PlayerResource.Instance.refill--;
+                refill--;
             }
         }
 

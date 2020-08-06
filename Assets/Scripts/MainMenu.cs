@@ -13,21 +13,25 @@ public class MainMenu : MonoBehaviour
     //Скрипт прикреплён к кнопке продолжить игру
 
     private string path; //переменная для пути сохранения
-    public GameObject resume; //прикрепляем кнопку продолжить
-    public GameObject newGame; //прикрепляем кнопку новая игра
-    public GameObject settings; //прикрепляем кнопку продолжить
-    public GameObject quit; //прикрепляем кнопку новая игра
+    public GameObject ResumeN; //прикрепляем кнопку продолжить
+    public GameObject ResumeT; //прикрепляем кнопку новая игра
+
 
     //слои меню и настроек
     public GameObject MainLayer;
     public GameObject SettingsLayer;
     public GameObject LanguageLayer;
-    public GameObject SelectMode;
-    public Dropdown size_drop;
+    public GameObject TimeLayer;
+    public GameObject NormalLayer;
+    public Dropdown size_dropN;
+    public Dropdown size_dropT;
 
     [SerializeField]
     int[] BoardSize;
     int index;
+
+    int width;
+    int height;
 
 
     private void Start() //при старте сцены с меню
@@ -49,42 +53,41 @@ public class MainMenu : MonoBehaviour
             LanguageLayer.SetActive(true);
 
         }
-        
-        int size = PlayerResource.Instance.width;
-
-        int v = Array.IndexOf(BoardSize, size);
-        size_drop.value = v;
-
-        size_drop.onValueChanged.AddListener(delegate {
-            index = size_drop.value;
-            PlayerResource.Instance.width = BoardSize[index];
-            PlayerResource.Instance.height = BoardSize[index];
-        });
-
     }
 
     private void Update() //при старте сцены с меню
     {
-#if UNITY_ANDROID && !UNITY_EDITOR //если скрипт запущен в редакторе или на андроиде
-        path = Path.Combine(Application.persistentDataPath, "FullSave.json"); //путь к сохранению
-#else
-        path = Path.Combine(Application.dataPath, "FullSave.json"); //путь к сохранению если не редактор и не андроид
-#endif
-        if (File.Exists(path)) //если файл сохранения есть
+        /*if (PlayerResource.Instance.scoreN != 0 && PlayerResource.Instance.EndGameN == false) //если файл сохранения есть
         {
-            resume.SetActive(true); //включаем кнопку продолжить
-            newGame.transform.position = new Vector2(0, -1f); //кнопку новая игра двигаем ниже
-            settings.transform.position = new Vector2(0, -2f); //кнопку настройки двигаем ниже
-            quit.transform.position = new Vector2(0, -3f); //кнопку выход двигаем ниже
+            ResumeN.SetActive(true); //включаем кнопку продолжить
         }
-        else //если файла сохранения не найдено
+        else if(PlayerResource.Instance.scoreT != 0 && PlayerResource.Instance.EndGameT == false) //если файла сохранения не найдено
         {
-            resume.SetActive(false); //выключаем кнопку продолжить
-            newGame.transform.position = new Vector2(0, 0); //кнопку новая игра поднимаем выше
-            settings.transform.position = new Vector2(0, -1f); //кнопку настройки двигаем выше
-            quit.transform.position = new Vector2(0, -2f); //кнопку выход двигаем выше
+            ResumeT.SetActive(true); //выключаем кнопку продолжить
+        }*/
 
-        }
+        width = 5;
+        height = 5;
+
+        int v = Array.IndexOf(BoardSize, width);
+        size_dropN.value = v;
+
+        size_dropN.onValueChanged.AddListener(delegate {
+            index = size_dropN.value;
+            height = BoardSize[index];
+            width = BoardSize[index];
+        });
+
+        int w = Array.IndexOf(BoardSize, width);
+        size_dropT.value = w;
+
+        size_dropT.onValueChanged.AddListener(delegate {
+            index = size_dropN.value;
+            height = BoardSize[index];
+            width = BoardSize[index];
+        });
+
+
     }
 
     public void Ru()
@@ -112,50 +115,86 @@ public class MainMenu : MonoBehaviour
     }
 
 
-    public void Resume()
+    public void NormalModeResume()
     {
-       // PlayServicesGoogle.Instance.ReadFromJson(); //читаем из JSON
-       // PlayServicesGoogle.Instance.LoadFromJson(); //применяем в игре
+        PlayerResource.Instance.isLoaded = true;
         PlayerResource.Instance.GameIsPaused = false;
+        PlayerResource.Instance.gameMode = "normal";
         Time.timeScale = 1f;
+        Debug.LogWarning("NormalModeResume");
+        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
     }
 
-    public void NewGame()
+    public void TimeModeResume()
     {
-        MainLayer.SetActive(false);
-        SelectMode.SetActive(true);
-    }
+        PlayerResource.Instance.isLoaded = true;
+        PlayerResource.Instance.GameIsPaused = false;
+        PlayerResource.Instance.gameMode = "timetrial";
+        Time.timeScale = 1f;
+        Debug.LogWarning("TimeModeResume");
+        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
 
-    public void Menu()
-    {
-        SelectMode.SetActive(false);
-        MainLayer.SetActive(true);
     }
 
     public void NormalMode()
     {
-        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
-        PlayerResource.Instance.GameIsPaused = false; //убираем паузу
-        Time.timeScale = 1f;        //убираем паузу
-        PlayerResource.Instance.EndGame = false; //ставим что конец игры не тру
-        PlayerResource.Instance.hint = 3;
-        PlayerResource.Instance.refill = 1;
-        PlayerResource.Instance.gameMode = "normal";
-        PlayerResource.Instance.time = 0f;
-        PlayerResource.Instance.score = 0;
+        MainLayer.SetActive(false);
+        NormalLayer.SetActive(true);
+        PlayServicesGoogle.Instance.ReadFromJson(); //читаем из JSON
+        PlayServicesGoogle.Instance.LoadFromJson(); //применяем в игре
+        if (PlayerResource.Instance.scoreN != 0 && PlayerResource.Instance.EndGameN == false) //если файл сохранения есть
+        {
+            ResumeN.SetActive(true); //включаем кнопку продолжить
+        }
     }
 
-    public void TimeTrialMode()
+    public void TimeMode()
     {
-        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
+        MainLayer.SetActive(false);
+        TimeLayer.SetActive(true);
+        PlayServicesGoogle.Instance.ReadFromJson(); //читаем из JSON
+        PlayServicesGoogle.Instance.LoadFromJson(); //применяем в игре
+        if (PlayerResource.Instance.scoreT != 0 && PlayerResource.Instance.EndGameT == false) //если файл сохранения есть
+        {
+            ResumeT.SetActive(true); //включаем кнопку продолжить
+        }
+    }
+
+    public void Menu()
+    {
+        TimeLayer.SetActive(false);
+        NormalLayer.SetActive(false);
+        MainLayer.SetActive(true);
+    }
+       
+    public void NormalModeStart()
+    {
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         Time.timeScale = 1f;        //убираем паузу
-        PlayerResource.Instance.EndGame = false; //ставим что конец игры не тру
-        PlayerResource.Instance.hint = 3;
-        PlayerResource.Instance.refill = 1;
+        PlayerResource.Instance.EndGameN = false; //ставим что конец игры не тру
+        PlayerResource.Instance.hintN = 3;
+        PlayerResource.Instance.refillN = 1;
+        PlayerResource.Instance.gameMode = "normal";
+        PlayerResource.Instance.scoreN = 0;
+        PlayerResource.Instance.heightN = height;
+        PlayerResource.Instance.widthN = width;
+        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
+    }
+
+    public void TimeTrialModeStart()
+    {
+        
+        PlayerResource.Instance.GameIsPaused = false; //убираем паузу
+        Time.timeScale = 1f;        //убираем паузу
+        PlayerResource.Instance.EndGameT = false; //ставим что конец игры не тру
+        PlayerResource.Instance.hintT = 3;
+        PlayerResource.Instance.refillT = 1;
         PlayerResource.Instance.gameMode = "timetrial";
         PlayerResource.Instance.time = 120f;
-        PlayerResource.Instance.score = 0;
+        PlayerResource.Instance.scoreT = 0;
+        PlayerResource.Instance.heightT = height;
+        PlayerResource.Instance.widthT = width;
+        SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
     }
 
     public void Setting()
@@ -172,17 +211,17 @@ public class MainMenu : MonoBehaviour
 
     public void ShowLeaderBoard()
     {
-        //PlayServicesGoogle.ShowLeaderboardsUI();
+        PlayServicesGoogle.ShowLeaderboardsUI();
     }
 
     public void ShowAchievement()
     {
-       // PlayServicesGoogle.ShowAchievementUI();
+        PlayServicesGoogle.ShowAchievementUI();
     }
 
     public void CloudLoad()
     {
-       // PlayServicesGoogle.Instance.LoadFromCloud(); //было false
+        PlayServicesGoogle.Instance.LoadFromCloud(); //было false
     }
 
 }

@@ -52,11 +52,14 @@ public class Timer : MonoBehaviour
                 Time.timeScale = 0f;
                 NoTimeLayer.SetActive(true);
                 PlayerResource.Instance.GameIsPaused = true;
-                PlayerResource.Instance.EndGame = true;
+                PlayerResource.Instance.EndGameT = true;
 
-                // PlayServicesGoogle.Instance.CollectData(); //собираем данные
-                // PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
-                // PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
+
+
+
+                PlayServicesGoogle.Instance.CollectData(); //собираем данные
+                PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
+                PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
 
                 // AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
             }
