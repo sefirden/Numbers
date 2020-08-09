@@ -57,15 +57,6 @@ public class MainMenu : MonoBehaviour
 
     private void Update() //при старте сцены с меню
     {
-        /*if (PlayerResource.Instance.scoreN != 0 && PlayerResource.Instance.EndGameN == false) //если файл сохранения есть
-        {
-            ResumeN.SetActive(true); //включаем кнопку продолжить
-        }
-        else if(PlayerResource.Instance.scoreT != 0 && PlayerResource.Instance.EndGameT == false) //если файла сохранения не найдено
-        {
-            ResumeT.SetActive(true); //выключаем кнопку продолжить
-        }*/
-
         width = 5;
         height = 5;
 

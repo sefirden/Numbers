@@ -16,6 +16,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public int hiScore;
     public string loadedBoard;
     public bool endGame;
+    public int difficult;
 
     public GameObject[] dots;
 
@@ -30,6 +31,15 @@ public class Board : MonoBehaviour, IPointerClickHandler
     private int[,] numbers;
     public GameObject[,] allDots;
     public GameObject[] CollectedNumbers;
+
+    public Button HintButton;
+    public Button AdHintButton;
+
+    public Button AdRefillButton;
+    public Button AdRefillButtonLayer;
+    public Button RefillButton;
+    public Button RefillButtonLayer;
+
 
     public int[] TagForRandomRefill;
     public GameObject[] HintNumbers;
@@ -86,6 +96,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
         index = 0;
 
+        if (hints == 0)
+        {
+            HintButton.gameObject.SetActive(false);
+            AdHintButton.gameObject.SetActive(true);
+        }
+
         if (PlayerResource.Instance.isLoaded == true)
         {
             SetUpLoaded();
@@ -96,6 +112,36 @@ public class Board : MonoBehaviour, IPointerClickHandler
             Shuffle();
             SetUp();
         }
+
+        switch (width)
+        {
+            case 5:
+                difficult = 3;
+                Debug.LogWarning("case 1 " + difficult);
+                break;
+            case 6:
+                difficult = 5;
+                Debug.LogWarning("case 2 " + difficult);
+                break;
+            case 7:
+                difficult = 5;
+                Debug.LogWarning("case 3 " + difficult);
+                break;
+            case 8:
+                difficult = 7;
+                Debug.LogWarning("case 4 " + difficult);
+                break;
+            case 9:
+                difficult = 7;
+                Debug.LogWarning("case 5 " + difficult);
+                break;
+            default:
+                difficult = width*2;
+                Debug.LogWarning("case 5 " + difficult);
+                break;
+        }
+
+
     }
 
     void Update()
@@ -239,7 +285,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
                 int dotToUse = Convert.ToInt32(a[indx]) - 1; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
                 
-                Debug.LogError(loadedBoard + " and " + dotToUse);
+                //Debug.LogError(loadedBoard + " and " + dotToUse);
 
                 GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                 dot.transform.parent = this.transform;
@@ -456,7 +502,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         foreach (var k in g)
         {
 
-            if (k.Count() <= width+1 && k.Key != 0)
+            if (k.Count() <= (width + difficult) && k.Key != 0) //тут крутим сложность
             {
                // Debug.Log("цифр количеством меньше " + (width+1) + " - "  + k.Key);
                 temp[indx] = k.Key;
@@ -592,7 +638,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     private void NoMatch()
     {
-        //AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
+        AdMob_baner.Instance.Show();
         Time.timeScale = 0f;
         NoMatchLayer.SetActive(true);
         PlayerResource.Instance.GameIsPaused = true;
@@ -611,7 +657,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
         PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
 
-        // AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
+        AdMob_baner.Instance.Show();
     }
 
     public void Hint()
@@ -699,6 +745,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
             hints--;
+
+            if(hints == 0)
+            {
+                HintButton.gameObject.SetActive(false);
+                AdHintButton.gameObject.SetActive(true);
+            }
         }
 
     }
@@ -870,6 +922,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 Time.timeScale = 1f;
                 NoMatchLayer.SetActive(false);
                 PlayerResource.Instance.GameIsPaused = false;
+                AdMob_baner.Instance.Hide();
 
                 Debug.LogWarning("Refill");
 
@@ -894,9 +947,33 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 }
                 Shuffle();
                 SetUp();
+                CollectBoardToSave();
                 refill--;
             }
         }
 
+    }
+
+    public void AdHint()
+    {
+        AdHintButton.interactable = false;
+        AdHintButton.GetComponentInChildren<Text>().text = "Loading...";
+        AdMob_baner.Instance.OnGetMoreHintClicked();
+    }
+
+    public void AdHintRecieve()
+    {
+        hints = 3;
+        score += 10000; //убрать
+        HintButton.gameObject.SetActive(true);
+        AdHintButton.gameObject.SetActive(false);
+        AdHintButton.interactable = true;
+    }
+
+    public void AdHintClose()
+    {
+        score = 0; //убрать
+        AdHintButton.interactable = true;
+        AdHintButton.GetComponentInChildren<Text>().text = "More Points";
     }
 }

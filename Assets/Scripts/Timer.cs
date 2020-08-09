@@ -61,7 +61,7 @@ public class Timer : MonoBehaviour
                 PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
                 PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
 
-                // AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
+                AdMob_baner.Instance.Show();
             }
         }
 

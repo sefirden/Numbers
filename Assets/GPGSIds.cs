@@ -24,8 +24,10 @@
 
 public static class GPGSIds
 {
-        public const string leaderboard_top_score = "CgkIqKunxqYGEAIQAQ"; // <GPGSID>
-        public const string achievement_end_game = "CgkIqKunxqYGEAIQAA"; // <GPGSID>
+        public const string leaderboard_play_time_time_limit_mode = "CgkIpLP6wsoMEAIQAw"; // <GPGSID>
+        public const string achievement_end_game = "CgkIpLP6wsoMEAIQBA"; // <GPGSID>
+        public const string leaderboard_top_score__normal_mode = "CgkIpLP6wsoMEAIQAQ"; // <GPGSID>
+        public const string leaderboard_top_score__time_limit_mode = "CgkIpLP6wsoMEAIQAg"; // <GPGSID>
 
 }
 

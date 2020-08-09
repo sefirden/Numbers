@@ -24,7 +24,7 @@ public class Pause : MonoBehaviour
         PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
         PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
 
-        //AdMob_baner.Instance.Show(Settings.Instance.ad_top_down);
+        AdMob_baner.Instance.Show();
 
     }
 
@@ -32,13 +32,13 @@ public class Pause : MonoBehaviour
     {
         Time.timeScale = 1f;
         Invoke("ResumeToGame", 0.1f);
-        
-       //AdMob_baner.Instance.Hide(Settings.Instance.ad_top_down);
+        AdMob_baner.Instance.Hide();
 
     }
 
     public void Restart()
     {
+        AdMob_baner.Instance.Hide();
 
         board = FindObjectOfType<Board>();
 
@@ -62,12 +62,13 @@ public class Pause : MonoBehaviour
         SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         Time.timeScale = 1f;//убираем паузу
+
     }
 
     public void Menu()
     {
         SceneManager.LoadScene("Menu");
-        //AdMob_baner.Instance.Hide(Settings.Instance.ad_top_down);
+        AdMob_baner.Instance.Hide();
     }
 
     public void Setting()
