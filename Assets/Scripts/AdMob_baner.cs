@@ -10,8 +10,7 @@ using UnityEngine.Events;
 public class AdMob_baner : MonoBehaviour
 {
     private BannerView adBannerDown;
-    private RewardedAd adReward;
-    private Board board;
+    private RewardBasedVideoAd rewardBasedVideo;
 
     public UnityEvent OnAdLoadedEvent;
     public UnityEvent OnAdFailedToLoadEvent;
@@ -19,6 +18,7 @@ public class AdMob_baner : MonoBehaviour
     public UnityEvent OnAdFailedToShowEvent;
     public UnityEvent OnUserEarnedRewardEvent;
     public UnityEvent OnAdClosedEvent;
+    public UnityEvent OnAdStartedEvent;
     public UnityEvent OnAdLeavingApplicationEvent;
 
     private string idApp, idBanner, idReward;
@@ -48,10 +48,28 @@ public class AdMob_baner : MonoBehaviour
         idReward = "ca-app-pub-3940256099942544/5224354917";
 
         MobileAds.Initialize(idApp);
-           
+
         RequestBannerAd();
 
-        RequestAndLoadRewardedAd();
+        // Get singleton reward based video ad reference.
+        rewardBasedVideo = RewardBasedVideoAd.Instance;
+
+        // Called when an ad request has successfully loaded.
+        rewardBasedVideo.OnAdLoaded += (sender, args) => OnAdLoadedEvent.Invoke();
+        // Called when an ad request failed to load.
+        rewardBasedVideo.OnAdFailedToLoad += (sender, args) => OnAdFailedToLoadEvent.Invoke();
+        // Called when an ad is shown.
+        rewardBasedVideo.OnAdOpening += (sender, args) => OnAdOpeningEvent.Invoke();
+        // Called when the ad starts to play.
+        rewardBasedVideo.OnAdStarted += (sender, args) => OnAdStartedEvent.Invoke();
+        // Called when the user should be rewarded for watching a video.
+        rewardBasedVideo.OnAdRewarded += (sender, args) => OnUserEarnedRewardEvent.Invoke();
+        // Called when the ad is closed.
+        rewardBasedVideo.OnAdClosed += (sender, args) => OnAdClosedEvent.Invoke();
+        // Called when the ad click caused the user to leave the application.
+        rewardBasedVideo.OnAdLeavingApplication += (sender, args) => OnAdLeavingApplicationEvent.Invoke();
+
+        RequestRewardBasedVideo();
     }
 
 
@@ -127,31 +145,20 @@ public class AdMob_baner : MonoBehaviour
 
     #region REWARDED ADS
 
-    public void RequestAndLoadRewardedAd()
+    public void RequestRewardBasedVideo()
     {
         // create new rewarded ad instance
-        adReward = new RewardedAd(idReward);
-
-        // Add Event Handlers
-        adReward.OnAdLoaded += (sender, args) => OnAdLoadedEvent.Invoke();
-        adReward.OnAdFailedToLoad += (sender, args) => OnAdFailedToLoadEvent.Invoke();
-        adReward.OnAdOpening += (sender, args) => OnAdOpeningEvent.Invoke();
-        adReward.OnAdFailedToShow += (sender, args) => OnAdFailedToShowEvent.Invoke();
-        adReward.OnAdClosed += (sender, args) => OnAdClosedEvent.Invoke();
-        adReward.OnUserEarnedReward += (sender, args) => OnUserEarnedRewardEvent.Invoke();
-
-        // Create empty ad request
-        adReward.LoadAd(AdRequestBuild());
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the rewarded video ad with the request.
+        rewardBasedVideo.LoadAd(request, idReward);
     }
 
     public void ShowRewardedAd()
     {
-        if (adReward != null)
+        if (rewardBasedVideo.IsLoaded())
         {
-            adReward.Show();
-
-            // Create empty ad request
-            adReward.LoadAd(AdRequestBuild());
+            rewardBasedVideo.Show();
         }
         else
         {

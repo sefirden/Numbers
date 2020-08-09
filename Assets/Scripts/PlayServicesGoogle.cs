@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.UI;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.SavedGame;
@@ -18,6 +19,9 @@ public class PlayServicesGoogle : MonoBehaviour
 
     public FullSaves fullsave = new FullSaves();
     private string path;
+    public Button LeaderBoard;
+    public Button Achievement;
+    public Button CloudLoad;
 
     public DateTime SaveTime;
     private void Awake() //запускается до всех стартов
@@ -64,25 +68,17 @@ public class PlayServicesGoogle : MonoBehaviour
     {
         if (authenticated)
         {
-            /*GameObject LeaderBoard = GameObject.Find("LeaderBoard"); //починить прятание кнопок
-            GameObject Achievement = GameObject.Find("Achievement");
-            GameObject CloudLoad = GameObject.Find("CloudLoad");
-
-            LeaderBoard.SetActive(true);
-            Achievement.SetActive(true);
-            CloudLoad.SetActive(true);*/
+            LeaderBoard.interactable = true;
+            Achievement.interactable = true;
+            CloudLoad.interactable = true;
 
             Debug.Log("authenticated"); //показываем кнопки ачив и лидерборд
         }
         else
         {
-            /* GameObject LeaderBoard = GameObject.Find("LeaderBoard");
-             GameObject Achievement = GameObject.Find("Achievement");
-             GameObject CloudLoad = GameObject.Find("CloudLoad");
-
-             LeaderBoard.SetActive(false);
-             Achievement.SetActive(false);
-             CloudLoad.SetActive(false);*/
+            LeaderBoard.interactable = false;
+            Achievement.interactable = false;
+            CloudLoad.interactable = false;
 
             Debug.Log("not authenticated"); //прячем кнопки ачив и лидерборд
         }
@@ -218,7 +214,7 @@ public class PlayServicesGoogle : MonoBehaviour
 
             ((PlayGamesPlatform)Social.Active).SavedGame
                 .OpenWithAutomaticConflictResolution(
-                "PizzeriaEscape",
+                "Numbers",
                 DataSource.ReadCacheOrNetwork,
                 ConflictResolutionStrategy.UseLongestPlaytime, DataToCloud);
         }
