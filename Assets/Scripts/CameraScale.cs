@@ -6,8 +6,8 @@ public class CameraScale : MonoBehaviour
 {
     private Board board;
     public float cameraOffset;
-    public float aspectRatio = 0.625f;
-    public float padding = 2;
+    public float aspectRatio = 0.4865f;
+    public float padding = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class CameraScale : MonoBehaviour
 
     void RepositionCamera(float x, float y)
     {
-        Vector3 tempPosition = new Vector3((x / 2), (y / 2), cameraOffset);
+        Vector3 tempPosition = new Vector3((x / 2), (y / 2)+1, cameraOffset);
         transform.position = tempPosition;
         if (board.width >= board.height)
         {

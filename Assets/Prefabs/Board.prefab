@@ -53,6 +53,7 @@ MonoBehaviour:
   loadedBoard: 
   endGame: 0
   difficult: 0
+  AdReward: 0
   dots:
   - {fileID: 4369894751642725644, guid: d06d01bb8bd24814f909fce639af06b8, type: 3}
   - {fileID: 576136662354486289, guid: 97eb1a44a1ad1844393ea6c1ba902eea, type: 3}
@@ -69,6 +70,8 @@ MonoBehaviour:
   hintcount: {fileID: 0}
   refillcount: {fileID: 0}
   refillcountLayer: {fileID: 0}
+  Adrefillcount: {fileID: 0}
+  AdrefillcountLayer: {fileID: 0}
   EndGameLayer: {fileID: 0}
   NoMatchLayer: {fileID: 0}
   CollectedNumbers: []

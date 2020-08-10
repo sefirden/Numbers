@@ -163,6 +163,7 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameN = false; //ставим что конец игры не тру
+        PlayerResource.Instance.AdRewardN = false;
         PlayerResource.Instance.hintN = 3;
         PlayerResource.Instance.refillN = 1;
         PlayerResource.Instance.gameMode = "normal";
@@ -178,6 +179,7 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameT = false; //ставим что конец игры не тру
+        PlayerResource.Instance.AdRewardT = false;
         PlayerResource.Instance.hintT = 3;
         PlayerResource.Instance.refillT = 1;
         PlayerResource.Instance.gameMode = "timetrial";

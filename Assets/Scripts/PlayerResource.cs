@@ -23,6 +23,7 @@ public class PlayerResource : MonoBehaviour
     public int refillN; //количество спасенных кусков пиццы, за каждый кусок противники сложнее
     public int heightN;
     public int widthN;
+    public bool AdRewardN;
 
     public bool EndGameN; //true если конец игры
     public string loadedBoardN;
@@ -30,12 +31,14 @@ public class PlayerResource : MonoBehaviour
 
     //переменные для Time Limit режима
     public float time; //
+    public float playedTime;
     public int scoreT; //количество здоровья, пока 4
     public int hiScoreT; //количество ячеек здоровья
     public int hintT; //количество монеток у игрока, нужны для магазина поверапов
     public int refillT; //количество спасенных кусков пиццы, за каждый кусок противники сложнее
     public int heightT;
     public int widthT;
+    public bool AdRewardT;
 
     public bool EndGameT; //true если конец игры
     public string loadedBoardT;

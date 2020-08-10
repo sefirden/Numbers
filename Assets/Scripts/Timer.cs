@@ -36,6 +36,8 @@ public class Timer : MonoBehaviour
         {
             PlayerResource.Instance.time -= Time.deltaTime; //отнимаем секунду
 
+            PlayerResource.Instance.playedTime += Time.deltaTime;
+
             timeMin = Math.Floor(PlayerResource.Instance.time / 60); //получаем целые минуты, округленные вниз до целого
             timeSec = Math.Floor(PlayerResource.Instance.time - (timeMin * 60)); //целые секунды, округленные вниз до целого
             if (timeSec > 9)
@@ -54,9 +56,9 @@ public class Timer : MonoBehaviour
                 PlayerResource.Instance.GameIsPaused = true;
                 PlayerResource.Instance.EndGameT = true;
 
-
-
-
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
+                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
+                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, PlayerResource.Instance.hiScoreT); //отправляем лучшее время в Google Play
                 PlayServicesGoogle.Instance.CollectData(); //собираем данные
                 PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
                 PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако

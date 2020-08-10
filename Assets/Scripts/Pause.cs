@@ -49,6 +49,7 @@ public class Pause : MonoBehaviour
             board.hints = 3;
             board.refill = 1;
             board.score = 0;
+            board.AdReward = false;
         }
         else if (PlayerResource.Instance.gameMode == "timetrial" && board != null)
         {
@@ -57,6 +58,7 @@ public class Pause : MonoBehaviour
             board.hints = 3;
             board.refill = 1;
             board.score = 0;
+            board.AdReward = false;
         }
 
         SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал

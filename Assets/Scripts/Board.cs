@@ -17,6 +17,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public string loadedBoard;
     public bool endGame;
     public int difficult;
+    public bool AdReward;
 
     public GameObject[] dots;
 
@@ -25,6 +26,9 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public Text hintcount;
     public Text refillcount;
     public Text refillcountLayer;
+    public Text Adrefillcount;
+    public Text AdrefillcountLayer;
+
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
     private bool countStep;
@@ -64,6 +68,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             hiScore = PlayerResource.Instance.hiScoreN;
             loadedBoard = PlayerResource.Instance.loadedBoardN;
             endGame = PlayerResource.Instance.EndGameN;
+            AdReward = PlayerResource.Instance.AdRewardN;
 
         }
         else if(PlayerResource.Instance.gameMode == "timetrial")
@@ -76,6 +81,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             hiScore = PlayerResource.Instance.hiScoreT;
             loadedBoard = PlayerResource.Instance.loadedBoardT;
             endGame = PlayerResource.Instance.EndGameT;
+            AdReward = PlayerResource.Instance.AdRewardT;
         }
 
     }
@@ -100,6 +106,24 @@ public class Board : MonoBehaviour, IPointerClickHandler
         {
             HintButton.gameObject.SetActive(false);
             AdHintButton.gameObject.SetActive(true);
+        }
+
+        if (refill == 0)
+        {
+            RefillButton.gameObject.SetActive(false);
+            AdRefillButton.gameObject.SetActive(true);            
+            RefillButtonLayer.gameObject.SetActive(false);
+            AdRefillButtonLayer.gameObject.SetActive(true);
+        }
+
+        if (AdReward == true)
+        {
+            AdRefillButton.interactable = false;
+            AdRefillButtonLayer.interactable = false;
+            AdRefillButton.GetComponentInChildren<Text>().text = "no more";
+            AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
+            Adrefillcount.text = "0";
+            AdrefillcountLayer.text = "0";
         }
 
         if (PlayerResource.Instance.isLoaded == true)
@@ -155,6 +179,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.hiScoreN = hiScore;
             PlayerResource.Instance.loadedBoardN = loadedBoard;
             PlayerResource.Instance.EndGameN = endGame;
+            PlayerResource.Instance.AdRewardN = AdReward;
 
         }
         else if (PlayerResource.Instance.gameMode == "timetrial")
@@ -165,6 +190,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.hiScoreT = hiScore;
             PlayerResource.Instance.loadedBoardT = loadedBoard;
             PlayerResource.Instance.EndGameT = endGame;
+            PlayerResource.Instance.AdRewardT = AdReward;
         }
                           
         scoreText.text = "Score: " + Convert.ToString(score);
@@ -653,6 +679,22 @@ public class Board : MonoBehaviour, IPointerClickHandler
         PlayerResource.Instance.GameIsPaused = true;
         endGame = true;
 
+
+
+        PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
+
+        if (PlayerResource.Instance.gameMode == "normal")
+        {
+              PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, hiScore); //отправляем лучшее время в Google Play
+
+        }
+        else if (PlayerResource.Instance.gameMode == "timetrial")
+        {
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, hiScore); //отправляем лучшее время в Google Play
+        }
+
+
         PlayServicesGoogle.Instance.CollectData(); //собираем данные
         PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
         PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
@@ -912,6 +954,15 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 SetUp();
                 CollectBoardToSave();
                 refill--;
+
+                if (refill == 0)
+                {
+                    RefillButton.gameObject.SetActive(false);
+                    AdRefillButton.gameObject.SetActive(true);
+
+                    RefillButtonLayer.gameObject.SetActive(false);
+                    AdRefillButtonLayer.gameObject.SetActive(true);
+                }
             }
         }
 
@@ -949,6 +1000,15 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 SetUp();
                 CollectBoardToSave();
                 refill--;
+
+                if (refill == 0)
+                {
+                    RefillButton.gameObject.SetActive(false);
+                    AdRefillButton.gameObject.SetActive(true);
+
+                    RefillButtonLayer.gameObject.SetActive(false);
+                    AdRefillButtonLayer.gameObject.SetActive(true);
+                }
             }
         }
 
@@ -964,7 +1024,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public void AdHintRecieve()
     {
         hints = 3;
-        score += 10000; //убрать
         HintButton.gameObject.SetActive(true);
         AdHintButton.gameObject.SetActive(false);
         AdHintButton.interactable = true;
@@ -972,8 +1031,71 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     public void AdHintClose()
     {
-        score = 0; //убрать
         AdHintButton.interactable = true;
-        AdHintButton.GetComponentInChildren<Text>().text = "More Points";
+        AdHintButton.GetComponentInChildren<Text>().text = "More Hints";
+    }
+
+    public void AdRefill()
+    {
+        AdRefillButton.interactable = false;
+        AdRefillButtonLayer.interactable = false;
+
+        AdRefillButton.GetComponentInChildren<Text>().text = "Loading...";
+        AdRefillButtonLayer.GetComponentInChildren<Text>().text = "Loading...";
+
+        AdMob_baner.Instance.OnGetMoreRefillClicked();
+    }
+
+    public void AdRefillRecieve()
+    {
+        AdReward = true;
+
+        AdRefillButton.GetComponentInChildren<Text>().text = "no more";
+        AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
+        Adrefillcount.text = "0";
+        AdrefillcountLayer.text = "0";
+
+        Time.timeScale = 1f;
+        NoMatchLayer.SetActive(false);
+        PlayerResource.Instance.GameIsPaused = false;
+        AdMob_baner.Instance.Hide();
+
+        Debug.LogWarning("Refill");
+
+        if (ChainLine.enabled == true)
+        {
+            ChainLine.enabled = false;
+            ChainLine.positionCount = 1;
+            ChainLine.SetPosition(0, Vector3.zero);
+        }
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] != null)
+                {
+                    Destroy(allDots[i, j]); //удаляем все собранные объекты
+                    allDots[i, j] = null;
+                }
+            }
+
+        }
+        Shuffle();
+        SetUp();
+        CollectBoardToSave();
+
+    }
+
+    public void AdRefillClose()
+    {
+        if (AdReward == false)
+        {
+            AdRefillButton.interactable = true;
+            AdRefillButtonLayer.interactable = true;
+
+            AdRefillButton.GetComponentInChildren<Text>().text = "More refill";
+            AdRefillButtonLayer.GetComponentInChildren<Text>().text = "More refill";
+        }
     }
 }

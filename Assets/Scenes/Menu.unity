@@ -280,9 +280,9 @@ MonoBehaviour:
     EndGameT: 0
     loadedBoardT: 
     SaveTime: 
-  LeaderBoard: {fileID: 0}
-  Achievement: {fileID: 0}
-  CloudLoad: {fileID: 0}
+  LeaderBoard: {fileID: 1667758320}
+  Achievement: {fileID: 1710988996}
+  CloudLoad: {fileID: 534435590}
 --- !u!1 &34212726
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,6 +1240,447 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 175003112}
   m_CullTransparentMesh: 0
+--- !u!1001 &196667071
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6058589698828654572, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_Name
+      value: AdMob
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdClosedEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_name
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLoadedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Ad Load
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToLoadEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Failed to Load
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdOpeningEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Ad Opening
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdFailedToShowEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Failed to Show
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdClosedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdClosedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdClosedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdClosedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdClosedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Ad is close
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: Rewarded
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdStartedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Ad start
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLeavingApplicationEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLeavingApplicationEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BroadcastMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLeavingApplicationEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLeavingApplicationEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnAdLeavingApplicationEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Leaving App
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: AdMob_baner, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 196667072}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: RequestRewardBasedVideo
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: OnUserEarnedRewardEvent.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: status
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: score
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.2667828
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.235904
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.128407
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058589698828654575, guid: a1a35f7cf289df14d82958faa5b311cc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a1a35f7cf289df14d82958faa5b311cc, type: 3}
+--- !u!114 &196667072 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6058589698828654574, guid: a1a35f7cf289df14d82958faa5b311cc,
+    type: 3}
+  m_PrefabInstance: {fileID: 196667071}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8944c56b444027343a4394839378ef14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &248159474
 GameObject:
   m_ObjectHideFlags: 0
@@ -1498,7 +1939,7 @@ PrefabInstance:
     - target: {fileID: 6223891272900701016, guid: bf868a5ebcb0e94479b4261ab3a8aeca,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6223891272900701016, guid: bf868a5ebcb0e94479b4261ab3a8aeca,
         type: 3}
@@ -4275,7 +4716,7 @@ PrefabInstance:
     - target: {fileID: 9152054590135407945, guid: 4679bee628e71a640a53c7e6f9b260e2,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 9152054590135407945, guid: 4679bee628e71a640a53c7e6f9b260e2,
         type: 3}
@@ -7289,7 +7730,7 @@ PrefabInstance:
     - target: {fileID: 4936705770931455372, guid: 028d82148d83d204eb0e791300b5245c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4936705770931455372, guid: 028d82148d83d204eb0e791300b5245c,
         type: 3}
@@ -7733,7 +8174,7 @@ PrefabInstance:
     - target: {fileID: 2220345879129527802, guid: 078b84adcd8fee04b82b8af4b9dd5661,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2220345879129527802, guid: 078b84adcd8fee04b82b8af4b9dd5661,
         type: 3}
@@ -9522,124 +9963,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020896467}
   m_CullTransparentMesh: 0
---- !u!1 &2024715117
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2024715118}
-  - component: {fileID: 2024715119}
-  m_Layer: 0
-  m_Name: AdMob
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2024715118
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2024715117}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2667828, y: 7.235904, z: -7.128407}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2024715119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2024715117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8944c56b444027343a4394839378ef14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnAdLoadedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAdFailedToLoadEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAdOpeningEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAdFailedToShowEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserEarnedRewardEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6438401562014285688, guid: ffcac0ff243f86348971bd03d9c268dd,
-          type: 3}
-        m_TargetAssemblyTypeName: Board, Assembly-CSharp
-        m_MethodName: AdHintRecieve
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnAdClosedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6438401562014285688, guid: ffcac0ff243f86348971bd03d9c268dd,
-          type: 3}
-        m_TargetAssemblyTypeName: Board, Assembly-CSharp
-        m_MethodName: AdHintClose
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2024715119}
-        m_TargetAssemblyTypeName: AdMob_baner, Assembly-CSharp
-        m_MethodName: RequestRewardBasedVideo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnAdStartedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAdLeavingApplicationEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6438401562014285688, guid: ffcac0ff243f86348971bd03d9c268dd,
-          type: 3}
-        m_TargetAssemblyTypeName: Board, Assembly-CSharp
-        m_MethodName: AdHintClose
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &2033243296
 GameObject:
   m_ObjectHideFlags: 0

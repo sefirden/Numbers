@@ -10,16 +10,16 @@ using UnityEngine.Events;
 public class AdMob_baner : MonoBehaviour
 {
     private BannerView adBannerDown;
-    private RewardBasedVideoAd rewardBasedVideo;
+    private RewardBasedVideoAd adRewardHint;
+    private RewardBasedVideoAd adRewardRefill;
 
-    public UnityEvent OnAdLoadedEvent;
-    public UnityEvent OnAdFailedToLoadEvent;
-    public UnityEvent OnAdOpeningEvent;
-    public UnityEvent OnAdFailedToShowEvent;
-    public UnityEvent OnUserEarnedRewardEvent;
-    public UnityEvent OnAdClosedEvent;
-    public UnityEvent OnAdStartedEvent;
-    public UnityEvent OnAdLeavingApplicationEvent;
+    private Board board;
+
+    public bool rewardHint;
+    public bool rewardRefill;
+
+    public bool closeHint;
+    public bool closeRefill;
 
     private string idApp, idBanner, idReward;
 
@@ -39,6 +39,37 @@ public class AdMob_baner : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (rewardHint)
+        {
+            board = FindObjectOfType<Board>();
+            board.AdHintRecieve();
+            rewardHint = false;
+        }
+
+        if(closeHint)
+        {
+            board = FindObjectOfType<Board>();
+            board.AdHintClose();
+            closeHint = false;
+        }
+
+        if (rewardRefill)
+        {
+            board = FindObjectOfType<Board>();
+            board.AdRefillRecieve();
+            rewardRefill = false;
+        }
+
+        if (closeRefill)
+        {
+            board = FindObjectOfType<Board>();
+            board.AdRefillClose();
+            closeRefill = false;
+        }
+
+    }
 
     void Start()
     {
@@ -52,24 +83,8 @@ public class AdMob_baner : MonoBehaviour
         RequestBannerAd();
 
         // Get singleton reward based video ad reference.
-        rewardBasedVideo = RewardBasedVideoAd.Instance;
-
-        // Called when an ad request has successfully loaded.
-        rewardBasedVideo.OnAdLoaded += (sender, args) => OnAdLoadedEvent.Invoke();
-        // Called when an ad request failed to load.
-        rewardBasedVideo.OnAdFailedToLoad += (sender, args) => OnAdFailedToLoadEvent.Invoke();
-        // Called when an ad is shown.
-        rewardBasedVideo.OnAdOpening += (sender, args) => OnAdOpeningEvent.Invoke();
-        // Called when the ad starts to play.
-        rewardBasedVideo.OnAdStarted += (sender, args) => OnAdStartedEvent.Invoke();
-        // Called when the user should be rewarded for watching a video.
-        rewardBasedVideo.OnAdRewarded += (sender, args) => OnUserEarnedRewardEvent.Invoke();
-        // Called when the ad is closed.
-        rewardBasedVideo.OnAdClosed += (sender, args) => OnAdClosedEvent.Invoke();
-        // Called when the ad click caused the user to leave the application.
-        rewardBasedVideo.OnAdLeavingApplication += (sender, args) => OnAdLeavingApplicationEvent.Invoke();
-
-        RequestRewardBasedVideo();
+        adRewardHint = RewardBasedVideoAd.Instance;
+        adRewardRefill = RewardBasedVideoAd.Instance;
     }
 
 
@@ -143,34 +158,95 @@ public class AdMob_baner : MonoBehaviour
     #endregion
 
 
-    #region REWARDED ADS
+    #region REWARDED ADS Hint
 
-    public void RequestRewardBasedVideo()
+    public void RequestRewardAdHint()
     {
-        // create new rewarded ad instance
-        // Create an empty ad request.
-        AdRequest request = new AdRequest.Builder().Build();
-        // Load the rewarded video ad with the request.
-        rewardBasedVideo.LoadAd(request, idReward);
+        AdRequest request = AdRequestBuild();
+        adRewardHint.LoadAd(request, idReward);
+
+        adRewardHint.OnAdLoaded += this.HandleOnRewardedAdLoadedHint;
+        adRewardHint.OnAdRewarded += this.HandleOnAdRewardedHint;
+        adRewardHint.OnAdClosed += this.HandleOnRewardedAdClosedHint;
     }
 
-    public void ShowRewardedAd()
+    public void ShowRewardAdHint()
     {
-        if (rewardBasedVideo.IsLoaded())
-        {
-            rewardBasedVideo.Show();
-        }
-        else
-        {
-            Debug.Log("Rewarded ad is not ready yet.");
-        }
+        if (adRewardHint.IsLoaded())
+            adRewardHint.Show();
+    }
+    //events
+    public void HandleOnRewardedAdLoadedHint(object sender, EventArgs args)
+    {//ad loaded
+        ShowRewardAdHint();
     }
 
+    public void HandleOnAdRewardedHint(object sender, EventArgs args)
+    {//user finished watching ad
+        rewardHint = true;
+    }
+
+    public void HandleOnRewardedAdClosedHint(object sender, EventArgs args)
+    {//ad closed (even if not finished watching)
+        closeHint = true;
+
+        adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
+        adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
+        adRewardHint.OnAdClosed -= this.HandleOnRewardedAdClosedHint;
+    }
+
+    #endregion
+
+    #region REWARDED ADS Refill
+
+    public void RequestRewardAdRefill()
+    {
+        AdRequest request = AdRequestBuild();
+        adRewardRefill.LoadAd(request, idReward);
+
+        adRewardRefill.OnAdLoaded += this.HandleOnRewardedAdLoadedRefill;
+        adRewardRefill.OnAdRewarded += this.HandleOnAdRewardedRefill;
+        adRewardRefill.OnAdClosed += this.HandleOnRewardedAdClosedRefill;
+    }
+
+    public void ShowRewardAdRefill()
+    {
+        if (adRewardRefill.IsLoaded())
+            adRewardRefill.Show();
+    }
+    //events
+    public void HandleOnRewardedAdLoadedRefill(object sender, EventArgs args)
+    {//ad loaded
+        ShowRewardAdRefill();
+    }
+
+    public void HandleOnAdRewardedRefill(object sender, EventArgs args)
+    {//user finished watching ad
+        rewardRefill = true;
+    }
+
+    public void HandleOnRewardedAdClosedRefill(object sender, EventArgs args)
+    {//ad closed (even if not finished watching)
+        closeRefill = true;
+
+        adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
+        adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;
+        adRewardRefill.OnAdClosed -= this.HandleOnRewardedAdClosedRefill;
+    }
+
+    #endregion
+
+    //other functions
+    //btn (more points) clicked
     public void OnGetMoreHintClicked()
     {
-        ShowRewardedAd();
+        RequestRewardAdHint();
     }
-    #endregion
+
+    public void OnGetMoreRefillClicked()
+    {
+        RequestRewardAdRefill();
+    }
 
     //------------------------------------------------------------------------
     AdRequest AdRequestBuild()
@@ -181,6 +257,14 @@ public class AdMob_baner : MonoBehaviour
     void OnDestroy()
     {
         DestroyBannerAd();
+
+       /* adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
+        adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
+        adRewardHint.OnAdClosed -= this.HandleOnRewardedAdClosedHint;
+
+        adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
+        adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;
+        adRewardRefill.OnAdClosed -= this.HandleOnRewardedAdClosedRefill;*/
     }
 }
 

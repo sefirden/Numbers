@@ -101,9 +101,11 @@ public class PlayServicesGoogle : MonoBehaviour
 
         public bool EndGameN; //true если конец игры
         public string loadedBoardN;
-        
+        public bool AdRewardN;
+
         //переменные для Time Limit режима
         public float time; //
+        public float playedTime;
         public int scoreT; //количество здоровья, пока 4
         public int hiScoreT; //количество ячеек здоровья
         public int hintT; //количество монеток у игрока, нужны для магазина поверапов
@@ -113,6 +115,7 @@ public class PlayServicesGoogle : MonoBehaviour
 
         public bool EndGameT; //true если конец игры
         public string loadedBoardT;
+        public bool AdRewardT;
 
         public string SaveTime;
     }
@@ -129,6 +132,7 @@ public class PlayServicesGoogle : MonoBehaviour
             fullsave.widthN = PlayerResource.Instance.widthN;
             fullsave.EndGameN = PlayerResource.Instance.EndGameN;
             fullsave.loadedBoardN = PlayerResource.Instance.loadedBoardN;
+            fullsave.AdRewardN = PlayerResource.Instance.AdRewardN;
 
             fullsave.scoreT = PlayerResource.Instance.scoreT;
             fullsave.hiScoreT = PlayerResource.Instance.hiScoreT;
@@ -138,7 +142,9 @@ public class PlayServicesGoogle : MonoBehaviour
             fullsave.widthT = PlayerResource.Instance.widthT;
             fullsave.EndGameT = PlayerResource.Instance.EndGameT;
             fullsave.loadedBoardT = PlayerResource.Instance.loadedBoardT;
+            fullsave.AdRewardT = PlayerResource.Instance.AdRewardT;
             fullsave.time = PlayerResource.Instance.time;
+            fullsave.playedTime = PlayerResource.Instance.playedTime;
 
             fullsave.SaveTime = Convert.ToString(DateTime.UtcNow);
         }
@@ -183,6 +189,7 @@ public class PlayServicesGoogle : MonoBehaviour
         PlayerResource.Instance.widthN = fullsave.widthN;
         PlayerResource.Instance.EndGameN = fullsave.EndGameN;
         PlayerResource.Instance.loadedBoardN = fullsave.loadedBoardN;
+        PlayerResource.Instance.AdRewardN = fullsave.AdRewardN;
 
         PlayerResource.Instance.scoreT = fullsave.scoreT;
         PlayerResource.Instance.hiScoreT = fullsave.hiScoreT;
@@ -192,7 +199,10 @@ public class PlayServicesGoogle : MonoBehaviour
         PlayerResource.Instance.widthT = fullsave.widthT;
         PlayerResource.Instance.EndGameT = fullsave.EndGameT;
         PlayerResource.Instance.loadedBoardT = fullsave.loadedBoardT;
+        PlayerResource.Instance.AdRewardT = fullsave.AdRewardT;
         PlayerResource.Instance.time = fullsave.time;
+        PlayerResource.Instance.playedTime = fullsave.playedTime;
+        
 
         SaveTime = Convert.ToDateTime(fullsave.SaveTime);
         Debug.LogWarning("LoadFromJson Done!!!");
