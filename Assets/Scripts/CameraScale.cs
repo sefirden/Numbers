@@ -6,7 +6,7 @@ public class CameraScale : MonoBehaviour
 {
     private Board board;
     public float cameraOffset;
-    public float aspectRatio = 0.4865f;
+    public float aspectRatio = 1f;
     public float padding = 1;
 
     // Start is called before the first frame update
@@ -25,11 +25,11 @@ public class CameraScale : MonoBehaviour
         transform.position = tempPosition;
         if (board.width >= board.height)
         {
-            Camera.main.orthographicSize = (board.width / 2 + padding) / aspectRatio;
+            Camera.main.orthographicSize = board.width + 0.5f;
         }
         else
         {
-            Camera.main.orthographicSize = board.height / 2 + padding;
+            Camera.main.orthographicSize = board.height + 0.5f; // + padding;
         }
     }
 }

@@ -164,6 +164,7 @@ public class MainMenu : MonoBehaviour
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameN = false; //ставим что конец игры не тру
         PlayerResource.Instance.AdRewardN = false;
+        PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, PlayerResource.Instance.hiScoreN); //отправляем лучшее время в Google Play
         PlayerResource.Instance.hintN = 3;
         PlayerResource.Instance.refillN = 1;
         PlayerResource.Instance.gameMode = "normal";
@@ -180,6 +181,8 @@ public class MainMenu : MonoBehaviour
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameT = false; //ставим что конец игры не тру
         PlayerResource.Instance.AdRewardT = false;
+        PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
+        PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, PlayerResource.Instance.hiScoreT); //отправляем лучшее время в Google Play
         PlayerResource.Instance.hintT = 3;
         PlayerResource.Instance.refillT = 1;
         PlayerResource.Instance.gameMode = "timetrial";

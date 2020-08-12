@@ -62,6 +62,7 @@
     <Compile Include="Assets\GooglePlayGames\BasicApi\Events\Event.cs" />
     <Compile Include="Assets\GooglePlayGames\ISocialPlatform\PlayGamesUserProfile.cs" />
     <Compile Include="Assets\GooglePlayGames\Platforms\Android\AndroidEventsClient.cs" />
+    <Compile Include="Assets\Scripts\bossPlayer.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\CommonTypes.cs" />
     <Compile Include="Assets\GooglePlayGames\OurUtils\Logger.cs" />
     <Compile Include="Assets\GooglePlayGames\Platforms\Android\AndroidVideoClient.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Assets\Scripts\Settings.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\Multiplayer\TurnBasedMatch.cs" />
     <Compile Include="Assets\GooglePlayGames\GameInfo.cs" />
+    <Compile Include="Assets\Scripts\ui.cs" />
     <Compile Include="Assets\GPGSIds.cs" />
     <Compile Include="Assets\Scripts\CameraScale.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\PlayerStats.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Assets\GooglePlayGames\BasicApi\Nearby\EndpointDetails.cs" />
     <Compile Include="Assets\Scripts\Board.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\zeroPlayer.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\SavedGame\SavedGameMetadataUpdate.cs" />
     <Compile Include="Assets\Scripts\Timer.cs" />
     <Compile Include="Assets\Scripts\SetText.cs" />
@@ -135,8 +138,6 @@
     <Compile Include="Assets\GooglePlayGames\OurUtils\Misc.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\Nearby\ConnectionResponse.cs" />
     <Compile Include="Assets\Scripts\SettingsPause.cs" />
-    <Compile Include="Assets\Scripts\zeroPlayer.cs" />
-    <Compile Include="Assets\Scripts\bossPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Resources\Languages\ru.txt" />

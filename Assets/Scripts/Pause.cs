@@ -50,6 +50,7 @@ public class Pause : MonoBehaviour
             board.refill = 1;
             board.score = 0;
             board.AdReward = false;
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, board.hiScore); //отправляем лучшее время в Google Play
         }
         else if (PlayerResource.Instance.gameMode == "timetrial" && board != null)
         {
@@ -59,6 +60,8 @@ public class Pause : MonoBehaviour
             board.refill = 1;
             board.score = 0;
             board.AdReward = false;
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, board.hiScore); //отправляем лучшее время в Google Play
         }
 
         SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал

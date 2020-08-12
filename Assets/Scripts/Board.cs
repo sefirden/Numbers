@@ -19,31 +19,14 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public int difficult;
     public bool AdReward;
 
+    private ui ui;
+
     public GameObject[] dots;
 
-    public Text scoreText;
-    public Text HighscoreText;
-    public Text hintcount;
-    public Text refillcount;
-    public Text refillcountLayer;
-    public Text Adrefillcount;
-    public Text AdrefillcountLayer;
-
-    public GameObject EndGameLayer;
-    public GameObject NoMatchLayer;
     private bool countStep;
     private int[,] numbers;
     public GameObject[,] allDots;
     public GameObject[] CollectedNumbers;
-
-    public Button HintButton;
-    public Button AdHintButton;
-
-    public Button AdRefillButton;
-    public Button AdRefillButtonLayer;
-    public Button RefillButton;
-    public Button RefillButtonLayer;
-
 
     public int[] TagForRandomRefill;
     public GameObject[] HintNumbers;
@@ -58,6 +41,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     private void Awake()
     {
+        ui = FindObjectOfType<ui>();
+
         if (PlayerResource.Instance.gameMode == "normal")
         {
             width = PlayerResource.Instance.widthN;
@@ -89,6 +74,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
+
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
@@ -104,26 +90,26 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
         if (hints == 0)
         {
-            HintButton.gameObject.SetActive(false);
-            AdHintButton.gameObject.SetActive(true);
+            ui.HintButton.gameObject.SetActive(false);
+            ui.AdHintButton.gameObject.SetActive(true);
         }
 
         if (refill == 0)
         {
-            RefillButton.gameObject.SetActive(false);
-            AdRefillButton.gameObject.SetActive(true);            
-            RefillButtonLayer.gameObject.SetActive(false);
-            AdRefillButtonLayer.gameObject.SetActive(true);
+            ui.RefillButton.gameObject.SetActive(false);
+            ui.AdRefillButton.gameObject.SetActive(true);
+            ui.RefillButtonLayer.gameObject.SetActive(false);
+            ui.AdRefillButtonLayer.gameObject.SetActive(true);
         }
 
         if (AdReward == true)
         {
-            AdRefillButton.interactable = false;
-            AdRefillButtonLayer.interactable = false;
-            AdRefillButton.GetComponentInChildren<Text>().text = "no more";
-            AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
-            Adrefillcount.text = "0";
-            AdrefillcountLayer.text = "0";
+            ui.AdRefillButton.interactable = false;
+            ui.AdRefillButtonLayer.interactable = false;
+            ui.AdRefillButton.GetComponentInChildren<Text>().text = "no more";
+            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
+            ui.Adrefillcount.text = "0";
+            ui.AdrefillcountLayer.text = "0";
         }
 
         if (PlayerResource.Instance.isLoaded == true)
@@ -192,12 +178,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.EndGameT = endGame;
             PlayerResource.Instance.AdRewardT = AdReward;
         }
-                          
-        scoreText.text = "Score: " + Convert.ToString(score);
-        hintcount.text = Convert.ToString(hints);
-        refillcount.text = Convert.ToString(refill);
-        refillcountLayer.text = Convert.ToString(refill);
-        HighscoreText.text = "High Score: " + Convert.ToString(hiScore);
+
+        ui.scoreText.text = "Score: " + Convert.ToString(score);
+        ui.hintcount.text = Convert.ToString(hints);
+        ui.refillcount.text = Convert.ToString(refill);
+        ui.refillcountLayer.text = Convert.ToString(refill);
+        ui.HighscoreText.text = "High Score: " + Convert.ToString(hiScore);
 
 
 
@@ -666,7 +652,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
         AdMob_baner.Instance.Show();
         Time.timeScale = 0f;
-        NoMatchLayer.SetActive(true);
+        ui.NoMatchLayer.SetActive(true);
         PlayerResource.Instance.GameIsPaused = true;
     }
 
@@ -674,8 +660,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
 
         Time.timeScale = 0f;
-        NoMatchLayer.SetActive(false);
-        EndGameLayer.SetActive(true);
+        ui.NoMatchLayer.SetActive(false);
+        ui.EndGameLayer.SetActive(true);
         PlayerResource.Instance.GameIsPaused = true;
         endGame = true;
 
@@ -790,8 +776,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
             if(hints == 0)
             {
-                HintButton.gameObject.SetActive(false);
-                AdHintButton.gameObject.SetActive(true);
+                ui.HintButton.gameObject.SetActive(false);
+                ui.AdHintButton.gameObject.SetActive(true);
             }
         }
 
@@ -957,11 +943,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
                 if (refill == 0)
                 {
-                    RefillButton.gameObject.SetActive(false);
-                    AdRefillButton.gameObject.SetActive(true);
+                    ui.RefillButton.gameObject.SetActive(false);
+                    ui.AdRefillButton.gameObject.SetActive(true);
 
-                    RefillButtonLayer.gameObject.SetActive(false);
-                    AdRefillButtonLayer.gameObject.SetActive(true);
+                    ui.RefillButtonLayer.gameObject.SetActive(false);
+                    ui.AdRefillButtonLayer.gameObject.SetActive(true);
                 }
             }
         }
@@ -971,7 +957,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             if (refill > 0)
             {
                 Time.timeScale = 1f;
-                NoMatchLayer.SetActive(false);
+                ui.NoMatchLayer.SetActive(false);
                 PlayerResource.Instance.GameIsPaused = false;
                 AdMob_baner.Instance.Hide();
 
@@ -1003,11 +989,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
                 if (refill == 0)
                 {
-                    RefillButton.gameObject.SetActive(false);
-                    AdRefillButton.gameObject.SetActive(true);
+                    ui.RefillButton.gameObject.SetActive(false);
+                    ui.AdRefillButton.gameObject.SetActive(true);
 
-                    RefillButtonLayer.gameObject.SetActive(false);
-                    AdRefillButtonLayer.gameObject.SetActive(true);
+                    ui.RefillButtonLayer.gameObject.SetActive(false);
+                    ui.AdRefillButtonLayer.gameObject.SetActive(true);
                 }
             }
         }
@@ -1016,32 +1002,32 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     public void AdHint()
     {
-        AdHintButton.interactable = false;
-        AdHintButton.GetComponentInChildren<Text>().text = "Loading...";
+        ui.AdHintButton.interactable = false;
+        ui.AdHintButton.GetComponentInChildren<Text>().text = "Loading...";
         AdMob_baner.Instance.OnGetMoreHintClicked();
     }
 
     public void AdHintRecieve()
     {
         hints = 3;
-        HintButton.gameObject.SetActive(true);
-        AdHintButton.gameObject.SetActive(false);
-        AdHintButton.interactable = true;
+        ui.HintButton.gameObject.SetActive(true);
+        ui.AdHintButton.gameObject.SetActive(false);
+        ui.AdHintButton.interactable = true;
     }
 
     public void AdHintClose()
     {
-        AdHintButton.interactable = true;
-        AdHintButton.GetComponentInChildren<Text>().text = "More Hints";
+        ui.AdHintButton.interactable = true;
+        ui.AdHintButton.GetComponentInChildren<Text>().text = "More Hints";
     }
 
     public void AdRefill()
     {
-        AdRefillButton.interactable = false;
-        AdRefillButtonLayer.interactable = false;
+        ui.AdRefillButton.interactable = false;
+        ui.AdRefillButtonLayer.interactable = false;
 
-        AdRefillButton.GetComponentInChildren<Text>().text = "Loading...";
-        AdRefillButtonLayer.GetComponentInChildren<Text>().text = "Loading...";
+        ui.AdRefillButton.GetComponentInChildren<Text>().text = "Loading...";
+        ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "Loading...";
 
         AdMob_baner.Instance.OnGetMoreRefillClicked();
     }
@@ -1050,13 +1036,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
         AdReward = true;
 
-        AdRefillButton.GetComponentInChildren<Text>().text = "no more";
-        AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
-        Adrefillcount.text = "0";
-        AdrefillcountLayer.text = "0";
+        ui.AdRefillButton.GetComponentInChildren<Text>().text = "no more";
+        ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
+        ui.Adrefillcount.text = "0";
+        ui.AdrefillcountLayer.text = "0";
 
         Time.timeScale = 1f;
-        NoMatchLayer.SetActive(false);
+        ui.NoMatchLayer.SetActive(false);
         PlayerResource.Instance.GameIsPaused = false;
         AdMob_baner.Instance.Hide();
 
@@ -1091,11 +1077,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
         if (AdReward == false)
         {
-            AdRefillButton.interactable = true;
-            AdRefillButtonLayer.interactable = true;
+            ui.AdRefillButton.interactable = true;
+            ui.AdRefillButtonLayer.interactable = true;
 
-            AdRefillButton.GetComponentInChildren<Text>().text = "More refill";
-            AdRefillButtonLayer.GetComponentInChildren<Text>().text = "More refill";
+            ui.AdRefillButton.GetComponentInChildren<Text>().text = "More refill";
+            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "More refill";
         }
     }
 }

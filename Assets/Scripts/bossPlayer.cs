@@ -5,14 +5,22 @@ using UnityEngine;
 public class bossPlayer : MonoBehaviour
 {
     public GameObject boss;
+    public GameObject zero;
     private Board board;
-    private Vector2 startPosition, endPosition;
+    private ui ui;
+    private Vector3 startPosition, endPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         board = FindObjectOfType<Board>();
-        boss.transform.position = new Vector2(Camera.main.orthographicSize + 1, board.height + 2);
+        ui = FindObjectOfType<ui>();
+
+        Vector2 posTop = ui.PlayerAnchor.transform.position;  // get the game object position
+        Vector2 viewportPointTop = Camera.main.WorldToViewportPoint(posTop);  //convert game object position to VievportPoint
+
+        boss.gameObject.GetComponent<RectTransform>().anchorMin = viewportPointTop;
+        boss.gameObject.GetComponent<RectTransform>().anchorMax = viewportPointTop;
 
         StartCoroutine(MoveToStart());
     }
@@ -27,10 +35,10 @@ public class bossPlayer : MonoBehaviour
     {
         float step;
         float moveTime = 0;
-        float speed = 0.66f;
+        float speed = board.width / 5f;
 
-        startPosition = boss.transform.position;
-        endPosition = new Vector2((board.width / 2) + 1, boss.transform.position.y);
+        startPosition = new Vector3(Camera.main.orthographicSize + 1f, ui.PlayerAnchor.transform.position.y, 1f);
+        endPosition = new Vector3(Camera.main.transform.position.x + 1f, ui.PlayerAnchor.transform.position.y, 1f);
         step = (speed / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime;
         while (moveTime <= 1.0f)
         {
