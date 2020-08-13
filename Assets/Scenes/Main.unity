@@ -4090,6 +4090,7 @@ MonoBehaviour:
   TopAnchor: {fileID: 1414548696}
   ButtomAnchor: {fileID: 1085780948}
   PlayerAnchor: {fileID: 1955407126}
+  OneSize: 0
 --- !u!1 &1414548696
 GameObject:
   m_ObjectHideFlags: 0

@@ -168,7 +168,7 @@ public class AdMob_baner : MonoBehaviour
         adRewardHint.OnAdLoaded += this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded += this.HandleOnAdRewardedHint;
         adRewardHint.OnAdClosed += this.HandleOnRewardedAdClosedHint;
-        adRewardHint.OnAdFailedToLoad += HandleRewardBasedVideoFailedToLoadHint;
+        adRewardHint.OnAdFailedToLoad += this.HandleRewardBasedVideoFailedToLoadHint;
         // Called when an ad is shown.
     }
 
@@ -193,7 +193,12 @@ public class AdMob_baner : MonoBehaviour
         MonoBehaviour.print(
             "HandleRewardBasedVideoFailedToLoad event received with message: "
                              + args.Message);
-        RequestRewardAdHint();
+        closeHint = true;
+
+        adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
+        adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
+        adRewardHint.OnAdClosed -= this.HandleOnRewardedAdClosedHint;
+        adRewardHint.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadHint;
     }
 
     public void HandleOnRewardedAdClosedHint(object sender, EventArgs args)
@@ -203,6 +208,7 @@ public class AdMob_baner : MonoBehaviour
         adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
         adRewardHint.OnAdClosed -= this.HandleOnRewardedAdClosedHint;
+        adRewardHint.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadHint;
     }
 
     #endregion
@@ -217,7 +223,7 @@ public class AdMob_baner : MonoBehaviour
         adRewardRefill.OnAdLoaded += this.HandleOnRewardedAdLoadedRefill;
         adRewardRefill.OnAdRewarded += this.HandleOnAdRewardedRefill;
         adRewardRefill.OnAdClosed += this.HandleOnRewardedAdClosedRefill;
-        adRewardRefill.OnAdFailedToLoad += HandleRewardBasedVideoFailedToLoadRefill;
+        adRewardRefill.OnAdFailedToLoad += this.HandleRewardBasedVideoFailedToLoadRefill;
     }
 
     public void ShowRewardAdRefill()
@@ -241,7 +247,13 @@ public class AdMob_baner : MonoBehaviour
         MonoBehaviour.print(
             "HandleRewardBasedVideoFailedToLoad event received with message: "
                              + args.Message);
-        RequestRewardAdRefill();
+        closeRefill = true;
+
+        adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
+        adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;
+        adRewardRefill.OnAdClosed -= this.HandleOnRewardedAdClosedRefill;
+        adRewardRefill.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadRefill;
+
     }
 
     public void HandleOnRewardedAdClosedRefill(object sender, EventArgs args)
@@ -251,6 +263,7 @@ public class AdMob_baner : MonoBehaviour
         adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
         adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;
         adRewardRefill.OnAdClosed -= this.HandleOnRewardedAdClosedRefill;
+        adRewardRefill.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadRefill;
     }
 
     #endregion
@@ -277,13 +290,15 @@ public class AdMob_baner : MonoBehaviour
     {
         DestroyBannerAd();
 
-       /* adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
+        /*adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
         adRewardHint.OnAdClosed -= this.HandleOnRewardedAdClosedHint;
+        adRewardHint.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadHint;
 
         adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
         adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;
-        adRewardRefill.OnAdClosed -= this.HandleOnRewardedAdClosedRefill;*/
+        adRewardRefill.OnAdClosed -= this.HandleOnRewardedAdClosedRefill;
+        adRewardRefill.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadRefill;*/
     }
 }
 

@@ -32,19 +32,44 @@ public class ui : MonoBehaviour
     public GameObject ButtomAnchor;
     public GameObject PlayerAnchor;
 
+    public float OneSize;
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+       
         board = FindObjectOfType<Board>();
 
-        TopAnchor.transform.position = new Vector3(Camera.main.transform.position.x, board.width + (board.width / 10f), TopAnchor.transform.position.z);
+        switch (board.width)
+        {
+            case 5:
+                OneSize = 1.2f;
+                break;
+            case 6:
+                OneSize = 1.33f;
+                break;
+            case 7:
+                OneSize = 1.47f;
+                break;
+            case 8:
+                OneSize = 1.61f;
+                break;
+            case 9:
+                OneSize = 1.75f;
+                break;
+            default:
+                OneSize = board.width + board.width / 5f;
+                break;
+        }
 
-        ButtomAnchor.transform.position = new Vector3(Camera.main.transform.position.x, -1 - (board.width / 10f), ButtomAnchor.transform.position.z);
+        TopAnchor.transform.position = new Vector3(Camera.main.transform.position.x, board.width -1f + OneSize, TopAnchor.transform.position.z);
 
-        PlayerAnchor.transform.position = new Vector3(Camera.main.transform.position.x, board.width + 1f + (board.width / 10f), PlayerAnchor.transform.position.z);
+        ButtomAnchor.transform.position = new Vector3(Camera.main.transform.position.x, - OneSize, ButtomAnchor.transform.position.z);
+
+        PlayerAnchor.transform.position = new Vector3(Camera.main.transform.position.x, board.width + OneSize - 1f + OneSize, PlayerAnchor.transform.position.z);
 
 
         Vector2 posTop = TopAnchor.transform.position;  // get the game object position
