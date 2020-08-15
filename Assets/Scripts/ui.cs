@@ -34,6 +34,12 @@ public class ui : MonoBehaviour
 
     public float OneSize;
 
+    public Image BacgroundLayer;
+    public Image ScoreLayer;
+    public Image BoardLayer;
+    public Image ButtonLayer;
+
+
 
 
 
@@ -77,6 +83,10 @@ public class ui : MonoBehaviour
 
         Vector2 posButtom = ButtomAnchor.transform.position;  // get the game object position
         Vector2 viewportPointButtom = Camera.main.WorldToViewportPoint(posButtom);  //convert game object position to VievportPoint
+
+
+        BoardLayer.gameObject.GetComponent<RectTransform>().anchorMin = new Vector2(0, viewportPointButtom.y);
+        BoardLayer.gameObject.GetComponent<RectTransform>().anchorMax = new Vector2(1, viewportPointTop.y);
 
         HintButton.gameObject.GetComponent<RectTransform>().anchorMin = viewportPointButtom;
         HintButton.gameObject.GetComponent<RectTransform>().anchorMax = viewportPointButtom;
