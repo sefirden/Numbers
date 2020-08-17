@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6438401562014285691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -65,22 +65,7 @@ MonoBehaviour:
   - {fileID: 2344109698101105054, guid: 9b440783695360c429d4c2f97f9f5097, type: 3}
   - {fileID: 590946992983873115, guid: 07d64942121175346a8adeae0284dea9, type: 3}
   - {fileID: 2217836700080852577, guid: b59801e5b8c8feb44999d9dd19de9500, type: 3}
-  scoreText: {fileID: 0}
-  HighscoreText: {fileID: 0}
-  hintcount: {fileID: 0}
-  refillcount: {fileID: 0}
-  refillcountLayer: {fileID: 0}
-  Adrefillcount: {fileID: 0}
-  AdrefillcountLayer: {fileID: 0}
-  EndGameLayer: {fileID: 0}
-  NoMatchLayer: {fileID: 0}
   CollectedNumbers: []
-  HintButton: {fileID: 0}
-  AdHintButton: {fileID: 0}
-  AdRefillButton: {fileID: 0}
-  AdRefillButtonLayer: {fileID: 0}
-  RefillButton: {fileID: 0}
-  RefillButtonLayer: {fileID: 0}
   TagForRandomRefill: 
   HintNumbers: []
 --- !u!120 &6438401562014285686

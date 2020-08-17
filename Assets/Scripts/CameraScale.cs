@@ -23,10 +23,10 @@ public class CameraScale : MonoBehaviour
 
     void RepositionCamera(float x, float y)
     {
-        Vector3 tempPosition = new Vector3((x / 2), (y / 2) + board.width / 5f, cameraOffset);
-        transform.position = tempPosition;
+      //  Vector3 tempPosition = new Vector3((x / 2), (y / 2) + board.width / 5f, cameraOffset);
+       // transform.position = tempPosition;
 
-        switch (board.width)
+       /* switch (board.width)
         {
             case 5:
                 Camera.main.orthographicSize = 5.35f;
@@ -55,6 +55,6 @@ public class CameraScale : MonoBehaviour
         else
         {
             Camera.main.orthographicSize = board.height + 0.5f; // + padding;
-        }
+        }*/
     }
 }

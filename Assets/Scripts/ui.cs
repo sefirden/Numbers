@@ -28,10 +28,6 @@ public class ui : MonoBehaviour
     public Button RefillButton;
     public Button RefillButtonLayer;
 
-    public GameObject TopAnchor;
-    public GameObject ButtomAnchor;
-    public GameObject PlayerAnchor;
-
     public float OneSize;
 
     public Image BacgroundLayer;
@@ -41,7 +37,7 @@ public class ui : MonoBehaviour
 
 
 
-
+    /*
 
     // Start is called before the first frame update
     void Start()
@@ -119,4 +115,5 @@ public class ui : MonoBehaviour
     {
         
     }
+    */
 }

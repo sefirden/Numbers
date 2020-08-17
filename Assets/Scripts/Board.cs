@@ -39,6 +39,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
        
     private LineRenderer ChainLine;
 
+    public float scaleBoard;
+
     private void Awake()
     {
         ui = FindObjectOfType<ui>();
@@ -68,7 +70,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
             endGame = PlayerResource.Instance.EndGameT;
             AdReward = PlayerResource.Instance.AdRewardT;
         }
-
     }
 
     // Start is called before the first frame update
@@ -112,6 +113,40 @@ public class Board : MonoBehaviour, IPointerClickHandler
             ui.AdrefillcountLayer.text = "0";
         }
 
+        switch (width)
+        {
+            case 5:
+                difficult = 3;
+                scaleBoard = 2f;
+                Debug.LogWarning("case 1 " + difficult);
+                break;
+            case 6:
+                difficult = 5;
+                scaleBoard = 1.6f;
+                Debug.LogWarning("case 2 " + difficult);
+                break;
+            case 7:
+                difficult = 5;
+                scaleBoard = 1.34f;
+                Debug.LogWarning("case 3 " + difficult);
+                break;
+            case 8:
+                difficult = 7;
+                scaleBoard = 1.13f;
+                Debug.LogWarning("case 4 " + difficult);
+                break;
+            case 9:
+                difficult = 7;
+                scaleBoard = 1f;
+                Debug.LogWarning("case 5 " + difficult);
+                break;
+            default:
+                difficult = width * 2;
+                scaleBoard = 1f;
+                Debug.LogWarning("case 5 " + difficult);
+                break;
+        }
+
         if (PlayerResource.Instance.isLoaded == true)
         {
             SetUpLoaded();
@@ -122,36 +157,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
             Shuffle();
             SetUp();
         }
-
-        switch (width)
-        {
-            case 5:
-                difficult = 3;
-                Debug.LogWarning("case 1 " + difficult);
-                break;
-            case 6:
-                difficult = 5;
-                Debug.LogWarning("case 2 " + difficult);
-                break;
-            case 7:
-                difficult = 5;
-                Debug.LogWarning("case 3 " + difficult);
-                break;
-            case 8:
-                difficult = 7;
-                Debug.LogWarning("case 4 " + difficult);
-                break;
-            case 9:
-                difficult = 7;
-                Debug.LogWarning("case 5 " + difficult);
-                break;
-            default:
-                difficult = width*2;
-                Debug.LogWarning("case 5 " + difficult);
-                break;
-        }
-
-
     }
 
     void Update()
@@ -248,7 +253,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                         
                         index--;
 
-                        CollectedNumbers[index].transform.localScale = Vector3.one;
+                        CollectedNumbers[index].transform.localScale = Vector3.one * scaleBoard;
                         CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
                         CollectedNumbers[index].transform.name = "ok";
                         CollectedNumbers[index] = null;
@@ -293,7 +298,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
         {
             for (int j = 0; j < height; j++)
             {
-                Vector2 tempPosition = new Vector2(i, j);
+                float x = (float)i * scaleBoard;
+                float y = (float)j * scaleBoard;
+
+                Vector3 tempPosition = new Vector3(x, y, 1f);
 
                 int dotToUse = Convert.ToInt32(a[indx]) - 1; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
                 
@@ -302,7 +310,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                 dot.transform.parent = this.transform;
                 dot.name = "t ( " + i + ", " + j + " )";
-
+                dot.transform.localScale *= scaleBoard;
                 allDots[i, j] = dot;
                 indx++;
             }
@@ -342,12 +350,17 @@ public class Board : MonoBehaviour, IPointerClickHandler
         {
             for (int j = 0; j < height; j++)
             {
-                Vector2 tempPosition = new Vector2(i, j);
+                float x = (float)i * scaleBoard;
+                float y = (float)j * scaleBoard;
+
+                Vector3 tempPosition = new Vector3(x, y, 1f);
+                Debug.Log(tempPosition);
 
                 int dotToUse = numbers[i, j]; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
                 GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                 dot.transform.parent = this.transform;
                 dot.name = "t ( " + i + ", " + j + " )";
+                dot.transform.localScale *= scaleBoard;
 
                 allDots[i, j] = dot;
             }
@@ -428,7 +441,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         {
             if (CollectedNumbers[0] != null)
             { 
-                CollectedNumbers[0].transform.localScale = Vector3.one;
+                CollectedNumbers[0].transform.localScale = Vector3.one * scaleBoard;
                 CollectedNumbers[0].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
                 CollectedNumbers[0].transform.name = "ok";
             }
@@ -443,8 +456,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
         //удаляем собранные--------------------------------------------
         for (int i = 0; i < index; i++)
         {
-            Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)]); //удаляем все собранные объекты
-            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x), Convert.ToInt32(CollectedNumbers[i].transform.position.y)] = null;
+            Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)]); //удаляем все собранные объекты
+            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)] = null;
         }
 
         Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
@@ -470,7 +483,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 else if (nullCount > 0)
                 {
 
-                    allDots[i, j].transform.Translate(transform.position.x, transform.position.y - nullCount, transform.position.z, Space.World);
+                    allDots[i, j].transform.Translate(transform.position.x, transform.position.y - nullCount * scaleBoard, transform.position.z, Space.World);
                     allDots[i, j - nullCount] = allDots[i, j];
 
                     allDots[i, j] = null;
@@ -562,7 +575,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
                     var temp = Scan();
 
-                    Vector2 tempPosition = new Vector2(i, j);
+                    float x = (float)i * scaleBoard;
+                    float y = (float)j * scaleBoard;
+
+                    Vector3 tempPosition = new Vector3(x, y, 1f);
                     dotToUse = temp[UnityEngine.Random.Range(0, temp.Length)]-1; //тут переписать
 
                    // Debug.LogError("Добавлена цифра - " + (dotToUse+1));
@@ -570,7 +586,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
                     dot.transform.parent = this.transform;
                     dot.name = "( " + i + ", " + j + " )";
-
+                    dot.transform.localScale *= scaleBoard;
                     allDots[i, j] = dot;
                 }
             }
@@ -608,7 +624,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 {
                     if (countStep != true)
                     {
-                        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
+                        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard);
 
                         for (var k = 0; k < hitColliders.Length; k++)
                         {
@@ -707,7 +723,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                     {
                         if (hint != true)
                         {
-                            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
+                            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard);
 
                             for (var k = 0; k < hitColliders.Length; k++)
                             {
@@ -744,7 +760,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                         {
                             if (hint != true)
                             {
-                                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f);
+                                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard);
 
                                 for (var k = 0; k < hitColliders.Length; k++)
                                 {
@@ -788,7 +804,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         if (hint == true)
         {
             hint = false;
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f * scaleBoard);
 
             for (var k = 0; k < hitColliders.Length; k++)
             {
@@ -823,7 +839,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         if (hint == true)
         {
             hint = false;
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f * scaleBoard);
 
             for (var k = 0; k < hitColliders.Length; k++)
             {
@@ -892,7 +908,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             {
                 if (HintNumbers[i] != null)
                 {
-                    HintNumbers[i].transform.localScale = Vector3.one;
+                    HintNumbers[i].transform.localScale = Vector3.one * scaleBoard;
                     HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
                     count++;
                 }
