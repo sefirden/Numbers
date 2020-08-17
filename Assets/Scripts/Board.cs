@@ -184,11 +184,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.AdRewardT = AdReward;
         }
 
-        ui.scoreText.text = "Score: " + Convert.ToString(score);
+        ui.scoreText.text = Convert.ToString(score);
         ui.hintcount.text = Convert.ToString(hints);
         ui.refillcount.text = Convert.ToString(refill);
         ui.refillcountLayer.text = Convert.ToString(refill);
-        ui.HighscoreText.text = "High Score: " + Convert.ToString(hiScore);
+        ui.HighscoreText.text = Convert.ToString(hiScore);
 
 
 

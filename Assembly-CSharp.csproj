@@ -76,7 +76,6 @@
     <Compile Include="Assets\GooglePlayGames\GameInfo.cs" />
     <Compile Include="Assets\Scripts\ui.cs" />
     <Compile Include="Assets\GPGSIds.cs" />
-    <Compile Include="Assets\Scripts\CameraScale.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\PlayerStats.cs" />
     <Compile Include="Assets\GooglePlayGames\ISocialPlatform\PlayGamesPlatform.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\PlayGamesClientConfiguration.cs" />
