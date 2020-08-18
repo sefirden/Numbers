@@ -169,6 +169,7 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.refillN = 1;
         PlayerResource.Instance.gameMode = "normal";
         PlayerResource.Instance.scoreN = 0;
+        PlayerResource.Instance.levelN = 0;
         PlayerResource.Instance.heightN = height;
         PlayerResource.Instance.widthN = width;
         SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал
@@ -188,6 +189,7 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.gameMode = "timetrial";
         PlayerResource.Instance.time = 120f;
         PlayerResource.Instance.scoreT = 0;
+        PlayerResource.Instance.levelT = 0;
         PlayerResource.Instance.heightT = height;
         PlayerResource.Instance.widthT = width;
         SceneManager.LoadScene("Main"); //тупо загружаем первый уровень, потом добавить сюда туториал

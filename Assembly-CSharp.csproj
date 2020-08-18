@@ -137,6 +137,7 @@
     <Compile Include="Assets\GooglePlayGames\OurUtils\Misc.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\Nearby\ConnectionResponse.cs" />
     <Compile Include="Assets\Scripts\SettingsPause.cs" />
+    <Compile Include="Assets\Scripts\Level.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Resources\Languages\ru.txt" />

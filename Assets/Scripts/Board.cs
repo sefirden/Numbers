@@ -18,8 +18,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public bool endGame;
     public int difficult;
     public bool AdReward;
+    public int level;
 
     private ui ui;
+    private Level Level;
 
     public GameObject[] dots;
 
@@ -44,6 +46,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
     private void Awake()
     {
         ui = FindObjectOfType<ui>();
+        Level = FindObjectOfType<Level>();
+
 
         if (PlayerResource.Instance.gameMode == "normal")
         {
@@ -56,6 +60,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             loadedBoard = PlayerResource.Instance.loadedBoardN;
             endGame = PlayerResource.Instance.EndGameN;
             AdReward = PlayerResource.Instance.AdRewardN;
+            level = PlayerResource.Instance.levelN;
 
         }
         else if(PlayerResource.Instance.gameMode == "timetrial")
@@ -69,13 +74,14 @@ public class Board : MonoBehaviour, IPointerClickHandler
             loadedBoard = PlayerResource.Instance.loadedBoardT;
             endGame = PlayerResource.Instance.EndGameT;
             AdReward = PlayerResource.Instance.AdRewardT;
+            level = PlayerResource.Instance.levelT;
         }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
+        Level.LoadLevel(level);
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
@@ -147,6 +153,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 break;
         }
 
+        ui.BossHealth(score, level);
+
         if (PlayerResource.Instance.isLoaded == true)
         {
             SetUpLoaded();
@@ -171,6 +179,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.loadedBoardN = loadedBoard;
             PlayerResource.Instance.EndGameN = endGame;
             PlayerResource.Instance.AdRewardN = AdReward;
+            PlayerResource.Instance.levelN = level;
 
         }
         else if (PlayerResource.Instance.gameMode == "timetrial")
@@ -182,6 +191,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.loadedBoardT = loadedBoard;
             PlayerResource.Instance.EndGameT = endGame;
             PlayerResource.Instance.AdRewardT = AdReward;
+            PlayerResource.Instance.levelT = level;
         }
 
         ui.scoreText.text = Convert.ToString(score);
@@ -189,6 +199,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
         ui.refillcount.text = Convert.ToString(refill);
         ui.refillcountLayer.text = Convert.ToString(refill);
         ui.HighscoreText.text = Convert.ToString(hiScore);
+        ui.lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level]);
 
 
 
@@ -354,7 +365,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 float y = (float)j * scaleBoard;
 
                 Vector3 tempPosition = new Vector3(x, y, 1f);
-                Debug.Log(tempPosition);
 
                 int dotToUse = numbers[i, j]; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
                 GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
@@ -404,6 +414,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
         int quantity = 0;
         int tempScore = 0;
+        int scoreToNextLevel = 0;
 
         for (int i = 0; i < CollectedNumbers.Length; i++)
         {
@@ -422,12 +433,28 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 hiScore = score;
             }
 
+            for(int j = 0; j <= level; j++)
+            {
+                scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j];
+            }
+
+
+            if (score > scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length)
+            {
+                level++;
+                Level.LoadLevel(level);
+            }
+            Debug.LogError("scoreToNextLevel " + scoreToNextLevel);
+
             if (PlayerResource.Instance.gameMode == "timetrial")
-                {
+            {
                 PlayerResource.Instance.time += quantity * (1f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 1,5 до 1,9 сек
-                }
+            }
             
             Debug.LogWarning("Score: " + score);
+
+            ui.BossHealth(score, level);
+
             Destroy(); //удаляем собранные цифры
 
             if (ChainLine.enabled == true)
