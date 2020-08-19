@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class ui : MonoBehaviour
 {
 
     private Board board;
 
-    public Text scoreText;
-    public Text HighscoreText;
-    public Text time;
+    public TMP_Text scoreText;
+    public TMP_Text HighscoreText;
+    public TMP_Text time;
     public Text hintcount;
     public Text refillcount;
     public Text refillcountLayer;
@@ -29,14 +30,16 @@ public class ui : MonoBehaviour
     public Button RefillButton;
     public Button RefillButtonLayer;
 
+    public GameObject LifeBarBackground;
     public GameObject LifeBar;
-    public Text lifeText;
+    public TMP_Text lifeText;
 
    // private float fillHealth;
 
     // Start is called before the first frame update
     void Awake()
     {
+        LifeBarBackground.transform.position = new Vector3(transform.position.x, 10.5f, transform.position.z);
         LifeBar.transform.position = new Vector3(transform.position.x, 10.5f, transform.position.z);
 
     }
@@ -68,6 +71,11 @@ public class ui : MonoBehaviour
             LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(score - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level];
         }
 
-        //lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level]);
+        lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level] - (score - scoreToNextLevel));
     }
+
+
+
+
+
 }

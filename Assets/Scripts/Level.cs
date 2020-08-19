@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,5 +26,10 @@ public class Level : MonoBehaviour
                 Levels[i].SetActive(false);
             }
         }
+    }
+
+    internal void ChangeLevel(int level)
+    {
+        throw new NotImplementedException();
     }
 }

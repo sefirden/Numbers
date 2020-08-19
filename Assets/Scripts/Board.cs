@@ -199,9 +199,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
         ui.refillcount.text = Convert.ToString(refill);
         ui.refillcountLayer.text = Convert.ToString(refill);
         ui.HighscoreText.text = Convert.ToString(hiScore);
-        ui.lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level]);
-
-
 
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
@@ -442,9 +439,9 @@ public class Board : MonoBehaviour, IPointerClickHandler
             if (score > scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length)
             {
                 level++;
+               // Level.ChangeLevel(level);
                 Level.LoadLevel(level);
             }
-            Debug.LogError("scoreToNextLevel " + scoreToNextLevel);
 
             if (PlayerResource.Instance.gameMode == "timetrial")
             {
