@@ -436,11 +436,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
             }
 
 
-            if (score > scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length)
+            if (score >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length)
             {
                 level++;
-               // Level.ChangeLevel(level);
-                Level.LoadLevel(level);
+
+                Level.ChangeLevel(level);
+               // Level.LoadLevel(level);
             }
 
             if (PlayerResource.Instance.gameMode == "timetrial")

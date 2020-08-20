@@ -28,8 +28,53 @@ public class Level : MonoBehaviour
         }
     }
 
-    internal void ChangeLevel(int level)
+    public void ChangeLevel(int level)
     {
-        throw new NotImplementedException();
+        Levels[level].SetActive(true);
+        
+        StartCoroutine(MoveNewLevel(level));
+        StartCoroutine(MoveOldLevel(level));
+    }
+
+    private IEnumerator MoveNewLevel(int level)
+    {
+        Vector3 startPositionNewLevel = new Vector3(14f, Levels[level].transform.position.y, Levels[level].transform.position.z);
+        Vector3 endPositionNewLevel = new Vector3(0f, Levels[level].transform.position.y, Levels[level].transform.position.z);
+
+        float step;
+        float moveTime = 0;
+        float speed = 0.66f;
+
+
+        step = (speed / (startPositionNewLevel - endPositionNewLevel).magnitude) * Time.fixedDeltaTime;
+        while (moveTime <= 1.0f)
+        {
+            moveTime += step;
+            Levels[level].transform.position = Vector3.Lerp(startPositionNewLevel, endPositionNewLevel, moveTime);
+            yield return new WaitForFixedUpdate();
+        }
+        Levels[level].transform.position = endPositionNewLevel;
+    }
+
+    private IEnumerator MoveOldLevel(int level)
+    {
+        level--;
+        Vector3 startPositionNewLevel = new Vector3(0, Levels[level].transform.position.y, Levels[level].transform.position.z);
+        Vector3 endPositionNewLevel = new Vector3(-14f, Levels[level].transform.position.y, Levels[level].transform.position.z);
+
+        float step;
+        float moveTime = 0;
+        float speed = 0.66f;
+
+
+        step = (speed / (startPositionNewLevel - endPositionNewLevel).magnitude) * Time.fixedDeltaTime;
+        while (moveTime <= 1.0f)
+        {
+            moveTime += step;
+            Levels[level].transform.position = Vector3.Lerp(startPositionNewLevel, endPositionNewLevel, moveTime);
+            yield return new WaitForFixedUpdate();
+        }
+        Levels[level].transform.position = endPositionNewLevel;
+        Levels[level].SetActive(false);
     }
 }
