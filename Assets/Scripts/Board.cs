@@ -113,10 +113,18 @@ public class Board : MonoBehaviour, IPointerClickHandler
         {
             ui.AdRefillButton.interactable = false;
             ui.AdRefillButtonLayer.interactable = false;
-            ui.AdRefillButton.GetComponentInChildren<Text>().text = "no more";
-            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
-            ui.Adrefillcount.text = "0";
-            ui.AdrefillcountLayer.text = "0";
+
+            ui.AdsRefillOn.gameObject.SetActive(false);
+            ui.AdsRefillOff.gameObject.SetActive(false);
+            ui.AdsRefillLoading.gameObject.SetActive(true);
+
+            ui.AdsRefillOnLayer.gameObject.SetActive(false);
+            ui.AdsRefillOffLayer.gameObject.SetActive(false);
+            ui.AdsRefillLoadingLayer.gameObject.SetActive(true);
+
+
+            ui.AdRefillButton.GetComponentInChildren<Text>().text = "";
+            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "";
         }
 
         switch (width)
@@ -685,6 +693,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
             {
                 NoMatch();
             }
+            else if (refill == 0 && AdReward == false)
+            {
+                NoMatch();
+            }
         }
 
     }
@@ -1044,7 +1056,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public void AdHint()
     {
         ui.AdHintButton.interactable = false;
-        ui.AdHintButton.GetComponentInChildren<Text>().text = "Loading...";
+        ui.AdsHint.gameObject.SetActive(false);
+        ui.AdsHintLoading.gameObject.SetActive(true);
+        ui.AdHintButton.GetComponentInChildren<Text>().text = "";
+
         AdMob_baner.Instance.OnGetMoreHintClicked();
     }
 
@@ -1053,13 +1068,20 @@ public class Board : MonoBehaviour, IPointerClickHandler
         hints = 3;
         ui.HintButton.gameObject.SetActive(true);
         ui.AdHintButton.gameObject.SetActive(false);
+
+        ui.AdsHint.gameObject.SetActive(true);
+        ui.AdHintButton.GetComponentInChildren<Text>().text = "+3";
+        ui.AdsHintLoading.gameObject.SetActive(false);
+
         ui.AdHintButton.interactable = true;
     }
 
     public void AdHintClose()
     {
         ui.AdHintButton.interactable = true;
-        ui.AdHintButton.GetComponentInChildren<Text>().text = "More Hints";
+        ui.AdsHint.gameObject.SetActive(true);
+        ui.AdHintButton.GetComponentInChildren<Text>().text = "+3";
+        ui.AdsHintLoading.gameObject.SetActive(false);
     }
 
     public void AdRefill()
@@ -1067,8 +1089,17 @@ public class Board : MonoBehaviour, IPointerClickHandler
         ui.AdRefillButton.interactable = false;
         ui.AdRefillButtonLayer.interactable = false;
 
-        ui.AdRefillButton.GetComponentInChildren<Text>().text = "Loading...";
-        ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "Loading...";
+        ui.AdsRefillOn.gameObject.SetActive(false);
+        ui.AdsRefillOff.gameObject.SetActive(false);
+        ui.AdsRefillLoading.gameObject.SetActive(true);
+
+        ui.AdsRefillOnLayer.gameObject.SetActive(false);
+        ui.AdsRefillOffLayer.gameObject.SetActive(false);
+        ui.AdsRefillLoadingLayer.gameObject.SetActive(true);
+
+
+        ui.AdRefillButton.GetComponentInChildren<Text>().text = "";
+        ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "";
 
         AdMob_baner.Instance.OnGetMoreRefillClicked();
     }
@@ -1077,10 +1108,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
     {
         AdReward = true;
 
-        ui.AdRefillButton.GetComponentInChildren<Text>().text = "no more";
-        ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "no more";
-        ui.Adrefillcount.text = "0";
-        ui.AdrefillcountLayer.text = "0";
+        ui.AdsRefillOn.gameObject.SetActive(false);
+        ui.AdsRefillOff.gameObject.SetActive(true);
+        ui.AdsRefillLoading.gameObject.SetActive(false);
+
+        ui.AdsRefillOnLayer.gameObject.SetActive(false);
+        ui.AdsRefillOffLayer.gameObject.SetActive(true);
+        ui.AdsRefillLoadingLayer.gameObject.SetActive(false);
 
         Time.timeScale = 1f;
         ui.NoMatchLayer.SetActive(false);

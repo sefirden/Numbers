@@ -46,8 +46,7 @@ MonoBehaviour:
   gameMode: 
   GameIsPaused: 0
   isLoaded: 0
-  scoreToNextLevel: 204e0000409c000060ea000080380100a086010090d0030020a10700b0710b0040420f00
-  level: 0
+  scoreToNextLevel: d0070000a00f000070170000401f000010270000a861000050c30000f8240100a0860100
   scoreN: 0
   hiScoreN: 0
   hintN: 0
@@ -55,6 +54,7 @@ MonoBehaviour:
   heightN: 0
   widthN: 0
   AdRewardN: 0
+  levelN: 0
   EndGameN: 0
   loadedBoardN: 
   time: 0
@@ -66,5 +66,6 @@ MonoBehaviour:
   heightT: 0
   widthT: 0
   AdRewardT: 0
+  levelT: 0
   EndGameT: 0
   loadedBoardT: 

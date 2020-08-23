@@ -29,7 +29,7 @@ public class zeroPlayer : MonoBehaviour
     {
         float step;
         float moveTime = 0;
-        float speed = 0.66f;
+        float speed = 1;
 
 
         step = (speed / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime;

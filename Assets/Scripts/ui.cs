@@ -34,7 +34,19 @@ public class ui : MonoBehaviour
     public GameObject LifeBar;
     public TMP_Text lifeText;
 
-   // private float fillHealth;
+    public Image AdsHint;
+    public Image AdsHintLoading;
+
+    public Image AdsRefillOn;
+    public Image AdsRefillOff;
+    public Image AdsRefillLoading;
+
+    public Image AdsRefillOnLayer;
+    public Image AdsRefillOffLayer;
+    public Image AdsRefillLoadingLayer;
+
+
+    // private float fillHealth;
 
     // Start is called before the first frame update
     void Awake()
