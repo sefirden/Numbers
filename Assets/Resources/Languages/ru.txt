@@ -1,16 +1,16 @@
-new_game:НОВАЯ ИГРА
-resume:ПРОДОЛЖИТЬ
-settings:НАСТРОЙКИ
-quit:ВЫХОД
-test:ТЕСТ
+new_game:Новая игра
+resume:Продолжить
+settings:Настройки
+quit:Выход
+test:Тест
 game_label:Numbers_alpha
 music_off:выкл
 sfx_off:выкл
 music_vol:Громкость Музыки
 sfx_vol:Громкость Эффектов
 language:Язык
-back:НАЗАД
-menu:МЕНЮ
+back:Назад
+menu:Меню
 game_over:Нет возможных ходов, конец игры!
 normal:Нормальный
 time_trial:Лимит времени

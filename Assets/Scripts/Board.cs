@@ -115,12 +115,12 @@ public class Board : MonoBehaviour, IPointerClickHandler
             ui.AdRefillButtonLayer.interactable = false;
 
             ui.AdsRefillOn.gameObject.SetActive(false);
-            ui.AdsRefillOff.gameObject.SetActive(false);
-            ui.AdsRefillLoading.gameObject.SetActive(true);
+            ui.AdsRefillOff.gameObject.SetActive(true);
+            ui.AdsRefillLoading.gameObject.SetActive(false);
 
             ui.AdsRefillOnLayer.gameObject.SetActive(false);
-            ui.AdsRefillOffLayer.gameObject.SetActive(false);
-            ui.AdsRefillLoadingLayer.gameObject.SetActive(true);
+            ui.AdsRefillOffLayer.gameObject.SetActive(true);
+            ui.AdsRefillLoadingLayer.gameObject.SetActive(false);
 
 
             ui.AdRefillButton.GetComponentInChildren<Text>().text = "";
@@ -718,6 +718,9 @@ public class Board : MonoBehaviour, IPointerClickHandler
         PlayerResource.Instance.GameIsPaused = true;
         endGame = true;
 
+        ui.EndGameScore.text = Convert.ToString(score);
+        ui.EndGameHiScore.text = Convert.ToString(hiScore);
+
 
 
         PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
@@ -1155,8 +1158,17 @@ public class Board : MonoBehaviour, IPointerClickHandler
             ui.AdRefillButton.interactable = true;
             ui.AdRefillButtonLayer.interactable = true;
 
-            ui.AdRefillButton.GetComponentInChildren<Text>().text = "More refill";
-            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "More refill";
+            ui.AdsRefillOn.gameObject.SetActive(true);
+            ui.AdsRefillOff.gameObject.SetActive(false);
+            ui.AdsRefillLoading.gameObject.SetActive(false);
+
+            ui.AdsRefillOnLayer.gameObject.SetActive(true);
+            ui.AdsRefillOffLayer.gameObject.SetActive(false);
+            ui.AdsRefillLoadingLayer.gameObject.SetActive(false);
+
+
+            ui.AdRefillButton.GetComponentInChildren<Text>().text = "1";
+            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "1";
         }
     }
 }

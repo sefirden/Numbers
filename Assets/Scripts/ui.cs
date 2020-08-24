@@ -19,6 +19,11 @@ public class ui : MonoBehaviour
     public Text Adrefillcount;
     public Text AdrefillcountLayer;
 
+    public Text NoTimeScore;
+    public Text NoTimeHiScore;
+    public Text EndGameScore;
+    public Text EndGameHiScore;
+
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
 

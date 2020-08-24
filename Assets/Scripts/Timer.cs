@@ -15,11 +15,13 @@ public class Timer : MonoBehaviour
     public double timeMin; //минуты в таймере 
     public double timeSec; //секунды в таймере
     public GameObject NoTimeLayer;
+    private ui ui;
 
     void Start()
     {
+        ui = FindObjectOfType<ui>();
         //timerText = GetComponent<Text>(); //при старте присваиваем элемент UI
-        if(PlayerResource.Instance.gameMode == "timetrial")
+        if (PlayerResource.Instance.gameMode == "timetrial")
         {
             timerText.SetActive(true);
         }
@@ -55,6 +57,10 @@ public class Timer : MonoBehaviour
                 timerText.SetActive(false);
                 Time.timeScale = 0f;
                 NoTimeLayer.SetActive(true);
+
+                ui.NoTimeScore.text = Convert.ToString(PlayerResource.Instance.scoreT);
+                ui.NoTimeHiScore.text = Convert.ToString(PlayerResource.Instance.hiScoreT);
+
                 PlayerResource.Instance.GameIsPaused = true;
                 PlayerResource.Instance.EndGameT = true;
 

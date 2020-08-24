@@ -94,6 +94,8 @@ public class Pause : MonoBehaviour
     private void ResumeToGame()
     {
         pauseMenuUI.SetActive(false);
+        SettingsLayer.SetActive(false);
+
         PlayerResource.Instance.GameIsPaused = false;
     }
 }

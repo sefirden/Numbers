@@ -1,17 +1,17 @@
-new_game:NEW GAME
-resume:RESUME
-settings:SETTINGS
-quit:QUIT
-test:TEST
+new_game:New game
+resume:Resume
+settings:Settings
+quit:Quit
+test:Test
 game_label:Numbers_alpha
 music_off:off
 sfx_off:off
 music_vol:Music volume
 sfx_vol:SFX volume
 language:Language
-back:BACK
-menu:MENU
-game_over:GAME OVER!
+back:Back
+menu:Menu
+game_over:Game over!
 normal:Normal
 time_trial:Time limit
 restart:Restart
