@@ -6,11 +6,11 @@ using UnityEngine;
 public class Level : MonoBehaviour
 {
     public GameObject[] Levels;
+    private bossPlayer boss;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-
+        boss = FindObjectOfType<bossPlayer>();
     }
 
     public void LoadLevel(int level)
@@ -30,6 +30,7 @@ public class Level : MonoBehaviour
 
     public void ChangeLevel(int level)
     {
+        boss.gameObject.SetActive(false);
         Levels[level].SetActive(true);
         
         StartCoroutine(MoveNewLevel(level));
@@ -54,6 +55,9 @@ public class Level : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         Levels[level].transform.position = endPositionNewLevel;
+        PlayerResource.Instance.zeroMove = false;
+        boss.gameObject.SetActive(true);
+        StartCoroutine(boss.MoveToStart());
     }
 
     private IEnumerator MoveOldLevel(int level)

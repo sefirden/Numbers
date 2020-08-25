@@ -10,9 +10,9 @@ public class ui : MonoBehaviour
 
     private Board board;
 
-    public TMP_Text scoreText;
-    public TMP_Text HighscoreText;
-    public TMP_Text time;
+    public Text scoreText;
+    public Text HighscoreText;
+    public Text time;
     public Text hintcount;
     public Text refillcount;
     public Text refillcountLayer;
@@ -37,7 +37,7 @@ public class ui : MonoBehaviour
 
     public GameObject LifeBarBackground;
     public GameObject LifeBar;
-    public TMP_Text lifeText;
+    public Text lifeText;
 
     public Image AdsHint;
     public Image AdsHintLoading;
@@ -62,7 +62,7 @@ public class ui : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void BossHealth(int score, int level)
+    public void BossHealth(int damage, int level)
     {
         int scoreToNextLevel = 0;
 
@@ -73,22 +73,22 @@ public class ui : MonoBehaviour
 
         if (PlayerResource.Instance.gameMode == "normal" && level == 0)
         {
-            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)score / (float)PlayerResource.Instance.scoreToNextLevel[level];
+            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)damage / (float)PlayerResource.Instance.scoreToNextLevel[level];
         }
         else if (PlayerResource.Instance.gameMode == "timetrial" && level == 0)
         {
-            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)score / (float)PlayerResource.Instance.scoreToNextLevel[level];
+            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)damage / (float)PlayerResource.Instance.scoreToNextLevel[level];
         }
         else if (PlayerResource.Instance.gameMode == "normal")
         {
-            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(score - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level];
+            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(damage - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level];
         }
         else if (PlayerResource.Instance.gameMode == "timetrial")
         {
-            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(score - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level];
+            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(damage - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level];
         }
 
-        lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level] - (score - scoreToNextLevel));
+        lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level] - (damage - scoreToNextLevel));
     }
 
 

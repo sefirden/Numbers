@@ -21,6 +21,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public int level;
 
     private ui ui;
+    private bossPlayer boss;
     private Level Level;
 
     public GameObject[] dots;
@@ -43,10 +44,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     public float scaleBoard;
 
+    public int damage;
+
     private void Awake()
     {
         ui = FindObjectOfType<ui>();
         Level = FindObjectOfType<Level>();
+        boss = FindObjectOfType<bossPlayer>();
 
 
         if (PlayerResource.Instance.gameMode == "normal")
@@ -61,6 +65,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             endGame = PlayerResource.Instance.EndGameN;
             AdReward = PlayerResource.Instance.AdRewardN;
             level = PlayerResource.Instance.levelN;
+            damage = PlayerResource.Instance.damageN;
 
         }
         else if(PlayerResource.Instance.gameMode == "timetrial")
@@ -75,6 +80,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             endGame = PlayerResource.Instance.EndGameT;
             AdReward = PlayerResource.Instance.AdRewardT;
             level = PlayerResource.Instance.levelT;
+            damage = PlayerResource.Instance.damageT;
         }
     }
 
@@ -160,8 +166,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 Debug.LogWarning("case 5 " + difficult);
                 break;
         }
-
-        ui.BossHealth(score, level);
+        boss.ChangeBoss(level);
+        ui.BossHealth(damage, level);
 
         if (PlayerResource.Instance.isLoaded == true)
         {
@@ -188,6 +194,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.EndGameN = endGame;
             PlayerResource.Instance.AdRewardN = AdReward;
             PlayerResource.Instance.levelN = level;
+            PlayerResource.Instance.damageN = damage;
 
         }
         else if (PlayerResource.Instance.gameMode == "timetrial")
@@ -200,6 +207,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             PlayerResource.Instance.EndGameT = endGame;
             PlayerResource.Instance.AdRewardT = AdReward;
             PlayerResource.Instance.levelT = level;
+            PlayerResource.Instance.damageT = damage;
         }
 
         ui.scoreText.text = Convert.ToString(score);
@@ -383,7 +391,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
     }
 
     private void ClickSelect()
-    {
+    {   
+
         //Converting Mouse Pos to 2D (vector2) World Pos
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
         RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
@@ -438,18 +447,28 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 hiScore = score;
             }
 
-            for(int j = 0; j <= level; j++)
+            if (PlayerResource.Instance.zeroMove == false && PlayerResource.Instance.bossMove == false)
+            {
+                damage += tempScore * quantity;
+                ui.BossHealth(damage, level);
+            }
+
+            for (int j = 0; j <= level; j++)
             {
                 scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j];
             }
 
 
-            if (score >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length)
+            if (damage >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length)
             {
                 level++;
 
                 Level.ChangeLevel(level);
-               // Level.LoadLevel(level);
+                boss.ChangeBoss(level);
+                PlayerResource.Instance.zeroMove = true;
+                ui.LifeBarBackground.SetActive(false);
+                damage = scoreToNextLevel;
+                ui.BossHealth(damage, level);
             }
 
             if (PlayerResource.Instance.gameMode == "timetrial")
@@ -459,7 +478,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
             
             Debug.LogWarning("Score: " + score);
 
-            ui.BossHealth(score, level);
 
             Destroy(); //удаляем собранные цифры
 

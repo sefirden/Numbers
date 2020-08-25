@@ -12,21 +12,29 @@ public class zeroPlayer : MonoBehaviour
 
     // Start is called before the first frame update
 
-    void Start()
+    void Awake()
     {
-        startPosition = transform.position;
-        endPosition = new Vector3(2f, 12.5f, transform.position.z);
-        StartCoroutine(MoveToStart());
+
+
+        ui = FindObjectOfType<ui>();
+
+        if (PlayerResource.Instance.isLoaded == false)
+        {
+            startPosition = transform.position;
+            endPosition = new Vector3(2f, 12.5f, transform.position.z);
+            StartCoroutine(MoveToStart());
+        }
+        else if (PlayerResource.Instance.isLoaded == true)
+        {
+            transform.position = new Vector3(2f, 12.5f, transform.position.z);
+            PlayerResource.Instance.zeroMove = false;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private IEnumerator MoveToStart()
     {
+        PlayerResource.Instance.zeroMove = true;
         float step;
         float moveTime = 0;
         float speed = 1;
@@ -40,5 +48,6 @@ public class zeroPlayer : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         transform.position = endPosition;
+        PlayerResource.Instance.zeroMove = false;
     }
 }

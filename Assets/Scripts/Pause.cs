@@ -51,6 +51,7 @@ public class Pause : MonoBehaviour
             board.score = 0;
             board.AdReward = false;
             board.level = 0;
+            board.damage = 0;
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, board.hiScore); //отправляем лучшее время в Google Play
         }
         else if (PlayerResource.Instance.gameMode == "timetrial" && board != null)
@@ -62,6 +63,7 @@ public class Pause : MonoBehaviour
             board.score = 0;
             board.AdReward = false;
             board.level = 0;
+            board.damage = 0;
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, board.hiScore); //отправляем лучшее время в Google Play
         }

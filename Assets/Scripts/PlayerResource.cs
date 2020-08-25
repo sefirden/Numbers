@@ -17,6 +17,9 @@ public class PlayerResource : MonoBehaviour
     public bool isLoaded;
     public int[] scoreToNextLevel;
 
+    public bool bossMove;
+    public bool zeroMove;
+
 
     //переменные для Normal режима
     public int scoreN; //количество здоровья, пока 4
@@ -27,6 +30,7 @@ public class PlayerResource : MonoBehaviour
     public int widthN;
     public bool AdRewardN;
     public int levelN;
+    public int damageN;
 
     public bool EndGameN; //true если конец игры
     public string loadedBoardN;
@@ -43,6 +47,7 @@ public class PlayerResource : MonoBehaviour
     public int widthT;
     public bool AdRewardT;
     public int levelT;
+    public int damageT;
 
     public bool EndGameT; //true если конец игры
     public string loadedBoardT;

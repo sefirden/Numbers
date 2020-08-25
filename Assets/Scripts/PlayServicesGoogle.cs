@@ -103,6 +103,7 @@ public class PlayServicesGoogle : MonoBehaviour
         public string loadedBoardN;
         public bool AdRewardN;
         public int levelN;
+        public int damageN;
 
         //переменные для Time Limit режима
         public float time; //
@@ -118,6 +119,7 @@ public class PlayServicesGoogle : MonoBehaviour
         public bool EndGameT; //true если конец игры
         public string loadedBoardT;
         public bool AdRewardT;
+        public int damageT;
 
         public string SaveTime;
     }
@@ -136,6 +138,7 @@ public class PlayServicesGoogle : MonoBehaviour
             fullsave.loadedBoardN = PlayerResource.Instance.loadedBoardN;
             fullsave.AdRewardN = PlayerResource.Instance.AdRewardN;
             fullsave.levelN = PlayerResource.Instance.levelN;
+            fullsave.damageN = PlayerResource.Instance.damageN;
 
             fullsave.scoreT = PlayerResource.Instance.scoreT;
             fullsave.hiScoreT = PlayerResource.Instance.hiScoreT;
@@ -149,6 +152,7 @@ public class PlayServicesGoogle : MonoBehaviour
             fullsave.time = PlayerResource.Instance.time;
             fullsave.playedTime = PlayerResource.Instance.playedTime;
             fullsave.levelT = PlayerResource.Instance.levelT;
+            fullsave.damageT = PlayerResource.Instance.damageT;
 
             fullsave.SaveTime = Convert.ToString(DateTime.UtcNow);
         }
@@ -195,6 +199,7 @@ public class PlayServicesGoogle : MonoBehaviour
         PlayerResource.Instance.loadedBoardN = fullsave.loadedBoardN;
         PlayerResource.Instance.AdRewardN = fullsave.AdRewardN;
         PlayerResource.Instance.levelN = fullsave.levelN;
+        PlayerResource.Instance.damageN = fullsave.damageN;
 
         PlayerResource.Instance.scoreT = fullsave.scoreT;
         PlayerResource.Instance.hiScoreT = fullsave.hiScoreT;
@@ -208,6 +213,7 @@ public class PlayServicesGoogle : MonoBehaviour
         PlayerResource.Instance.time = fullsave.time;
         PlayerResource.Instance.playedTime = fullsave.playedTime;
         PlayerResource.Instance.levelT = fullsave.levelT;
+        PlayerResource.Instance.damageT = fullsave.damageT;
 
 
 
