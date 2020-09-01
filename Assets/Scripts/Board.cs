@@ -20,6 +20,9 @@ public class Board : MonoBehaviour, IPointerClickHandler
     public bool AdReward;
     public int level;
 
+    public LineRenderer[] lines;
+    public LineRenderer sampleLine;
+
     private ui ui;
     private bossPlayer boss;
     private Level Level;
@@ -40,8 +43,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
     
     private bool hint;
        
-    private LineRenderer ChainLine;
-
     public float scaleBoard;
 
     public int damage;
@@ -91,12 +92,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
+        lines = new LineRenderer[width - 1];
         TagForRandomRefill = new int[width*height];
 
         HintNumbers = new GameObject[width];
 
-        ChainLine = GetComponent<LineRenderer>();
-        ChainLine.enabled = false;
         hint = false;
 
         index = 0;
@@ -179,6 +179,17 @@ public class Board : MonoBehaviour, IPointerClickHandler
             Shuffle();
             SetUp();
         }
+
+        for (int i = 0; i < width-1; i++)
+        {
+            LineRenderer line = Instantiate(sampleLine, sampleLine.transform.position, Quaternion.identity);
+            line.name = "line " + i;
+            lines[i] = line;
+            lines[i].gameObject.SetActive(false);
+        }
+
+
+
     }
 
     void Update()
@@ -256,10 +267,10 @@ public class Board : MonoBehaviour, IPointerClickHandler
                         CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
                         CollectedNumbers[index].transform.name = "owned";
 
-                        ChainLine.enabled = true;
-                        ChainLine.positionCount = index + 1;
-                        //ChainLine.SetPosition(0, CollectedNumbers[0].transform.position);
-                        ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
+
+                        lines[index - 1].SetPosition(0, CollectedNumbers[index - 1].transform.position);
+                        lines[index - 1].SetPosition(1, CollectedNumbers[index].transform.position);
+                        lines[index - 1].gameObject.SetActive(true);
 
                         index++;
                     }
@@ -282,7 +293,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
                         CollectedNumbers[index].transform.name = "ok";
                         CollectedNumbers[index] = null;
 
-                        ChainLine.positionCount = index;
+                        lines[index-1].gameObject.SetActive(false);
 
 
 
@@ -413,8 +424,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
             CollectedNumbers[index].transform.localScale *= 1.25f;
             CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
 
-            ChainLine.SetPosition(index, CollectedNumbers[index].transform.position);
-
             index++;
 
         }
@@ -481,12 +490,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
             Destroy(); //удаляем собранные цифры
 
-            if (ChainLine.enabled == true)
-            {
-                ChainLine.enabled = false;
-                ChainLine.positionCount = 1;
-                ChainLine.SetPosition(0, Vector3.zero);
-            }
         }
         else
         {
@@ -510,6 +513,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
             Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)]); //удаляем все собранные объекты
             allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)] = null;
         }
+
+        for (int i = 0; i < index-1; i++)
+        {
+            lines[i].gameObject.SetActive(false);
+        }
+
+
 
         Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
         index = 0;
@@ -939,7 +949,8 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
     private void Draw(bool draw)
     {
-        int count = 0;
+        int count = -1;
+
         if (draw == true) //рисуем
         {
             for (int i = 0; i < HintNumbers.Length; i++)
@@ -951,12 +962,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
                     count++;
                 }
             }
-
-            ChainLine.enabled = true;
-            ChainLine.positionCount = count;
             for (int j = 0; j < count; j++)
             {
-                ChainLine.SetPosition(j, HintNumbers[j].transform.position);
+                lines[j].SetPosition(0, HintNumbers[j].transform.position);
+                lines[j].SetPosition(1, HintNumbers[j+1].transform.position);
+                lines[j].gameObject.SetActive(true);
             }
 
         }
@@ -968,18 +978,17 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 {
                     HintNumbers[i].transform.localScale = Vector3.one * scaleBoard;
                     HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
-                    count++;
+
                 }
             }
 
             Array.Clear(HintNumbers, 0, HintNumbers.Length);
-
-            if (ChainLine.enabled == true)
+            
+            for(int j = 0; j < lines.Length; j++)
             {
-                ChainLine.enabled = false;
-                ChainLine.positionCount = 1;
-                ChainLine.SetPosition(0, Vector3.zero);
+                lines[j].gameObject.SetActive(false);
             }
+
         }
     }
 
@@ -991,12 +1000,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             {
                 Debug.LogWarning("Refill");
 
-                if (ChainLine.enabled == true)
-                {
-                    ChainLine.enabled = false;
-                    ChainLine.positionCount = 1;
-                    ChainLine.SetPosition(0, Vector3.zero);
-                }
+                Draw(false);
 
                 for (int i = 0; i < width; i++)
                 {
@@ -1037,12 +1041,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
                 Debug.LogWarning("Refill");
 
-                if (ChainLine.enabled == true)
-                {
-                    ChainLine.enabled = false;
-                    ChainLine.positionCount = 1;
-                    ChainLine.SetPosition(0, Vector3.zero);
-                }
+                Draw(false);
 
                 for (int i = 0; i < width; i++)
                 {
@@ -1144,13 +1143,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
         Debug.LogWarning("Refill");
 
-        if (ChainLine.enabled == true)
-        {
-            ChainLine.enabled = false;
-            ChainLine.positionCount = 1;
-            ChainLine.SetPosition(0, Vector3.zero);
-        }
-
+        Draw(false);
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
