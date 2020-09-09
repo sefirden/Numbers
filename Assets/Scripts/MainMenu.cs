@@ -28,11 +28,9 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField]
     int[] BoardSize;
-    int index;
 
     int width;
     int height;
-
 
     private void Start() //при старте сцены с меню
     {
@@ -53,32 +51,33 @@ public class MainMenu : MonoBehaviour
             LanguageLayer.SetActive(true);
 
         }
-    }
 
-    private void Update() //при старте сцены с меню
-    {
         width = 5;
         height = 5;
 
-        int v = Array.IndexOf(BoardSize, width);
-        size_dropN.value = v;
-
-        size_dropN.onValueChanged.AddListener(delegate {
-            index = size_dropN.value;
-            height = BoardSize[index];
-            width = BoardSize[index];
-        });
-
-        int w = Array.IndexOf(BoardSize, width);
-        size_dropT.value = w;
-
+        //Add listener for when the value of the Dropdown changes, to take action
         size_dropT.onValueChanged.AddListener(delegate {
-            index = size_dropN.value;
-            height = BoardSize[index];
-            width = BoardSize[index];
+                DropdownValueChangedT(size_dropT);
         });
 
+        //Add listener for when the value of the Dropdown changes, to take action
+        size_dropN.onValueChanged.AddListener(delegate {
+            DropdownValueChangedN(size_dropN);
+        });
+    }
 
+    //Ouput the new value of the Dropdown into Text
+    void DropdownValueChangedT(Dropdown change)
+    {
+        width = BoardSize[change.value];
+        height = BoardSize[change.value];
+    }
+
+    //Ouput the new value of the Dropdown into Text
+    void DropdownValueChangedN(Dropdown change)
+    {
+        width = BoardSize[change.value];
+        height = BoardSize[change.value];
     }
 
     public void Ru()
