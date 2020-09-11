@@ -27329,8 +27329,8 @@ MonoBehaviour:
   zero: {fileID: 1414548696}
   Sprite:
   - {fileID: 21300000, guid: bf92c81826a017640a42eb57b6337c60, type: 3}
-  - {fileID: 21300000, guid: e2b189c030117fe4f9c6c0ec02d0fe92, type: 3}
-  - {fileID: 21300000, guid: be305b73ec5753640aca65bdc33c0027, type: 3}
+  - {fileID: 21300000, guid: 98391730413ac534fafcaf301a7c5551, type: 3}
+  - {fileID: 21300000, guid: 6cdc0584cc5d718419ec94b31480f9f0, type: 3}
   - {fileID: 21300000, guid: 6fc6b2c1be81bf24ca2505fd32ab1339, type: 3}
   - {fileID: 21300000, guid: cfe6c41f3fef7cd47b2553ca82e76c42, type: 3}
   - {fileID: 21300000, guid: be305b73ec5753640aca65bdc33c0027, type: 3}
