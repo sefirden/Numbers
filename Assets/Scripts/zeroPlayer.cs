@@ -21,12 +21,12 @@ public class zeroPlayer : MonoBehaviour
         if (PlayerResource.Instance.isLoaded == false)
         {
             startPosition = transform.position;
-            endPosition = new Vector3(2f, 12.5f, transform.position.z);
+            endPosition = new Vector3(2f, 13.6f, transform.position.z);
             StartCoroutine(MoveToStart());
         }
         else if (PlayerResource.Instance.isLoaded == true)
         {
-            transform.position = new Vector3(2f, 12.5f, transform.position.z);
+            transform.position = new Vector3(2f, 13.6f, transform.position.z);
             PlayerResource.Instance.zeroMove = false;
         }
     }

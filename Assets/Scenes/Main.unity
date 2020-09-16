@@ -27330,13 +27330,13 @@ MonoBehaviour:
   Sprite:
   - {fileID: 21300000, guid: bf92c81826a017640a42eb57b6337c60, type: 3}
   - {fileID: 21300000, guid: 98391730413ac534fafcaf301a7c5551, type: 3}
+  - {fileID: 21300000, guid: b5212cff37af3bb44820799d16b6e79c, type: 3}
+  - {fileID: 21300000, guid: 9494f738d469dd84590d3557cd3017e6, type: 3}
+  - {fileID: 21300000, guid: dd804d7aa6b507944b25fed365df6d71, type: 3}
   - {fileID: 21300000, guid: 6cdc0584cc5d718419ec94b31480f9f0, type: 3}
-  - {fileID: 21300000, guid: 6fc6b2c1be81bf24ca2505fd32ab1339, type: 3}
-  - {fileID: 21300000, guid: cfe6c41f3fef7cd47b2553ca82e76c42, type: 3}
-  - {fileID: 21300000, guid: be305b73ec5753640aca65bdc33c0027, type: 3}
-  - {fileID: 21300000, guid: e2b189c030117fe4f9c6c0ec02d0fe92, type: 3}
-  - {fileID: 21300000, guid: be305b73ec5753640aca65bdc33c0027, type: 3}
-  - {fileID: 21300000, guid: e2b189c030117fe4f9c6c0ec02d0fe92, type: 3}
+  - {fileID: 21300000, guid: 774bb9b7f2de8ff4f8e44713e923eb13, type: 3}
+  - {fileID: 21300000, guid: 018265da085ee7e409bf1c5492013e6b, type: 3}
+  - {fileID: 21300000, guid: 4b6e4a23fdb72bf458383f814a552804, type: 3}
   Animation: []
 --- !u!1 &1086117262
 GameObject:
@@ -31499,7 +31499,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1414548696}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 12.67, z: 1}
+  m_LocalPosition: {x: -0.94, y: 13.6, z: 1}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 0}
