@@ -35,7 +35,7 @@ public class Settings : MonoBehaviour
 
     private void Start()
     {
-        audioMixer.SetFloat("volume_music", music_vol);
+        audioMixer.SetFloat("volume_music", music_vol); //при старте устанавливаем громкость, данные загружаются при старте не в этом крипте
         audioMixer.SetFloat("volume_sfx", sfx_vol);
     }
 

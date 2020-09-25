@@ -6,50 +6,46 @@ using UnityEngine.SceneManagement;
 
 public class PlayerResource : MonoBehaviour
 {
-
-    //Unity singletone по сути, храним тут всю информацию про персонажа при переходе между уровнями
-    //Прикреплён к префабу PlayerResources
-
     public static PlayerResource Instance { get; private set; } //определяем
 
     public string gameMode; //режим игры
     public bool GameIsPaused; //если игра на паузе
-    public bool isLoaded;
-    public int[] scoreToNextLevel;
+    public bool isLoaded; //тру если игра была загружена
+    public int[] scoreToNextLevel; //количество очков до следующего уровня
 
-    public bool bossMove;
-    public bool zeroMove;
+    public bool bossMove; //если босс двигается
+    public bool zeroMove; //если ноль двигается
 
 
     //переменные для Normal режима
-    public int scoreN; //количество здоровья, пока 4
-    public int hiScoreN; //количество ячеек здоровья
-    public int hintN; //количество монеток у игрока, нужны для магазина поверапов
-    public int refillN; //количество спасенных кусков пиццы, за каждый кусок противники сложнее
-    public int heightN;
-    public int widthN;
-    public bool AdRewardN;
-    public int levelN;
-    public int damageN;
+    public int scoreN; //количество очков
+    public int hiScoreN; //количество макс очков
+    public int hintN; //количество подсказок
+    public int refillN; //количество перезаполнений поля
+    public int heightN; //высота поля
+    public int widthN; //ширина поля
+    public bool AdRewardN; //была ли просмотрена реклама для перезаполнения поля
+    public int levelN; //текущий уровень
+    public int damageN; //количество нанесенного урона
 
     public bool EndGameN; //true если конец игры
-    public string loadedBoardN;
+    public string loadedBoardN; //загружаемый уровень в формате текстовой строки
 
 
-    //переменные для Time Limit режима
-    public float time; //
-    public float playedTime;
-    public int scoreT; //количество здоровья, пока 4
-    public int hiScoreT; //количество ячеек здоровья
-    public int hintT; //количество монеток у игрока, нужны для магазина поверапов
-    public int refillT; //количество спасенных кусков пиццы, за каждый кусок противники сложнее
+    //переменные для Time Limit режима, половина та же что и выше
+    public float time; //оставшееся время
+    public float playedTime; //общее время игры
+    public int scoreT; 
+    public int hiScoreT;
+    public int hintT;
+    public int refillT;
     public int heightT;
     public int widthT;
     public bool AdRewardT;
     public int levelT;
     public int damageT;
 
-    public bool EndGameT; //true если конец игры
+    public bool EndGameT;
     public string loadedBoardT;
 
     private void Awake() //запускается до всех стартов

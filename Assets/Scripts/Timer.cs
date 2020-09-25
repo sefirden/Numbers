@@ -35,37 +35,37 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        if (PlayerResource.Instance.GameIsPaused == false && PlayerResource.Instance.gameMode == "timetrial") //таймер отсчитывает назад на всех уровнях кроме пиццерии шопа и не отсчитывает когда умерли
+        if (PlayerResource.Instance.GameIsPaused == false && PlayerResource.Instance.gameMode == "timetrial") //таймер отсчитывает назад в режиме игры на время и когда нет паузы
         {
             PlayerResource.Instance.time -= Time.deltaTime; //отнимаем секунду
 
-            PlayerResource.Instance.playedTime += Time.deltaTime;
+            PlayerResource.Instance.playedTime += Time.deltaTime; //сыгранное время, для лидерборда
 
             timeMin = Math.Floor(PlayerResource.Instance.time / 60); //получаем целые минуты, округленные вниз до целого
             timeSec = Math.Floor(PlayerResource.Instance.time - (timeMin * 60)); //целые секунды, округленные вниз до целого
             if (timeSec > 9)
             {
-                timerText.GetComponent<Text>().text = timeMin + ":" + timeSec; //при каждом обновлении кадра присваиваем тексту в UI значение из общего списка ресурсов
+                timerText.GetComponent<Text>().text = timeMin + ":" + timeSec; //если секунд больше 9
             }
             else
             {
-                timerText.GetComponent<Text>().text = timeMin + ":0" + timeSec; //при каждом обновлении кадра присваиваем тексту в UI значение из общего списка ресурсов
+                timerText.GetComponent<Text>().text = timeMin + ":0" + timeSec; //если секунд меньше или равно 9, то добавляем 0 типа 09, 08
             }
             if (PlayerResource.Instance.time <= 0) //если время вышло
             {
-                timerText.SetActive(false);
+                timerText.SetActive(false); //выключаем таймер
                 Time.timeScale = 0f;
-                NoTimeLayer.SetActive(true);
+                NoTimeLayer.SetActive(true); //показываем всплывающее окно, что время вышло
 
-                ui.NoTimeScore.text = Convert.ToString(PlayerResource.Instance.scoreT);
+                ui.NoTimeScore.text = Convert.ToString(PlayerResource.Instance.scoreT); //присваиваем очки и мак очки для всплывающего окна
                 ui.NoTimeHiScore.text = Convert.ToString(PlayerResource.Instance.hiScoreT);
 
-                PlayerResource.Instance.GameIsPaused = true;
-                PlayerResource.Instance.EndGameT = true;
+                PlayerResource.Instance.GameIsPaused = true; //ставим паузу
+                PlayerResource.Instance.EndGameT = true; //ставим конец игры
 
                 PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
-                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, PlayerResource.Instance.hiScoreT); //отправляем лучшее время в Google Play
+                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, PlayerResource.Instance.hiScoreT); //отправляем лучшие очки в Google Play
 
                 PlayServicesGoogle.Instance.CollectData(); //собираем данные
                 PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON

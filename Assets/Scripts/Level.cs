@@ -5,40 +5,50 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    public GameObject[] Levels;
-    private bossPlayer boss;
+    public GameObject[] Levels; //список уровней
+    private bossPlayer boss; //скрипт босса
 
     private void Awake()
     {
-        boss = FindObjectOfType<bossPlayer>();
+        boss = FindObjectOfType<bossPlayer>(); ////присваиваем скрипт к переменной
     }
 
-    public void LoadLevel(int level)
+    public void LoadLevel(int level) //загрузка уровня, перебираем все уровни
     {
         for (int i = 0; i < Levels.Length; i++)
         {
             if(i == level)
             {
-                Levels[i].SetActive(true);
+                Levels[i].SetActive(true); //если нашли нужный включаем объект
             }
             else
             {
-                Levels[i].SetActive(false);
+                Levels[i].SetActive(false); //остальные выключаем
             }
         }
     }
 
-    public void ChangeLevel(int level)
+    public void ChangeLevel(int level) //смена уровня
     {
-        boss.gameObject.SetActive(false);
-        Levels[level].SetActive(true);
+        boss.gameObject.SetActive(false); //выключаем босса
+
+        Levels[level].SetActive(true); //включаем следующий уровень
         
-        StartCoroutine(MoveNewLevel(level));
-        StartCoroutine(MoveOldLevel(level));
+        StartCoroutine(MoveNewLevel(level)); //двигаем новый уровень
+        StartCoroutine(MoveOldLevel(level)); //двигаем старый уровень
     }
 
-    private IEnumerator MoveNewLevel(int level)
+    public void StartNewGameLevel(int level)
     {
+        Levels[level].SetActive(true); //включаем первый уровень
+
+        StartCoroutine(MoveNewLevel(level)); //двигаем новый уровень
+        StartCoroutine(MoveOldLevel(11)); //двигаем стартовый уровень
+    }
+
+    private IEnumerator MoveNewLevel(int level) 
+    {
+        //стандартная схема с движением, можно посмотреть в скрипте босса или ноля
         Vector3 startPositionNewLevel = new Vector3(14f, Levels[level].transform.position.y, Levels[level].transform.position.z);
         Vector3 endPositionNewLevel = new Vector3(0f, Levels[level].transform.position.y, Levels[level].transform.position.z);
 
@@ -55,14 +65,20 @@ public class Level : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         Levels[level].transform.position = endPositionNewLevel;
-        PlayerResource.Instance.zeroMove = false;
-        boss.gameObject.SetActive(true);
-        StartCoroutine(boss.MoveToStart());
+
+        PlayerResource.Instance.zeroMove = false; //говорим что босс не двигается
+
+        boss.gameObject.SetActive(true); //включаем босса
+
+        StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
     }
 
     private IEnumerator MoveOldLevel(int level)
     {
-        level--;
+        //стандартная схема с движением, можно посмотреть в скрипте босса или ноля
+
+        level--; //что бы не менять весь скрипт с предыдущего метода, смысл тот же
+
         Vector3 startPositionNewLevel = new Vector3(0, Levels[level].transform.position.y, Levels[level].transform.position.z);
         Vector3 endPositionNewLevel = new Vector3(-14f, Levels[level].transform.position.y, Levels[level].transform.position.z);
 

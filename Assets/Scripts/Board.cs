@@ -88,7 +88,6 @@ public class Board : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-        Level.LoadLevel(level);
         allDots = new GameObject[width, height];
         numbers = new int[width, height];
         CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
@@ -171,11 +170,13 @@ public class Board : MonoBehaviour, IPointerClickHandler
 
         if (PlayerResource.Instance.isLoaded == true)
         {
+            Level.LoadLevel(level);
             SetUpLoaded();
             PlayerResource.Instance.isLoaded = false;
         }
         else
         {
+            Level.LoadLevel(10); //загрузка новой игры
             Shuffle();
             SetUp();
         }

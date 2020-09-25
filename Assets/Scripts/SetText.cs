@@ -11,7 +11,7 @@ public class SetText : MonoBehaviour
 
     void Start()
     {
-       GetComponent<Text>().text = SaveSystem.GetText(text_id);
+       GetComponent<Text>().text = SaveSystem.GetText(text_id); //получаем текст из файлов игры
 
     }
 

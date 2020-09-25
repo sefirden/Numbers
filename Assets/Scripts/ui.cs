@@ -8,7 +8,7 @@ using TMPro;
 public class ui : MonoBehaviour
 {
 
-    private Board board;
+    //ниже все переменные интерфейса, какбы названия говорят сами за себя
 
     public Text scoreText;
     public Text HighscoreText;
@@ -51,44 +51,40 @@ public class ui : MonoBehaviour
     public Image AdsRefillLoadingLayer;
 
 
-    // private float fillHealth;
-
-    // Start is called before the first frame update
     void Awake()
     {
-        LifeBarBackground.transform.position = new Vector3(transform.position.x, 10.5f, transform.position.z);
+        LifeBarBackground.transform.position = new Vector3(transform.position.x, 10.5f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
         LifeBar.transform.position = new Vector3(transform.position.x, 10.5f, transform.position.z);
 
     }
 
-    // Update is called once per frame
-    public void BossHealth(int damage, int level)
+    public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
     {
         int scoreToNextLevel = 0;
 
         for (int j = 0; j < level; j++)
         {
-            scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j];
+            scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j]; //количество очков, которые нужны для перехода на след уровень
         }
 
-        if (PlayerResource.Instance.gameMode == "normal" && level == 0)
+        if (PlayerResource.Instance.gameMode == "normal" && level == 0) //если нормальный режим и мы на нулевом уровне
+        {
+            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)damage / (float)PlayerResource.Instance.scoreToNextLevel[level]; //опустошаем шкалу хп босса, 1 - урон / нужно дамага (типа нанесли 500, а хп всего 1000, то 1-(500/1000)
+        }
+        else if (PlayerResource.Instance.gameMode == "timetrial" && level == 0) //тоже что и выше, не помню зачем делил на режимы, пусть будет
         {
             LifeBar.GetComponent<Image>().fillAmount = 1f - (float)damage / (float)PlayerResource.Instance.scoreToNextLevel[level];
         }
-        else if (PlayerResource.Instance.gameMode == "timetrial" && level == 0)
+        else if (PlayerResource.Instance.gameMode == "normal") //тоже что и выше, но для всех уровней кроме нулевого
         {
-            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)damage / (float)PlayerResource.Instance.scoreToNextLevel[level];
-        }
-        else if (PlayerResource.Instance.gameMode == "normal")
-        {
-            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(damage - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level];
+            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(damage - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level]; //опустошаем шкалу хп, от урона отнимаем весь лишний урон с пред уровней и делим на нужный дамаг
         }
         else if (PlayerResource.Instance.gameMode == "timetrial")
         {
-            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(damage - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level];
+            LifeBar.GetComponent<Image>().fillAmount = 1f - (float)(damage - scoreToNextLevel) / (float)PlayerResource.Instance.scoreToNextLevel[level]; //тоже что и выше, но для другого режима, хз зачем я так делал, если что удалить
         }
 
-        lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level] - (damage - scoreToNextLevel));
+        lifeText.text = Convert.ToString(PlayerResource.Instance.scoreToNextLevel[level] - (damage - scoreToNextLevel)); //присваиваем текстовому полю оставшееся хп босса по формуле = нужно урона - (урон - уже нанесенный урон на пред уровнях)
     }
 
 

@@ -4,43 +4,40 @@ using UnityEngine;
 
 public class zeroPlayer : MonoBehaviour
 {
-    public GameObject zero;
-    public GameObject boss;
+    public bossPlayer boss; //скрипт босса
+    private Level Level; //скрипт уровней
 
-    private ui ui;
-    private Vector3 startPosition, endPosition;
-
-    // Start is called before the first frame update
+    private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
 
     void Awake()
     {
+        Level = FindObjectOfType<Level>(); //присваиваем скрипт к переменной
+        boss = FindObjectOfType<bossPlayer>(); //присваиваем скрипт к переменной
 
-
-        ui = FindObjectOfType<ui>();
-
-        if (PlayerResource.Instance.isLoaded == false)
+        if (PlayerResource.Instance.isLoaded == false) //если игре НЕ была загружена, новая игра
         {
-            startPosition = transform.position;
-            endPosition = new Vector3(2f, 13.6f, transform.position.z);
-            StartCoroutine(MoveToStart());
+            startPosition = transform.position; //ставим стартовую позицию ноля как текущую
+            endPosition = new Vector3(2f, 13.6f, transform.position.z); //конечная позиция ноля, подправить потом под уровень
+            StartCoroutine(MoveToStart()); //запускаем движения ноля к стартовой позиции
         }
-        else if (PlayerResource.Instance.isLoaded == true)
+        else if (PlayerResource.Instance.isLoaded == true) //если игру БЫЛА загружена, то
         {
-            transform.position = new Vector3(2f, 13.6f, transform.position.z);
-            PlayerResource.Instance.zeroMove = false;
+            transform.position = new Vector3(2f, 13.6f, transform.position.z); //сразу ставим нужну позицию
+            PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается, не помню но где-то было нужно
         }
     }
 
 
-    private IEnumerator MoveToStart()
+    private IEnumerator MoveToStart() //метод плавного движения ноля к старту
     {
-        PlayerResource.Instance.zeroMove = true;
-        float step;
-        float moveTime = 0;
-        float speed = 1;
+        PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
+        float step; //количество шагов, зависит от растояния
+        float moveTime = 0; //не помню зачем, но нужно
+        float speed = 1;  //скорость движения
 
 
-        step = (speed / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime;
+        step = (speed / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
+        //ниже формула для плавного движения
         while (moveTime <= 1.0f)
         {
             moveTime += step;
@@ -48,6 +45,8 @@ public class zeroPlayer : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         transform.position = endPosition;
-        PlayerResource.Instance.zeroMove = false;
+
+        PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается
+        Level.StartNewGameLevel(0); //меняем стартовую локацию на первый уровень при старте игры
     }
 }
