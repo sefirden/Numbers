@@ -9,19 +9,21 @@ using UnityEngine.Events;
 
 public class AdMob_baner : MonoBehaviour
 {
-    private BannerView adBannerDown;
-    private RewardBasedVideoAd adRewardHint;
-    private RewardBasedVideoAd adRewardRefill;
+    private BannerView adBannerDown; //банер внизу экрана
 
-    private Board board;
+    private RewardBasedVideoAd adRewardHint; //видео за подсказки
+    private RewardBasedVideoAd adRewardRefill; //видео за перемешивание поля
 
+    private Board board; //поле
+
+    //переменные для отслеживания была реклама просмотрена или закрыта, работает только так, по гайду адмоб не работает
     public bool rewardHint;
     public bool rewardRefill;
 
     public bool closeHint;
     public bool closeRefill;
 
-    private string idApp, idBanner, idReward;
+    private string idApp, idBanner, idReward; //стринговые ид приложения, банера и видео
 
     public static AdMob_baner Instance { get; private set; } //определяем
 
@@ -39,23 +41,23 @@ public class AdMob_baner : MonoBehaviour
 
     }
 
-    private void Update()
+    private void Update() //такая херня, что в апдейте надо проверять была ли реклама закрыта или просмотрена до конца, и помле этого запускать нужный метод в скрипте боард
     {
-        if (rewardHint)
+        if (rewardHint) //если реклама для подсказок была просмотрена
         {
-            board = FindObjectOfType<Board>();
-            board.AdHintRecieve();
-            rewardHint = false;
+            board = FindObjectOfType<Board>(); //ищем поле
+            board.AdHintRecieve(); //запускаем метод в скрипте боард, который присваивает уже награду
+            rewardHint = false; //тут говорим что реклама не просмотрена, это надо чтобы можно было еще раз смотреть рекламу и получить награду
         }
 
-        if(closeHint)
+        if(closeHint) //если реклама была закрыта
         {
-            board = FindObjectOfType<Board>();
-            board.AdHintClose();
-            closeHint = false;
+            board = FindObjectOfType<Board>(); //ищем поле
+            board.AdHintClose(); //запускаем метод в скрипте боард, который обрабатывает закрытие рекламы (возвращает кнопки и итд.)
+            closeHint = false; //говорим что реклама не была закрыта, иначе повторно закрытая реклама не сработает
         }
 
-        if (rewardRefill)
+        if (rewardRefill) //см выше, но для перемешивания поля
         {
             board = FindObjectOfType<Board>();
             board.AdRefillRecieve();
@@ -73,16 +75,16 @@ public class AdMob_baner : MonoBehaviour
 
     void Start()
     {
-
+        //это тестовые ид, взять оригинальные перед софт лаунчем приложения и изменить
         idApp = "ca-app-pub-3940256099942544~3347511713";
         idBanner = "ca-app-pub-3940256099942544/6300978111";
         idReward = "ca-app-pub-3940256099942544/5224354917";
 
+        //ниже по гайду от адмоб, не понимаю зачем все это и как
         MobileAds.Initialize(idApp);
 
-        RequestBannerAd();
+        RequestBannerAd(); //сразу при старте приложения запрашиваем банерную рекламу
 
-        // Get singleton reward based video ad reference.
         adRewardHint = RewardBasedVideoAd.Instance;
         adRewardRefill = RewardBasedVideoAd.Instance;
     }
@@ -91,24 +93,26 @@ public class AdMob_baner : MonoBehaviour
 
     #region Banner Methods --------------------------------------------------
 
-    public void RequestBannerAd()
+    public void RequestBannerAd() //запрашиваем банерную рекламу
     {
-        AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
+        AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth); //тут про то что она адаптивная и по всей ширине экрана
         
-        adBannerDown = new BannerView(idBanner, adaptiveSize, AdPosition.Bottom);
+        adBannerDown = new BannerView(idBanner, adaptiveSize, AdPosition.Bottom); //а тут про то что она внизу экрана
        
+        //переопределяем методы, без этого не работает
         adBannerDown.OnAdLoaded += HandleAdLoaded;
         adBannerDown.OnAdFailedToLoad += HandleAdFailedToLoad;
         adBannerDown.OnAdOpening += HandleAdOpened;
         adBannerDown.OnAdClosed += HandleAdClosed;
         adBannerDown.OnAdLeavingApplication += HandleAdLeftApplication;
 
-        AdRequest request = AdRequestBuild();
-        adBannerDown.LoadAd(request);
-        Hide();
+        AdRequest request = AdRequestBuild(); //запрашиваем рекламу
+        adBannerDown.LoadAd(request); //загружаем
+        Hide(); //и прячем, нам нужно показывать банер только в определенных местах
 
     }
 
+    //ниже ебала по гайду от адмоб, там вроде ничего такого, по хорошему там надо отрабатывать неудачные запросы и тд, но для банерной похер
     public void HandleAdLoaded(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdLoaded event received");
@@ -140,16 +144,16 @@ public class AdMob_baner : MonoBehaviour
 
 
 
-    public void Hide()
+    public void Hide() //прячет банер
     {
         adBannerDown.Hide();
     }
-    public void Show()
+    public void Show() //показывает банер
     {   
         adBannerDown.Show();
     }
 
-    public void DestroyBannerAd()
+    public void DestroyBannerAd() //уничтожает банер, после этого надо заново отправвлять реквест
     {
         if (adBannerDown != null)
             adBannerDown.Destroy();
@@ -160,40 +164,40 @@ public class AdMob_baner : MonoBehaviour
 
     #region REWARDED ADS Hint
 
-    public void RequestRewardAdHint()
+    public void RequestRewardAdHint() //запрашиваем видео рекламу
     {
         AdRequest request = AdRequestBuild();
         adRewardHint.LoadAd(request, idReward);
 
+        //переопределяем базовые методы на свои
         adRewardHint.OnAdLoaded += this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded += this.HandleOnAdRewardedHint;
         adRewardHint.OnAdClosed += this.HandleOnRewardedAdClosedHint;
         adRewardHint.OnAdFailedToLoad += this.HandleRewardBasedVideoFailedToLoadHint;
-        // Called when an ad is shown.
     }
 
-    public void ShowRewardAdHint()
+    public void ShowRewardAdHint() //показываем видео
     {
         if (adRewardHint.IsLoaded())
-            adRewardHint.Show();
+            adRewardHint.Show(); //показывает сразу как загрузится
     }
-    //events
-    public void HandleOnRewardedAdLoadedHint(object sender, EventArgs args)
-    {//ad loaded
-        ShowRewardAdHint();
-    }
-
-    public void HandleOnAdRewardedHint(object sender, EventArgs args)
-    {//user finished watching ad
-        rewardHint = true;
+    
+    public void HandleOnRewardedAdLoadedHint(object sender, EventArgs args) //когда реклама загружена
+    {
+        ShowRewardAdHint(); //показывает видео
     }
 
-    public void HandleRewardBasedVideoFailedToLoadHint(object sender, AdFailedToLoadEventArgs args)
+    public void HandleOnAdRewardedHint(object sender, EventArgs args) //когда видео досмотрели до конца
+    {
+        rewardHint = true; //тут говорим что просмотрели, дальше см в апдейте
+    }
+
+    public void HandleRewardBasedVideoFailedToLoadHint(object sender, AdFailedToLoadEventArgs args) //если реклама не загрузилась, например нажали кнопку а интернета нет, это этот случай
     {
         MonoBehaviour.print(
             "HandleRewardBasedVideoFailedToLoad event received with message: "
                              + args.Message);
-        closeHint = true;
+        closeHint = true; //говорим что реклама была закрыта, см в апдейте, иначе кнопка загрузки не отлипнет с нажатого состояния когде нет инета
 
         adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
@@ -201,9 +205,9 @@ public class AdMob_baner : MonoBehaviour
         adRewardHint.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadHint;
     }
 
-    public void HandleOnRewardedAdClosedHint(object sender, EventArgs args)
-    {//ad closed (even if not finished watching)
-        closeHint = true;
+    public void HandleOnRewardedAdClosedHint(object sender, EventArgs args) //когда рекламу закрыл пользователь сам
+    {
+        closeHint = true; //говорим что реклама закрыта, см в апдейте
 
         adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
@@ -213,7 +217,9 @@ public class AdMob_baner : MonoBehaviour
 
     #endregion
 
-    #region REWARDED ADS Refill
+    #region REWARDED ADS Refill 
+
+    //все тоже самое что и выше, но для перемешивания поля, а не для подсказок
 
     public void RequestRewardAdRefill()
     {
@@ -231,14 +237,14 @@ public class AdMob_baner : MonoBehaviour
         if (adRewardRefill.IsLoaded())
             adRewardRefill.Show();
     }
-    //events
+
     public void HandleOnRewardedAdLoadedRefill(object sender, EventArgs args)
-    {//ad loaded
+    {
         ShowRewardAdRefill();
     }
 
     public void HandleOnAdRewardedRefill(object sender, EventArgs args)
-    {//user finished watching ad
+    {
         rewardRefill = true;
     }
 
@@ -257,7 +263,7 @@ public class AdMob_baner : MonoBehaviour
     }
 
     public void HandleOnRewardedAdClosedRefill(object sender, EventArgs args)
-    {//ad closed (even if not finished watching)
+    {
         closeRefill = true;
 
         adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
@@ -268,19 +274,18 @@ public class AdMob_baner : MonoBehaviour
 
     #endregion
 
-    //other functions
-    //btn (more points) clicked
-    public void OnGetMoreHintClicked()
+
+    public void OnGetMoreHintClicked() //метод, который мы вешаем на кнопку +подсказки
     {
         RequestRewardAdHint();
     }
 
-    public void OnGetMoreRefillClicked()
+    public void OnGetMoreRefillClicked() //метод, который мы вешаем на кнопку перемешивание за рекламу
     {
         RequestRewardAdRefill();
     }
 
-    //------------------------------------------------------------------------
+    //ствндартная фигня по гайду от адмоб
     AdRequest AdRequestBuild()
     {
         return new AdRequest.Builder().Build();
@@ -290,6 +295,7 @@ public class AdMob_baner : MonoBehaviour
     {
         DestroyBannerAd();
 
+        //возможно закомментированное нужно, но это не точно
         /*adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
         adRewardHint.OnAdClosed -= this.HandleOnRewardedAdClosedHint;
@@ -301,108 +307,3 @@ public class AdMob_baner : MonoBehaviour
         adRewardRefill.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadRefill;*/
     }
 }
-
-
-
-   /* private BannerView bannerView;
-
-    // Use this for initialization
-    void Start()
-    {
-        RequestBanner();
-    }
-
-
-    public void Hide()
-    {
-        bannerView.Hide();
-    }
-    public void Show()
-    {
-        bannerView.Show();
-    }
-
-    public void OnGUI()
-    {
-        GUI.skin.label.fontSize = 60;
-        Rect textOutputRect = new Rect(
-          0.15f * Screen.width,
-          0.25f * Screen.height,
-          0.7f * Screen.width,
-          0.3f * Screen.height);
-        GUI.Label(textOutputRect, "Adaptive Banner Example");
-    }
-
-    private void RequestBanner()
-    {
-        // These ad units are configured to always serve test ads.
-#if UNITY_EDITOR
-        string adUnitId = "unused";
-#elif UNITY_ANDROID
-            string adUnitId = "ca-app-pub-3212738706492790/6113697308";
-#elif UNITY_IPHONE
-            string adUnitId = "ca-app-pub-3212738706492790/5381898163";
-#else
-            string adUnitId = "unexpected_platform";
-#endif
-
-        // Clean up banner ad before creating a new one.
-        if (adBanner != null)
-        {
-            adBanner.Destroy();
-        }
-
-        AdSize adaptiveSize =
-                AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
-
-        adBanner = new BannerView(adUnitId, adaptiveSize, AdPosition.Bottom);
-
-        // Register for ad events.
-        adBanner.OnAdLoaded += HandleAdLoaded;
-        adBanner.OnAdFailedToLoad += HandleAdFailedToLoad;
-        adBanner.OnAdOpening += HandleAdOpened;
-        adBanner.OnAdClosed += HandleAdClosed;
-        adBanner.OnAdLeavingApplication += HandleAdLeftApplication;
-
-        AdRequest adRequest = new AdRequest.Builder()
-            .AddTestDevice(AdRequest.TestDeviceSimulator)
-            .AddTestDevice("0123456789ABCDEF0123456789ABCDEF")
-            .Build();
-
-        // Load a banner ad.
-        adBanner.LoadAd(adRequest);
-    }
-
-    #region Banner callback handlers
-
-    public void HandleAdLoaded(object sender, EventArgs args)
-    {
-        MonoBehaviour.print("HandleAdLoaded event received");
-        MonoBehaviour.print(String.Format("Ad Height: {0}, width: {1}",
-            adBanner.GetHeightInPixels(),
-            adBanner.GetWidthInPixels()));
-    }
-
-    public void HandleAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
-    {
-        MonoBehaviour.print(
-                "HandleFailedToReceiveAd event received with message: " + args.Message);
-    }
-
-    public void HandleAdOpened(object sender, EventArgs args)
-    {
-        MonoBehaviour.print("HandleAdOpened event received");
-    }
-
-    public void HandleAdClosed(object sender, EventArgs args)
-    {
-        MonoBehaviour.print("HandleAdClosed event received");
-    }
-
-    public void HandleAdLeftApplication(object sender, EventArgs args)
-    {
-        MonoBehaviour.print("HandleAdLeftApplication event received");
-    }
-
-    #endregion
-}*/

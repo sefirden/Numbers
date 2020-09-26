@@ -8,6 +8,7 @@ public class bossPlayer : MonoBehaviour
     public GameObject boss; //объект босса
     public GameObject zero; //объект ноля
 
+
     private ui ui; //скрипт всего УИ
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции босса
     public Sprite[] Sprite; //список со спрайтами боссов
@@ -15,7 +16,7 @@ public class bossPlayer : MonoBehaviour
 
     void Awake()
     {
-        ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменной
+        ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
 
         if (PlayerResource.Instance.isLoaded == false) //если игре НЕ была загружена, новая игра
         {
@@ -58,5 +59,6 @@ public class bossPlayer : MonoBehaviour
 
         PlayerResource.Instance.bossMove = false; //говорим что босс не двигается
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
+
     }
 }

@@ -7,10 +7,12 @@ public class Level : MonoBehaviour
 {
     public GameObject[] Levels; //список уровней
     private bossPlayer boss; //скрипт босса
+    public Board board; //объект поля
 
     private void Awake()
     {
         boss = FindObjectOfType<bossPlayer>(); ////присваиваем скрипт к переменной
+        board = FindObjectOfType<Board>();
     }
 
     public void LoadLevel(int level) //загрузка уровня, перебираем все уровни
@@ -44,6 +46,7 @@ public class Level : MonoBehaviour
 
         StartCoroutine(MoveNewLevel(level)); //двигаем новый уровень
         StartCoroutine(MoveOldLevel(11)); //двигаем стартовый уровень
+
     }
 
     private IEnumerator MoveNewLevel(int level) 
@@ -69,7 +72,7 @@ public class Level : MonoBehaviour
         PlayerResource.Instance.zeroMove = false; //говорим что босс не двигается
 
         boss.gameObject.SetActive(true); //включаем босса
-
+        board.gameObject.SetActive(true); //когда вышел ноль включаем поле
         StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
     }
 

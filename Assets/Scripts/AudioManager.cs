@@ -5,18 +5,18 @@ using UnityEngine;
 using System;
 
 [System.Serializable]
-public class Sound
+public class Sound //х-ки каждого звука
 {
-    public string name;
-    public AudioClip clip;
+    public string name; //имя
+    public AudioClip clip; //аудио выбираем
 
     [Range(0f,1f)]
-    public float volume;
+    public float volume; //громкость в диапазоне 0-1
     [Range(0.1f, 3f)]
-    public float pitch;
+    public float pitch; //питч в диапазоне 0,1-3
 
-    public bool loop;
-    public AudioMixerGroup mixer;
+    public bool loop; //зацикливать или нет
+    public AudioMixerGroup mixer; //собственно мейн аудиомиксер
 
     [HideInInspector]
     public AudioSource source;
@@ -25,7 +25,7 @@ public class Sound
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; } //определяем
-    public Sound[] sounds;
+    public Sound[] sounds; //все звуки в этом масиве
 
     private void Awake() //запускается до всех стартов
     {
@@ -40,7 +40,7 @@ public class AudioManager : MonoBehaviour
         }
         //end no audio
 
-        foreach(Sound s in sounds)
+        foreach(Sound s in sounds) //эта фигня создает нужные источники звука, хз как точно работает, спиздил в гайде
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
@@ -53,24 +53,24 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    private void Start()
+    private void Start() //при старте сцены играет заглавную тему 
     {
-        Play("Theme");
+        Play("Theme"); //имя трека
     }
 
-    public void Play(string name)
+    public void Play(string name) //функция для проигрывания нужного трека
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null)
         {
-            Debug.LogWarning("Звук: " + name + " не найден!");
+            Debug.LogWarning("Звук: " + name + " не найден!"); //если такого звука нет в списке всех звков
             return;
         }
         s.source.Play();
 
     }
 
-    public void Stop(string name)
+    public void Stop(string name) //также, но стопаем проигрывание трека вызывая метод с именем трека как аргументом
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null)

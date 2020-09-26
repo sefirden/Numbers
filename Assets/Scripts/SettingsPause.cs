@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class SettingsPause : MonoBehaviour
 {
-    //слои меню и настроек
+    //весь код как в скрипте SettingsMenu, комментарии там же
     public GameObject MainLayer;
     public GameObject SettingsLayer;
     public Toggle music_off;

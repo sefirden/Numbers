@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
 
+//основной игровой срипт с кучей методов, тут ебаный пиздец, править аккуратно
+
 public class Board : MonoBehaviour, IPointerClickHandler
 {
     public int width;
@@ -173,9 +175,11 @@ public class Board : MonoBehaviour, IPointerClickHandler
             Level.LoadLevel(level);
             SetUpLoaded();
             PlayerResource.Instance.isLoaded = false;
+            gameObject.SetActive(true);
         }
         else
         {
+            gameObject.SetActive(false);
             Level.LoadLevel(10); //загрузка новой игры
             Shuffle();
             SetUp();

@@ -14,16 +14,16 @@ using UnityEngine.SceneManagement;
 public class PlayServicesGoogle : MonoBehaviour
 {
 
-    //public bool authenticated;
     public static PlayServicesGoogle Instance { get; private set; } //определяем
 
-    public FullSaves fullsave = new FullSaves();
-    private string path;
-    public Button LeaderBoard;
-    public Button Achievement;
-    public Button CloudLoad;
+    public FullSaves fullsave = new FullSaves(); //сюда сохраняем все данные
+    private string path; //путь к сейву
+    public Button LeaderBoard; //кнопка лидерборд
+    public Button Achievement; //кнопка ачивки
+    public Button CloudLoad; //кнопка загрузка из облака
 
-    public DateTime SaveTime;
+    public DateTime SaveTime; //текущая дата и время, нужно для облачного сейва
+
     private void Awake() //запускается до всех стартов
     {
         if (Instance == null) //если объекта ещё нет
@@ -42,6 +42,7 @@ public class PlayServicesGoogle : MonoBehaviour
     #region Auth
     private void Start()
     {
+        //ниже по гайду гугл плей сервисы
 
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
             .EnableSavedGames().Build();
@@ -53,7 +54,7 @@ public class PlayServicesGoogle : MonoBehaviour
         SignIn();
     }
 
-    void SignIn()
+    void SignIn() //логинимся
     {
 
         Social.localUser.Authenticate((bool success) =>
@@ -66,16 +67,18 @@ public class PlayServicesGoogle : MonoBehaviour
 
     private void OnConnectionResponse(bool authenticated)
     {
-        if (authenticated)
+        if (authenticated) //если залогинились
         {
-            LeaderBoard.interactable = true;
+            //включаем кнопки
+            LeaderBoard.interactable = true; 
             Achievement.interactable = true;
             CloudLoad.interactable = true;
 
             Debug.Log("authenticated"); //показываем кнопки ачив и лидерборд
         }
-        else
+        else //если не залогинились
         {
+            //кнопки выключены
             LeaderBoard.interactable = false;
             Achievement.interactable = false;
             CloudLoad.interactable = false;
@@ -87,36 +90,36 @@ public class PlayServicesGoogle : MonoBehaviour
 
     #region Collect data
     [Serializable]
-    public class FullSaves
-    {
+    public class FullSaves //класс со всеми данными которые надо сохранить
+    {   //описание переменных в скрипте плеерресоурсес
         public bool GameIsPaused; //если игра на паузе
 
         //переменные для Normal режима
-        public int scoreN; //количество здоровья, пока 4
-        public int hiScoreN; //количество ячеек здоровья
-        public int hintN; //количество монеток у игрока, нужны для магазина поверапов
-        public int refillN; //количество спасенных кусков пиццы, за каждый кусок противники сложнее
+        public int scoreN; 
+        public int hiScoreN;
+        public int hintN;
+        public int refillN;
         public int heightN;
         public int widthN;
 
-        public bool EndGameN; //true если конец игры
+        public bool EndGameN;
         public string loadedBoardN;
         public bool AdRewardN;
         public int levelN;
         public int damageN;
 
         //переменные для Time Limit режима
-        public float time; //
+        public float time;
         public float playedTime;
-        public int scoreT; //количество здоровья, пока 4
-        public int hiScoreT; //количество ячеек здоровья
-        public int hintT; //количество монеток у игрока, нужны для магазина поверапов
-        public int refillT; //количество спасенных кусков пиццы, за каждый кусок противники сложнее
+        public int scoreT;
+        public int hiScoreT;
+        public int hintT;
+        public int refillT;
         public int heightT;
         public int widthT;
         public int levelT;
 
-        public bool EndGameT; //true если конец игры
+        public bool EndGameT;
         public string loadedBoardT;
         public bool AdRewardT;
         public int damageT;
@@ -126,7 +129,7 @@ public class PlayServicesGoogle : MonoBehaviour
 
     public void CollectData() //собираем дынные из игры
     {
-        if (SceneManager.GetActiveScene().name != "Menu")
+        if (SceneManager.GetActiveScene().name != "Menu") //если мы не в меню
         {
             fullsave.scoreN = PlayerResource.Instance.scoreN;
             fullsave.hiScoreN = PlayerResource.Instance.hiScoreN;
@@ -165,9 +168,9 @@ public class PlayServicesGoogle : MonoBehaviour
 #else
         path = Path.Combine(Application.dataPath, "FullSave.json");
 #endif
-        if (SceneManager.GetActiveScene().name != "Menu")
+        if (SceneManager.GetActiveScene().name != "Menu") //если мы не в меню
         {
-            File.WriteAllText(path, SaveSystem.Encrypt(JsonUtility.ToJson(fullsave)));
+            File.WriteAllText(path, SaveSystem.Encrypt(JsonUtility.ToJson(fullsave))); //кодируем сейвы и пишем закодированное в жсон
             Debug.LogWarning("SaveToJson Done!!!");
         }
     }
@@ -182,7 +185,7 @@ public class PlayServicesGoogle : MonoBehaviour
 #endif
         if (File.Exists(path))
         {
-            fullsave = JsonUtility.FromJson<FullSaves>(SaveSystem.Decrypt(File.ReadAllText(path)));
+            fullsave = JsonUtility.FromJson<FullSaves>(SaveSystem.Decrypt(File.ReadAllText(path))); //читаем из жсон и декодируем
             Debug.LogWarning("ReadFromJson Done!!!");
         }
     }
@@ -225,14 +228,13 @@ public class PlayServicesGoogle : MonoBehaviour
 
 
     #region Saved Games
+    //многое из гайда, не трогать пока работает
 
-
-    //save
-    public void SaveToCloud() //true повесить на кнопку перед кнопкой продолжить
+    public void SaveToCloud() //сохраням в облако, вызываем везде этот метод
     {
         Debug.Log("SaveToCloud");
 
-        if (Social.localUser.authenticated)
+        if (Social.localUser.authenticated) //если залогинены
         {
 
             ((PlayGamesPlatform)Social.Active).SavedGame
@@ -249,10 +251,10 @@ public class PlayServicesGoogle : MonoBehaviour
 
         if (status == SavedGameRequestStatus.Success)
         {
-            CollectData();
-            string json = JsonUtility.ToJson(fullsave); //возможно тут хня написана
-            Debug.LogWarning(json);
-            byte[] data = Encoding.UTF8.GetBytes(json);
+            CollectData(); //собираем данные
+            string json = JsonUtility.ToJson(fullsave); //записываем в жсон
+
+            byte[] data = Encoding.UTF8.GetBytes(json); //из жсона в дату, а ее отправляем в облако
             SavedGameMetadataUpdate update = new SavedGameMetadataUpdate.Builder().WithUpdatedDescription("Saved at " + DateTime.Now.ToString()).Build();
 
             ((PlayGamesPlatform)Social.Active).SavedGame.CommitUpdate(meta, update, data, SaveToCloudStatus);
@@ -260,7 +262,7 @@ public class PlayServicesGoogle : MonoBehaviour
         }
     }
 
-    //Success save
+    //статус сохранения
     private void SaveToCloudStatus(SavedGameRequestStatus status, ISavedGameMetadata meta)
     {
         Debug.LogWarning("SaveToCloudStatus " + status);
@@ -268,8 +270,8 @@ public class PlayServicesGoogle : MonoBehaviour
 
 
 
-    //Load
-    public void LoadFromCloud()
+    //грузим из облака
+    public void LoadFromCloud() //для загрузки вызываем этот метод
     {
         Debug.Log("LoadFromCloud");
 
@@ -286,7 +288,7 @@ public class PlayServicesGoogle : MonoBehaviour
         }
     }
 
-    private void DataFromCloud(SavedGameRequestStatus status, ISavedGameMetadata meta)
+    private void DataFromCloud(SavedGameRequestStatus status, ISavedGameMetadata meta) //загружаем данные из облака
     {
         Debug.Log("DataToCloud");
 
@@ -296,12 +298,12 @@ public class PlayServicesGoogle : MonoBehaviour
 
         }
     }
-    private void ReadFromCloud(SavedGameRequestStatus status, byte[] data)
+    private void ReadFromCloud(SavedGameRequestStatus status, byte[] data) //читаем загруженные данные 
     {
         if (status == SavedGameRequestStatus.Success)
         {
-            string saveData = Encoding.UTF8.GetString(data);
-            fullsave = JsonUtility.FromJson<FullSaves>(saveData); //пишем в файл, возможно хня
+            string saveData = Encoding.UTF8.GetString(data); //декодируем загруженное
+            fullsave = JsonUtility.FromJson<FullSaves>(saveData); //применяем
 
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -310,7 +312,7 @@ public class PlayServicesGoogle : MonoBehaviour
             path = Path.Combine(Application.dataPath, "FullSave.json");
 #endif
 
-            File.WriteAllText(path, SaveSystem.Encrypt(JsonUtility.ToJson(fullsave)));
+            File.WriteAllText(path, SaveSystem.Encrypt(JsonUtility.ToJson(fullsave))); //кодируем и пишем в жсон, не помню зачем оно тут, но лучше не трогать
 
             Debug.LogWarning("saveData " + saveData);
         }
@@ -320,29 +322,29 @@ public class PlayServicesGoogle : MonoBehaviour
 
 
     #region Achievements
-    public static void UnlockAchievement(string id)
+    public static void UnlockAchievement(string id) //запускаем этот метод с ид ачивки, когда ее полуает игрок
     {
         Social.ReportProgress(id, 100, success => { });
     }
 
-    public static void IncrementAchievement(string id, int stepsToIncrement)
+    public static void IncrementAchievement(string id, int stepsToIncrement) //ачивка из нескольких частей, типа просмотрите 3 рекламы, передаем ид и количество шагов в ачивке
     {
         PlayGamesPlatform.Instance.IncrementAchievement(id, stepsToIncrement, success => { });
     }
 
-    public static void ShowAchievementUI()
+    public static void ShowAchievementUI() //показать уи ачивок
     {
         Social.ShowAchievementsUI();
     }
     #endregion /Achievements
 
     #region Leaderboards
-    public static void AddScoreToLeaderboard(string leaderboardId, long score)
+    public static void AddScoreToLeaderboard(string leaderboardId, long score) //запускаем этот метод когда переадем данные в лидерборд, передаем ид лидерборда и данные в типе лонг
     {
         Social.ReportScore(score, leaderboardId, success => { });
     }
 
-    public static void ShowLeaderboardsUI()
+    public static void ShowLeaderboardsUI() //показать уи лидербордов
     {
         Social.ShowLeaderboardUI();
     }
