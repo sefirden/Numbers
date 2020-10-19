@@ -8,54 +8,55 @@ using System.Linq;
 
 //основной игровой срипт с кучей методов, тут ебаный пиздец, править аккуратно
 
-public class Board : MonoBehaviour, IPointerClickHandler
+public class Board : MonoBehaviour, IPointerClickHandler //вот вотета фигня в конце нужна чтобы срабатывалм клики на уи
 {
-    public int width;
-    public int height;
-    public int hints;
-    public int refill;
-    public int score;
-    public int hiScore;
-    public string loadedBoard;
-    public bool endGame;
-    public int difficult;
-    public bool AdReward;
-    public int level;
+    public int width; //ширина поля
+    public int height; //высота поля
+    public int hints; //количество подсказок, закодировать
+    public int refill; //количество перемешиваний, закодировать
+    public int score; //очки, закодировать
+    public int hiScore; //рекорд, закодировать
+    public string loadedBoard; //загружаемое поле в виде строки из всех цифр
+    public bool endGame; //конец игры или нет
+    public int difficult; //сложность, зависит от размера поля, используется в рандоме при заполнении поля новыми цифрами
+    public bool AdReward; //смотрел ли пользователь рекламу
+    public int level; //уровень, от 0 до 8, 9 это ендгейм локация, 10 стартовая локация
 
-    public LineRenderer[] lines;
-    public LineRenderer sampleLine;
+    public LineRenderer[] lines; //масив с линиями, что бы рисовать линии между соединенными цифрами
+    public LineRenderer sampleLine; //тут добавлен префаб линн в инспекторе как образец для содания линий
 
-    private ui ui;
-    private bossPlayer boss;
-    private Level Level;
+    private ui ui; //скрипт уи
+    private bossPlayer boss; //скрипт босса
+    private Level Level; //скрипт уровней
 
-    public GameObject[] dots;
+    public GameObject[] dots; //масив с префабами цифр для заполнения поля
 
-    private bool countStep;
-    private int[,] numbers;
-    public GameObject[,] allDots;
-    public GameObject[] CollectedNumbers;
+    private bool countStep; //учавствуйет в проверке конца игры
+    private int[,] numbers; //масив с изначальными цифрами прис тарте игры, содержит одинаковое количество всех цифр по размеру поля
+    public GameObject[,] allDots; //масив со всеми созданными цифрами на поле, удалять и изменять цифры через обращение к этому масиву
+    public GameObject[] CollectedNumbers; //масив с собранными по порядку цифрами
 
-    public int[] TagForRandomRefill;
-    public GameObject[] HintNumbers;
+    public int[] TagForRandomRefill; //масив со всеми цифрами, считается их количество и из нужных заполняем рандомно поле
+    public GameObject[] HintNumbers; //масив для работы подсказок, подсказка заполняет этот масив
 
-    private Vector2 startPosition, endPosition;
-    private GameObject tempObject;
-    private int index;
+    private Vector2 startPosition, endPosition; //вектор 2 стартовой и конечной позиции, нужно для отслеживания вектора направления при соединении цифр
+    private GameObject tempObject; //записываем сюда выбранную цифру на предыдущем этапе, если соединили 3 цифры, то эта переменная будет второй цифрой, нужно для сравнивания выбранной предыдущей цифрой и текущей выбранной
+    private int index; //индекс записанной в масив собраных цифр
     
-    private bool hint;
+    private bool hint; //переменная учавствует в поиске цифр при подсказке
        
-    public float scaleBoard;
+    public float scaleBoard; //переменная для увеличения размера цифр в полях 5 и 7
 
-    public int damage;
+    public int damage; //урон высчитан из очков, когда босс на уровне, от урона меняется босс и уровень
 
     private void Awake()
     {
+        //присваиваем переменным скрипты
         ui = FindObjectOfType<ui>();
         Level = FindObjectOfType<Level>();
         boss = FindObjectOfType<bossPlayer>();
 
-
+        //если нормальный режим игры, присваиваем переменные из плеерресурсес, которые загружаются из сейва
         if (PlayerResource.Instance.gameMode == "normal")
         {
             width = PlayerResource.Instance.widthN;
@@ -71,7 +72,7 @@ public class Board : MonoBehaviour, IPointerClickHandler
             damage = PlayerResource.Instance.damageN;
 
         }
-        else if(PlayerResource.Instance.gameMode == "timetrial")
+        else if(PlayerResource.Instance.gameMode == "timetrial") //для режима на время
         {
             width = PlayerResource.Instance.widthT;
             height = PlayerResource.Instance.heightT;
@@ -87,54 +88,56 @@ public class Board : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        allDots = new GameObject[width, height];
-        numbers = new int[width, height];
-        CollectedNumbers = new GameObject[width]; //максимальная длина цепочки - 9
-        lines = new LineRenderer[width - 1];
-        TagForRandomRefill = new int[width*height];
+        allDots = new GameObject[width, height]; //размер масива зависит от выбранного размера поля
+        numbers = new int[width, height]; //размер масива зависит от выбранного размера поля
+        CollectedNumbers = new GameObject[width]; //размер масива зависит от выбранного размера поля, максимальная длина цепочки - 9
+        lines = new LineRenderer[width - 1]; //размер масива зависит от выбранного размера поля -1 , так как соединить 5 цифр нужно 4 линии и тд
+        TagForRandomRefill = new int[width*height]; //размер масива зависит от размера поля, для 5 это 5*5=25, 49 и 81 для других режимов
 
-        HintNumbers = new GameObject[width];
+        HintNumbers = new GameObject[width]; //размер масива зависит от выбранного размера поля
 
-        hint = false;
+        hint = false; //ставим что подсказка сейчас не активна, если в старте этого не делать, то подсказки потом не работают
 
-        index = 0;
+        index = 0; //индекс обнуляем
 
-        if (hints == 0)
+        if (hints == 0) //если нет доступных подсказок, переключаем кнопки на рекламу
         {
-            ui.HintButton.gameObject.SetActive(false);
-            ui.AdHintButton.gameObject.SetActive(true);
+            ui.HintButton.gameObject.SetActive(false); //выключаем обычную кнопку
+            ui.AdHintButton.gameObject.SetActive(true); //включаем кнопку рекламы и +3 подсказки
         }
 
-        if (refill == 0)
+        if (refill == 0) //если нет доступных перемешиваний, переключаем кнопки в уи и в слое конца игры
         {
-            ui.RefillButton.gameObject.SetActive(false);
-            ui.AdRefillButton.gameObject.SetActive(true);
-            ui.RefillButtonLayer.gameObject.SetActive(false);
-            ui.AdRefillButtonLayer.gameObject.SetActive(true);
+            ui.RefillButton.gameObject.SetActive(false); //выключаем обычную кнопку
+            ui.AdRefillButton.gameObject.SetActive(true); //включаем кнопку рекламы и +1 перемешивание
+            ui.RefillButtonLayer.gameObject.SetActive(false); //выключаем обычную кнопку в слое конца игры
+            ui.AdRefillButtonLayer.gameObject.SetActive(true); //включаем кнопку рекламы и +1 перемешивание в слое конца игры
         }
 
-        if (AdReward == true)
+        if (AdReward == true) //если реклама была просмотрена для перемешивания поля
         {
+            //делаем не активными кнопки рекламы и в слое конца игры
             ui.AdRefillButton.interactable = false;
             ui.AdRefillButtonLayer.interactable = false;
 
-            ui.AdsRefillOn.gameObject.SetActive(false);
-            ui.AdsRefillOff.gameObject.SetActive(true);
-            ui.AdsRefillLoading.gameObject.SetActive(false);
+            //меняем картинки на кнопках
+            ui.AdsRefillOn.gameObject.SetActive(false); //выключаем картинку доступна реклама
+            ui.AdsRefillOff.gameObject.SetActive(true); //включаем картинку реклама НЕ доступна
+            ui.AdsRefillLoading.gameObject.SetActive(false); //выключаем картинку загрузки рекламы
 
+            //см выше, но для кнопки в слоее конца игры
             ui.AdsRefillOnLayer.gameObject.SetActive(false);
             ui.AdsRefillOffLayer.gameObject.SetActive(true);
             ui.AdsRefillLoadingLayer.gameObject.SetActive(false);
 
-
+            //счетчик доступных просмотров рекламы на кнопках ставим без текста, можно ставить 0, но не красиво
             ui.AdRefillButton.GetComponentInChildren<Text>().text = "";
             ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "";
         }
 
-        switch (width)
+        switch (width) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
         {
             case 5:
                 difficult = 3;
@@ -167,34 +170,33 @@ public class Board : MonoBehaviour, IPointerClickHandler
                 Debug.LogWarning("case 5 " + difficult);
                 break;
         }
-        boss.ChangeBoss(level);
-        ui.BossHealth(damage, level);
 
-        if (PlayerResource.Instance.isLoaded == true)
+        boss.ChangeBoss(level); //загружаем боссу нужный спрайт (по сути грузим нужного по порядку босса)
+        ui.BossHealth(damage, level); //в зависимости от урона и уровня грузи лайфбар босса с нужными данными
+
+        if (PlayerResource.Instance.isLoaded == true) //если игра была загружена
         {
-            Level.LoadLevel(level);
-            SetUpLoaded();
-            PlayerResource.Instance.isLoaded = false;
-            gameObject.SetActive(true);
+            Level.LoadLevel(level); //грузим нужный уровень
+            SetUpLoaded(); //заполняем поле из загруженных цифр
+            PlayerResource.Instance.isLoaded = false; //говорим что уже не загружено
+            gameObject.SetActive(true); //включаем видимость поля
         }
-        else
+        else //если была выбрана новая игра
         {
-            gameObject.SetActive(false);
-            Level.LoadLevel(10); //загрузка новой игры
-            Shuffle();
-            SetUp();
+            gameObject.SetActive(false); //выключаем поле
+            Level.LoadLevel(10); //загрузка уровня новой игры
+            Shuffle(); //перемешиваем стандартный набор цифр при новой игре
+            SetUp(); //заполняем поле перемешенными цифрами
         }
 
-        for (int i = 0; i < width-1; i++)
+        for (int i = 0; i < width-1; i++) //создаем обьекты линий для соединения цифр, количество линий размер поля -1
         {
             LineRenderer line = Instantiate(sampleLine, sampleLine.transform.position, Quaternion.identity);
             line.name = "line " + i;
             lines[i] = line;
-            lines[i].gameObject.SetActive(false);
+            lines[i].gameObject.SetActive(false); //скрываем созданные линии
         }
-
-
-
+               
     }
 
     void Update()
