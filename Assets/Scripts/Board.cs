@@ -202,7 +202,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     void Update()
     {
 
-        if (PlayerResource.Instance.gameMode == "normal")
+        if (PlayerResource.Instance.gameMode == "normal") //если нормальный режим, грузим данные для поля из переменных нормального режима, описание переменных см выше
         {
             PlayerResource.Instance.hintN = hints;
             PlayerResource.Instance.refillN = refill;
@@ -215,7 +215,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             PlayerResource.Instance.damageN = damage;
 
         }
-        else if (PlayerResource.Instance.gameMode == "timetrial")
+        else if (PlayerResource.Instance.gameMode == "timetrial") //если режим на время, грузим данные из переменных режима на время
         {
             PlayerResource.Instance.hintT = hints;
             PlayerResource.Instance.refillT = refill;
@@ -228,101 +228,89 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             PlayerResource.Instance.damageT = damage;
         }
 
-        ui.scoreText.text = Convert.ToString(score);
-        ui.hintcount.text = Convert.ToString(hints);
-        ui.refillcount.text = Convert.ToString(refill);
-        ui.refillcountLayer.text = Convert.ToString(refill);
-        ui.HighscoreText.text = Convert.ToString(hiScore);
+        //при каждом апдейте вешаем на элементы ui текст
+        ui.scoreText.text = Convert.ToString(score); //очки
+        ui.hintcount.text = Convert.ToString(hints); //количество подсказок
+        ui.refillcount.text = Convert.ToString(refill); //количество перемешиваний
+        ui.refillcountLayer.text = Convert.ToString(refill); //количество перемешиваний в слое конца игры
+        ui.HighscoreText.text = Convert.ToString(hiScore); //макс очки
 
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
-        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true)//клик кнопки мышки вниз //&& !EventSystem.current.IsPointerOverGameObject()
+        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true)//клик кнопки мышки вниз если не на паузе
         {
-
-            ClickSelect(); //ищем стартовую точку
-            
-           // Draw(true); //выключаем подсказку
-
+            ClickSelect(); //ищем стартовую точку методом
         }
-        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true) //когда мышь зажата // && !EventSystem.current.IsPointerOverGameObject()
+        else if (Input.GetMouseButton(0) && PlayerResource.Instance.GameIsPaused != true) //когда мышь зажата и нет паузы
         {
-
             RaycastHit2D hit2 = Physics2D.Linecast(startPosition, endPosition); //кидаем лайнкаст каждый раз по апдейту из предыдущего тайла по положению курсора
 
             if (hit2) //если что-то поймали лайнкастом
             {
-                if (tempObject != null)
+                if (tempObject != null) //если при первом клике была выбрана цифра, а не просто клик в пустоту был
                 {
-                    if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1) //если текущая цифра больше предыдущей на 1
+                    if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == -1) //если тег временной(первой цифры) отнять тег пойманой райкастом цифры равно -1 (по сути следущая цифра больше предыдущей)
                     {
 
-                        tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
-                        tempObject.transform.name = "owned";
-
-                        Debug.Log(hit2.transform.tag);
+                        tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер, выключался в другом методе
+                        tempObject.transform.name = "owned"; //меняем имя, надо для отмены выбора цифры, см дальше
 
                         hit2.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем у текущего тайла колайдер, чтобы лайнкаст его не цеплял
-                        tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер
+                        tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер и сравнивать следующую цифру с текущей
 
                         endPosition = hit2.transform.position; //последнюю позицию ставим по центру тайла
                         startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
 
-                        CollectedNumbers[index] = hit2.transform.gameObject; //записываем в массив
-                                                                             //visual
-                        CollectedNumbers[index].transform.localScale *= 1.25f;
-                        CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
-                        CollectedNumbers[index].transform.name = "owned";
+                        CollectedNumbers[index] = hit2.transform.gameObject; //записываем пойманную райкастом цифру в массив пойманных цифр
 
+                        //visual
+                        CollectedNumbers[index].transform.localScale *= 1.25f; //увеличиваем объект пойманной цифры на 25%
+                        CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //уменьшаем колайдер цифры до размеров до увеличения, иначе райкаст цепляет не те цифры иногда
+                        CollectedNumbers[index].transform.name = "owned"; //меняем имя, надо для отмены выбора цифры, см дальше
+                        
+                        lines[index - 1].SetPosition(0, CollectedNumbers[index - 1].transform.position); //берем линию из масива с линиями по индексу, устанавливаем первую точку линии по предыдущей цифре
+                        lines[index - 1].SetPosition(1, CollectedNumbers[index].transform.position); //берем линию из масива с линиями по индексу, устанавливаем вторую точку линии по пойманной райкастом цифре
+                        lines[index - 1].gameObject.SetActive(true); //включаем эту линию
 
-                        lines[index - 1].SetPosition(0, CollectedNumbers[index - 1].transform.position);
-                        lines[index - 1].SetPosition(1, CollectedNumbers[index].transform.position);
-                        lines[index - 1].gameObject.SetActive(true);
-
-                        index++;
+                        index++; //увеличиваем индекс, для след цифр
                     }
-                    else if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == 1 && hit2.transform.name == "owned")
+                    else if (Convert.ToInt32(tempObject.transform.tag) - Convert.ToInt32(hit2.transform.tag) == 1 && hit2.transform.name == "owned") //если тег временной(первой цифры) отнять тег пойманой райкастом цифры равно 1 (по сути следущая цифра меньше предыдущей) и имя пойманной имеет имя овнед (значит она уже была выбрана ранее типа первая 4 а выбрана 3)
                     {
-                        tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер
-
-                        Debug.Log(hit2.transform.tag);
+                        tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем у предыдущего тайла колайдер, выключался в другом методе
 
                         hit2.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем у текущего тайла колайдер, чтобы лайнкаст его не цеплял
-                        tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер
+                        tempObject = hit2.transform.gameObject;//записываем последний тайл в темп, чтобы потом включить там колайдер и сравнивать следующую цифру с текущей
 
                         endPosition = hit2.transform.position; //последнюю позицию ставим по центру тайла
                         startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
                         
-                        index--;
+                        index--; //уменьшаем индекс
 
-                        CollectedNumbers[index].transform.localScale = Vector3.one * scaleBoard;
-                        CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
-                        CollectedNumbers[index].transform.name = "ok";
-                        CollectedNumbers[index] = null;
+                        CollectedNumbers[index].transform.localScale = Vector3.one * scaleBoard; //для этой цифры ставим стандартный размер
+                        CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f); //ставим стандартный размер колайдера
+                        CollectedNumbers[index].transform.name = "ok"; //меняем имя с овнед на ок
+                        CollectedNumbers[index] = null; //удаляем эту цифру из списка пойманных цифр
 
-                        lines[index-1].gameObject.SetActive(false);
-
-
-
+                        lines[index-1].gameObject.SetActive(false); //выключаем линию, которая соединяла эти цифры
                     }
                     else
                     {
-                        Debug.LogWarning("wrong number");
+                        Debug.LogWarning("wrong number"); //если выбрана неверная цифра типа певая 5, а райкастом выбрали 7
                     }
                 }
             }
 
         }
-        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true)//отпускаем кнопку мышки
+        else if (Input.GetMouseButtonUp(0) && PlayerResource.Instance.GameIsPaused != true)//отпускаем кнопку мышки и нет паузы 
         {
-            if (tempObject != null)
+            if (tempObject != null) //если была выбрана хотя бы одна цифра ранее
             {
                 tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             }
 
             Score(); //считаем очки
         }
-
     }
 
     public void OnPointerClick(PointerEventData eventData) //чтобы работало UI
@@ -330,47 +318,45 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         //Debug.LogWarning("Refill");
     }
 
-    private void SetUpLoaded()
+    private void SetUpLoaded() //заполняем доску при продолжении игры
     {
         int indx = 0;
-        string[] a = loadedBoard.Split(new char[] { '*' });
+        string[] a = loadedBoard.Split(new char[] { '*' }); //берем строку с цифрами записанными через * и создаем из нее массив
 
 
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++) //в зависимости от ширины и высоты
         {
             for (int j = 0; j < height; j++)
             {
-                float x = (float)i * scaleBoard;
+                float x = (float)i * scaleBoard; //координаты множим на переменную по размеру поля см выше
                 float y = (float)j * scaleBoard;
 
-                Vector3 tempPosition = new Vector3(x, y, 1f);
+                Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
 
-                int dotToUse = Convert.ToInt32(a[indx]) - 1; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
+                int dotToUse = Convert.ToInt32(a[indx]) - 1; //цифра из масива сохраненных цифр
                 
-                //Debug.LogError(loadedBoard + " and " + dotToUse);
-
-                GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
-                dot.transform.parent = this.transform;
-                dot.name = "t ( " + i + ", " + j + " )";
-                dot.transform.localScale *= scaleBoard;
-                allDots[i, j] = dot;
-                indx++;
+                GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+                dot.transform.parent = this.transform; //присваиваем позицию
+                dot.name = "t ( " + i + ", " + j + " )"; //присваиваем имя
+                dot.transform.localScale *= scaleBoard; //увиличиваем по размеру поля
+                allDots[i, j] = dot; //записываем в масив всех цфир поля
+                indx++; //увиличиваем индекс
             }
         }
     }
 
-    private void Shuffle() //перемешиваем доску
+    private void Shuffle() //перемешиваем доску прис тарте новой игры
     {
 
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                numbers[i, j] = j;
-
+                numbers[i, j] = j; //создаем масив цифр для перемешивания
             }
         }
 
+        //перемешивание массива случайным образом, способ из интернета
         for (int tp = 0; tp < width; tp++)
         {
             for (int t = 0; t < height; t++)
@@ -411,7 +397,6 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     private void ClickSelect()
     {   
 
-        //Converting Mouse Pos to 2D (vector2) World Pos
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
         RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
 
