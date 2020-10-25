@@ -378,294 +378,289 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         {
             for (int j = 0; j < height; j++)
             {
-                float x = (float)i * scaleBoard;
+                float x = (float)i * scaleBoard; //координаты множим на переменную по размеру поля см выше
                 float y = (float)j * scaleBoard;
 
-                Vector3 tempPosition = new Vector3(x, y, 1f);
+                Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
 
-                int dotToUse = numbers[i, j]; //потом вписать сюда не количество картинок а количество столбцов, тут генерация рандомного заполенния поля
-                GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
-                dot.transform.parent = this.transform;
-                dot.name = "t ( " + i + ", " + j + " )";
-                dot.transform.localScale *= scaleBoard;
+                int dotToUse = numbers[i, j]; //заполняем поле из масива, который предварительно был перемешан и заполнен, см выше метод шафл
+                GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+                dot.transform.parent = this.transform; //присваиваем позицию
+                dot.name = "t ( " + i + ", " + j + " )"; //присваиваем имя
+                dot.transform.localScale *= scaleBoard; //увиличиваем по размеру поля
 
-                allDots[i, j] = dot;
+                allDots[i, j] = dot; //записываем в масив всех цфир поля
             }
         }
     }
 
-    private void ClickSelect()
+    private void ClickSelect() //обработчик клика по нажатию на кнопку, ищет райкастом цифры
     {   
 
-        Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
-        RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
+        Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //получаем координаты клика, переводим в нужные координаты
+        RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f); //кидаем райкаст по координатам см выше
 
-        if (hit)
+        if (hit) //если райкастом что-то поймали
         {
-            Draw(false);
-            Debug.LogWarning("first click tag " + hit.transform.tag);
+            Draw(false); //убираем нарисованные ранее линии, соединяющие цифры
 
-            startPosition = hit.transform.position;
-            Debug.Log("first click position " + startPosition);
+            startPosition = hit.transform.position; //говорим что стартовая позиция это наши координаты каста
 
-            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            tempObject = hit.transform.gameObject;
 
-            CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем уоллайдер, чтобы не ловить этот же обьект следующим райкастом
+            tempObject = hit.transform.gameObject; //говорим что временный объект это наш пойманный кастом
 
-            CollectedNumbers[index].transform.localScale *= 1.25f;
-            CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+            CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив собрыннх цифр
 
-            index++;
+            CollectedNumbers[index].transform.localScale *= 1.25f; //увеличиваем размер цифры
+            CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //делаем размер колайдера стандартного размера
+
+            index++; //увеличиваем индекс, для заполнения масива по порядку
 
         }
-        else
+        else //если райкастом ничего не поймали
         {
-            Debug.Log("not item");
+            Debug.Log("not item"); //просто выводим в лог
         }
     }
 
-    private void Score() //считает очки
+    private void Score() //считает очки, содержит запуск смены босса, уровня и изменение хп босса
     {
-        int quantity = 0;
-        int tempScore = 0;
-        int scoreToNextLevel = 0;
+        int quantity = 0; //количество собранных цифр
+        int tempScore = 0; //временное количество очков
+        int scoreToNextLevel = 0; //количество очков для перехода на след уровень
 
-        for (int i = 0; i < CollectedNumbers.Length; i++)
+        for (int i = 0; i < CollectedNumbers.Length; i++) //считаем количество собранных цифр
         {
-            if (CollectedNumbers[i] != null)
+            if (CollectedNumbers[i] != null) //если елемент масива не нуль
             {
-                tempScore += width;
-                quantity++;
+                tempScore += width; //увеличиваем временные очки на размер поля (для поля 5 получаем 5 очков за цифру, для поля 9 получаем 9)
+                quantity++; //увеличиваем количество
             }
         }
-        if (quantity > 1) //если выбрана больше чем 1 цифра
+        if (quantity > 1) //если собрана больше чем 1 цифра
         {
-            score += tempScore * quantity;
+            score += tempScore * quantity; //увеличиваем очки по формуле временные очки множим на количество
 
-            if (score > hiScore)
+            if (score > hiScore) //если количество очков больше чем максимальное
             {
-                hiScore = score;
+                hiScore = score; //приравниваем максимальное к текущему значению
             }
 
-            if (PlayerResource.Instance.zeroMove == false && PlayerResource.Instance.bossMove == false)
+            if (PlayerResource.Instance.zeroMove == false && PlayerResource.Instance.bossMove == false) //если ноль не двигается и босс не двигается
             {
-                damage += tempScore * quantity;
-                ui.BossHealth(damage, level);
+                damage += tempScore * quantity; //считаем урон по формуле как и очки см выше
+                ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
             }
 
-            for (int j = 0; j <= level; j++)
+            for (int j = 0; j <= level; j++) //каждый раз считаем количество очков для следующего уровня
             {
-                scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j];
+                scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j]; //плюсуем все значения очков для перехода на след уровень вплоть до теккущего уровня
             }
 
-
-            if (damage >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length)
+            //основной кусок по смене уровня
+            if (damage >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length) //если сумарного урона больше чем количество урона нужное для смены уровня и уровень меньше максимального количества
             {
-                level++;
+                level++; //увеличиваем уровень 
 
-                Level.ChangeLevel(level);
-                boss.ChangeBoss(level);
-                PlayerResource.Instance.zeroMove = true;
-                ui.LifeBarBackground.SetActive(false);
-                damage = scoreToNextLevel;
-                ui.BossHealth(damage, level);
+                Level.ChangeLevel(level); //запускаем смену уровня
+                boss.ChangeBoss(level); //запускаем смену босса
+                PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается, чтобы не считало урон пока идет смена уровня
+                ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
+                damage = scoreToNextLevel; //уравниваем нанесенный урон до уровня нужного для смены, что бы босс появлялся с ровным количеством хп, а не без нескольких пунктов
+                ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
             }
 
-            if (PlayerResource.Instance.gameMode == "timetrial")
+            if (PlayerResource.Instance.gameMode == "timetrial") //если у нас режим игры на время
             {
                 PlayerResource.Instance.time += quantity * (1f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 1,5 до 1,9 сек
             }
             
-            Debug.LogWarning("Score: " + score);
-
-
             Destroy(); //удаляем собранные цифры
 
         }
-        else
+        else //если собрана всего одна цифра и мы отпустили клик
         {
-            if (CollectedNumbers[0] != null)
+            if (CollectedNumbers[0] != null) //если первый элемент не нуль
             { 
-                CollectedNumbers[0].transform.localScale = Vector3.one * scaleBoard;
-                CollectedNumbers[0].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
-                CollectedNumbers[0].transform.name = "ok";
+                CollectedNumbers[0].transform.localScale = Vector3.one * scaleBoard; //ставим первой цифре стандартный размер
+                CollectedNumbers[0].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f); //делаем размер колайдера тоже стандартным
+                CollectedNumbers[0].transform.name = "ok"; //меняем имя, надо для возможности отмены хода движением в обратном порядке по цифрам
             }
-            Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
-            index = 0;
+            Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
+            index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
         }
 
     }
     
     private void Destroy() //удаляем собранные элементы
     {
-        //удаляем собранные--------------------------------------------
+        //удаляем собранные
         for (int i = 0; i < index; i++)
         {
             Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)]); //удаляем все собранные объекты
-            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)] = null;
+            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)] = null; //обнуляем нужные элементы массива всех цифр
         }
 
         for (int i = 0; i < index-1; i++)
         {
-            lines[i].gameObject.SetActive(false);
+            lines[i].gameObject.SetActive(false); //выключаем все включенные линии по этой хитрой схеме
         }
 
 
 
-        Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем собранные цифры
-        index = 0;
+        Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
+        index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
 
-        //двигаем ряды вниз--------------------------------------------
+        //двигаем ряды вниз
         StartCoroutine(DecreaseRow());
     }
     
-    private IEnumerator DecreaseRow() //private IEnumerator DecreaseRow()
+    private IEnumerator DecreaseRow()//короутина, которая двигает цифры вниз, на место собранных ранее
     {
-        Debug.LogWarning("START COROUTINE");
-        int nullCount = 0;
 
-        for (int i = 0; i < width; i++)
+        int nullCount = 0; //количество пустых ячеек на поле
+
+        for (int i = 0; i < width; i++)//столбцы
         {
-            for (int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++) //рядки
             {
-                if (allDots[i, j] == null)
+                if (allDots[i, j] == null) //если есть пустая ячейка
                 {
-                    nullCount++;
+                    nullCount++; //увеличиваем счетчик пустых ячеек
                 }
-                else if (nullCount > 0)
+                else if (nullCount > 0) //если пустых ячеек больше 0
                 {
 
-                    allDots[i, j].transform.Translate(transform.position.x, transform.position.y - nullCount * scaleBoard, transform.position.z, Space.World);
-                    allDots[i, j - nullCount] = allDots[i, j];
+                    allDots[i, j].transform.Translate(transform.position.x, transform.position.y - nullCount * scaleBoard, transform.position.z, Space.World); //двигаем полную ячейку по вертикали вниз на количество пустых ячеек
+                    allDots[i, j - nullCount] = allDots[i, j]; //подставляем в пустую ячейку цифру сверху
 
-                    allDots[i, j] = null;
+                    allDots[i, j] = null; //обнуляем ячейку, которая стала пустой
                 }
             }
-            nullCount = 0;
+            nullCount = 0; //обнуляем количество пустх ячеек и переходим к проверке следующего столбца
         }
-        yield return new WaitForSeconds(0.4f);
-        Debug.LogWarning("END COROUTINE");
+        yield return new WaitForSeconds(0.4f); //ожидание 0,4с, хрен пойми на что влияет, потестить, теоретически скорость сдвига ячеек вниз
 
+        //запускаем заполнение пустых ячеек на поле
         Refilling();
     }
 
-    private int[] Scan()
+    private int[] Scan() //метод, который проверяет количество всех цифр на поле и возвращает масив, который содержит только те цифры, которых мало на поле
     {
+        //смысл метода, что в итоге мы получим массив цифр которых не хватает на поле по правилам, и из этого массива будет выбрана случайная цифра
+        //собираем все цифры, вместо пустых ячеек ставим 0, потом сортируем и создаем словарь с количеством каждой цифры, во временный метод вписываем цифры, которых мало на поле и также вписываем те, которых на поле не осталось вообще
+       
+        int[] temp = new int [width]; //временный масив размером в ширину поля
+        int count = 0; //счетчик цифр
+        int indx  = 0; //индекс масива
 
-        int[] temp = new int [width];
-        int count = 0;
-        int indx  = 0;
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++) //столбцы
         {
-            for (int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++) //рядки
             {
-                if (allDots[i, j] == null)
+                if (allDots[i, j] == null) //если на доске есть пустое значение
                 {
-                    TagForRandomRefill[count] = 0;
-                    count++;
+                    TagForRandomRefill[count] = 0; //то пишем в массив 0
+                    count++; //увеличиваем счетчик
                 }
-                else
+                else //если не пустое значение
                 {
-                    TagForRandomRefill[count] = Convert.ToInt32(allDots[i, j].transform.tag);
-                    count++;
+                    TagForRandomRefill[count] = Convert.ToInt32(allDots[i, j].transform.tag); //пишем в массив тег текущего объекта
+                    count++; //увеличиваем счетчик
                 }
             }
         }
 
-        Array.Sort(TagForRandomRefill);
+        Array.Sort(TagForRandomRefill); //сортируем все собранные цифры в массиве
 
-        var g = TagForRandomRefill.GroupBy(i => i);
+        var g = TagForRandomRefill.GroupBy(i => i); //собираем словарь из массива всех цифр, где ключ к словарю это цифра, а значение это количество этих цифр
 
-        foreach (var k in g)
+        foreach (var k in g) //для каждоый цифры в словаре
         {
-
-            if (k.Count() <= (width + difficult) && k.Key != 0) //тут крутим сложность
+            //собираем временный масив из цифр, которых не хватает на поле по правилам что ниже
+            if (k.Count() <= (width + difficult) && k.Key != 0) //если количество цифр меньше равно ширине поля + модификатор сложности (для каждого размера поля свой см выше) и это не цифра 0 (типа цифра 2 встречается 5 раз, что меньше ширины поля + сложность, значит цифра 2 попадет в временный массив для заполнения поля)
             {
-               // Debug.Log("цифр количеством меньше " + (width+1) + " - "  + k.Key);
-                temp[indx] = k.Key;
-                indx++;
+                temp[indx] = k.Key; //то пишем ее во временный массив 
+                indx++; //увеличиваем индекс, для заполенния массива
             }                
         }
 
 
-            int[] Board = new int[width];
+            int[] Board = new int[width]; //создаем массив, который содержит все цифры по порядку, зависит от размера поля 
 
             for (int i = 0; i < width; i++)
             {
-                Board[i] = i + 1;                
+                Board[i] = i + 1;  //для поля размером 5, массив будет 1,2,3,4,5              
             }
 
-            var tag = TagForRandomRefill.Distinct();
+            var tag = TagForRandomRefill.Distinct(); //массив, который из всех собранных цифр оставляет только по одному варианту (типа было 1,1,2,3,3, станет 1,2,3)
 
-            var result = Board.Except(tag);
+            var result = Board.Except(tag); //массив который оставляет из массива боард, только те цифры, которых нет в массиве тег (без этого куска возможен вариант, когда ты собрал все цифры и они больше не смогут появится при заполнении)
 
-            foreach (var k in result)
+            foreach (var k in result) //для каждой цифры в масиве результ
             {
-                temp[indx] = k;
-                //Debug.LogError("temp[indx] = " + temp[indx]);
-                indx++;
+                temp[indx] = k; //записываем в временный масив
+                indx++; //увиличиваем индекс
 
             }
-            //тут подставлять цифру, которой нет на поле
-            Array.Resize(ref temp, indx);
 
-        return temp;
+            Array.Resize(ref temp, indx); //меняем размер масива в зависимости от количества цифр в нем, по умолчанию размер как ширина поля
+
+        return temp; //возвращаем временный массив
     }
 
-    private void Refilling()
+    private void Refilling() //заполнение поля, на место пустых ячеек
     {
-        int dotToUse;
+        int dotToUse; //номер цифры из списка префабов для заполнения ячейки поля
 
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++) //столбцы
         {
-            for (int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++) //рядки
             {
-                if (allDots[i, j] == null)
+                if (allDots[i, j] == null) //если находим пустуя ячейку на поле
                 {
-                    //каждый раз цикла проверяем количество цифр на поле и те цифры, которые втречаються на поле width+2 и больше раз не попадают в выборку для рандома
-                    
+           
+                    var temp = Scan(); //получаем массив с цифрами для заполнения, которые соответствуют правилам, см метод скан выше
 
-                    var temp = Scan();
-
-                    float x = (float)i * scaleBoard;
+                    float x = (float)i * scaleBoard; //координаты множим на переменную по размеру поля см выше
                     float y = (float)j * scaleBoard;
 
-                    Vector3 tempPosition = new Vector3(x, y, 1f);
-                    dotToUse = temp[UnityEngine.Random.Range(0, temp.Length)]-1; //тут переписать
+                    Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
 
-                   // Debug.LogError("Добавлена цифра - " + (dotToUse+1));
+                    dotToUse = temp[UnityEngine.Random.Range(0, temp.Length)]-1; //выбираем цифру из массива случайным способом и отнимаем 1, иначе вместо 2 будем заполнять 3 и тд.
 
-                    GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
-                    dot.transform.parent = this.transform;
-                    dot.name = "( " + i + ", " + j + " )";
-                    dot.transform.localScale *= scaleBoard;
-                    allDots[i, j] = dot;
+                    GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+                    dot.transform.parent = this.transform; //присваиваем позицию
+                    dot.name = "( " + i + ", " + j + " )"; //присваиваем имя
+                    dot.transform.localScale *= scaleBoard; //увеличиваем по размеру поля
+
+                    allDots[i, j] = dot; //записываем в масив всех цфир поля
                 }
             }
 
         }
-        Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры
+        Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры, не помню почему именно тут а не в методе скан, лучше не трогать
 
-        CollectBoardToSave();
-        CheckEndGame();
+        CollectBoardToSave(); //сохранение всех цифр на поле по порядку в строку, через *
+        CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
 
     }
 
-    private void CollectBoardToSave()
+    private void CollectBoardToSave() //сохранение всех цифр на поле по порядку в строку, через *
     {
-        loadedBoard = null;
+        loadedBoard = null; //обнуляем предыдущую строку из цифр
 
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++) //столбцы
         {
-            for (int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++) //рядки
             {
-                loadedBoard += allDots[i, j].transform.tag + "*";
+                loadedBoard += allDots[i, j].transform.tag + "*"; //сохраняем теги всех объектов в строку через *
             }
         }
     }
 
-    private void CheckEndGame()
+    private void CheckEndGame() //проверка на конец игры, есть ли возможные варианты ходов
     {
         countStep = false;
 
