@@ -195,13 +195,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             line.name = "line " + i;
             lines[i] = line;
             lines[i].gameObject.SetActive(false); //скрываем созданные линии
-        }
-               
+        }               
     }
 
     void Update()
     {
-
         if (PlayerResource.Instance.gameMode == "normal") //если нормальный режим, грузим данные для поля из переменных нормального режима, описание переменных см выше
         {
             PlayerResource.Instance.hintN = hints;
@@ -345,7 +343,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
     }
 
-    private void Shuffle() //перемешиваем доску прис тарте новой игры
+    private void Shuffle() //перемешиваем доску при старте новой игры
     {
 
         for (int i = 0; i < width; i++)
@@ -662,93 +660,91 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void CheckEndGame() //проверка на конец игры, есть ли возможные варианты ходов
     {
-        countStep = false;
+        countStep = false; //шаг при проверке конца игры, фелс если нет возможных ходов 
 
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++) //столбцы
         {
-            if (countStep != true)
+            if (countStep != true) //если нет возможных ходов, если это не сделать будет в холостую проверять все столбцы даже если найдет возможный ход в первом столбце
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 0; j < height; j++) //рядки
                 {
-                    if (countStep != true)
+                    if (countStep != true) //если нет возможных ходов
                     {
-                        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard);
+                        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard); //создаем массив с коллайдерами, записываем все колайдеры в радиусе 1,2*скейл от точки проверки
 
-                        for (var k = 0; k < hitColliders.Length; k++)
+                        for (var k = 0; k < hitColliders.Length; k++) //для всех элементов массива с колайдерами
                         {
-                            if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1)
+                            if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == 1) //если текущий тег колайдера - текущая точка проверки равно 1 (образно если точка проверки равно 1 и рядом мы нашли цифру 2)
                             {
-                                Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
-                                countStep = true;
-                                break;
+                                countStep = true; //говорим что есть возможный ход
+                                break; //выходим из цикла
                             }
-                            else if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == -1)
+                            else if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[i, j].transform.tag) == -1) //если текущий тег колайдера - текущая точка проверки равно -1 (образно если точка проверки равно 2 и мы нашли цифру 1) это позволяет делать меньше итераций для поиска хода, когда он есть
                             {
-                                Debug.LogWarning("есть возможный ход: " + hitColliders[k].transform.tag + ">" + allDots[i, j].transform.tag);
-                                countStep = true;
-                                break;
+                                countStep = true; //говорим что есть возможный ход
+                                break; //выходим из цикла
                             }
                         }
-                        Array.Clear(hitColliders, 0, hitColliders.Length);
+                        Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки
                     }
                     else
-                        break;
+                        break; //выходим из цикла
                 }
             }
             else
-                break;
+                break; //выходим из цикла
         }
-        if(countStep == false)
+        if(countStep == false) //если после всех проверок нет возможных ходов
         {
-            if (refill == 0)
+            if (refill == 0) //если количество перемешиваний поля равно 0
             {
-                EndGame();
+                EndGame(); //показываем всплывающий слой конца игры
             }
-            else if (refill > 0)
+            else if (refill > 0) //если количество перемешиваний больше 0
             {
-                NoMatch();
+                NoMatch(); //показываем всплывающий слой нет ходов с предложением перемешать поле
             }
-            else if (refill == 0 && AdReward == false)
+            else if (refill == 0 && AdReward == false) //если количество перемешиваний поля равно 0, но человек еще не смотрел видео рекламу для перемешивания в этой игре
             {
-                NoMatch();
+                NoMatch(); //показываем всплывающий слой нет ходов с предложением перемешать поле за просмотр видео рекламы
             }
         }
 
     }
 
-    private void NoMatch()
+    private void NoMatch() //запускаем когда нет возможных ходов
     {
-        AdMob_baner.Instance.Show();
-        Time.timeScale = 0f;
-        ui.NoMatchLayer.SetActive(true);
-        PlayerResource.Instance.GameIsPaused = true;
+        AdMob_baner.Instance.Show(); //показываем рекламный банер
+        Time.timeScale = 0f; //ставим паузу в игре
+        ui.NoMatchLayer.SetActive(true); //показываем слой нет возможных ходов
+        PlayerResource.Instance.GameIsPaused = true; //говорим что игра на паузе
     }
 
-    public void EndGame()
+    public void EndGame() //запускаем когда нет возможных ходов и вариантов перемешать поле
     {
 
-        Time.timeScale = 0f;
-        ui.NoMatchLayer.SetActive(false);
-        ui.EndGameLayer.SetActive(true);
-        PlayerResource.Instance.GameIsPaused = true;
-        endGame = true;
+        Time.timeScale = 0f; //ставим паузу в игре
+        ui.NoMatchLayer.SetActive(false); //выключаем слой нет ходов (надо когда из слоя нет ходов мы отказываемся перемешивать поле)
+        ui.EndGameLayer.SetActive(true); //показываем слой конца игры
+        PlayerResource.Instance.GameIsPaused = true; //говорим что игра на паузе
+        endGame = true; //говорим что конец игры
 
-        ui.EndGameScore.text = Convert.ToString(score);
-        ui.EndGameHiScore.text = Convert.ToString(hiScore);
+        ui.EndGameScore.text = Convert.ToString(score); //показываем на слое конца иры очки
+        ui.EndGameHiScore.text = Convert.ToString(hiScore); //показываем максимальные очки
 
 
 
         PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
 
-        if (PlayerResource.Instance.gameMode == "normal")
+        if (PlayerResource.Instance.gameMode == "normal") //если режим игры нормальный
         {
-              PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, hiScore); //отправляем лучшее время в Google Play
+              PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, hiScore); //отправляем лучшие очки в Google Play
 
         }
-        else if (PlayerResource.Instance.gameMode == "timetrial")
+        else if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время
         {
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
-            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, hiScore); //отправляем лучшее время в Google Play
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, hiScore); //отправляем лучшие очки в Google Play
         }
 
 
@@ -756,7 +752,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
         PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
 
-        AdMob_baner.Instance.Show();
+        AdMob_baner.Instance.Show(); //показываем рекламный банер
     }
 
     public void Hint()
@@ -934,239 +930,234 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     }
 
-    private void Draw(bool draw)
+    private void Draw(bool draw) //метод по рисованию линий между цифрами при подсказках
     {
-        int count = -1;
+        int count = -1; //счетчик равно -1, иначе будет рисовать не верно
 
-        if (draw == true) //рисуем
+        if (draw == true) //если драв = тру то рисуем
         {
-            for (int i = 0; i < HintNumbers.Length; i++)
+            for (int i = 0; i < HintNumbers.Length; i++) //для всех цифр в массиве с собранными подсказками
             {
-                if (HintNumbers[i] != null)
+                if (HintNumbers[i] != null) //если элемент массива не равно нуль
                 {
-                    HintNumbers[i].transform.localScale *= 1.25f;
-                    HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
-                    count++;
+                    HintNumbers[i].transform.localScale *= 1.25f; //увеличиваем размер цифры
+                    HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //делаем коллайдер стандартного размера
+                    count++; //увеличиваем счетчик
                 }
             }
-            for (int j = 0; j < count; j++)
+            for (int j = 0; j < count; j++) //для всех линий в рамках счетчика цифр
             {
-                lines[j].SetPosition(0, HintNumbers[j].transform.position);
-                lines[j].SetPosition(1, HintNumbers[j+1].transform.position);
-                lines[j].gameObject.SetActive(true);
+                lines[j].SetPosition(0, HintNumbers[j].transform.position); //ставим стартовую точку линии
+                lines[j].SetPosition(1, HintNumbers[j+1].transform.position); //ставим конечную точку линии
+                lines[j].gameObject.SetActive(true); //показываем линию
             }
 
         }
-        else if (draw == false) //убираем нарисованное
+        else if (draw == false) //если фелс то убираем нарисованное
         {
-            for (int i = 0; i < HintNumbers.Length; i++)
+            for (int i = 0; i < HintNumbers.Length; i++) //для всех цифр в массиве с собранными подсказками
             {
-                if (HintNumbers[i] != null)
+                if (HintNumbers[i] != null) //если элемент массива не равно нуль
                 {
-                    HintNumbers[i].transform.localScale = Vector3.one * scaleBoard;
-                    HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f);
-
+                    HintNumbers[i].transform.localScale = Vector3.one * scaleBoard; //делаем размер цифр стандартным
+                    HintNumbers[i].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f); //делаем коллайдер стандартного размера
                 }
             }
 
-            Array.Clear(HintNumbers, 0, HintNumbers.Length);
+            Array.Clear(HintNumbers, 0, HintNumbers.Length); //очищаем масив с собранными цифрами в подсказке
             
-            for(int j = 0; j < lines.Length; j++)
+            for(int j = 0; j < lines.Length; j++) //для всех линий
             {
-                lines[j].gameObject.SetActive(false);
+                lines[j].gameObject.SetActive(false); //выключаем линию
             }
 
         }
     }
 
-    public void Refill(bool layer)
+    public void Refill(bool layer) //метод по перемешиванию поля, ну а если точнее, то не перемешивание а заполнение новыми цифрами
     {
-        if (layer == false)
+        if (layer == false) //если метод был запущен не со слоя когда нет возможных ходов
         {
-            if (refill > 0 && PlayerResource.Instance.GameIsPaused != true)
+            if (refill > 0 && PlayerResource.Instance.GameIsPaused != true) //если количество перемешиваний больше 0 и игра не на паузе
             {
-                Debug.LogWarning("Refill");
+                Draw(false); //выключаем все нарисованные линии между цифрами
 
-                Draw(false);
-
-                for (int i = 0; i < width; i++)
+                for (int i = 0; i < width; i++) //столбцы
                 {
-                    for (int j = 0; j < height; j++)
+                    for (int j = 0; j < height; j++) //рядки
                     {
-                        if (allDots[i, j] != null)
+                        if (allDots[i, j] != null) //если нужная ячейка не нуль, содержит цифры
                         {
                             Destroy(allDots[i, j]); //удаляем все собранные объекты
-                            allDots[i, j] = null;
+                            allDots[i, j] = null; //гвоорим что ячейка равна нуль
                         }
                     }
-
                 }
-                Shuffle();
-                SetUp();
-                CollectBoardToSave();
-                refill--;
 
-                if (refill == 0)
+                Shuffle(); //перемешиваем доску 
+                SetUp(); //ставим новые цифры на поле
+                CollectBoardToSave(); //сохраняем новые цифры с строку для сохранения
+
+                refill--; //отнимаем количество доступных перемешиваний
+
+                if (refill == 0) //если внезапно количество подсказок стало равно 0
                 {
-                    ui.RefillButton.gameObject.SetActive(false);
-                    ui.AdRefillButton.gameObject.SetActive(true);
+                    ui.RefillButton.gameObject.SetActive(false); //выключаем кнопку перемешать поле
+                    ui.AdRefillButton.gameObject.SetActive(true); //включаем кнопку просмотра рекламы для перемешивания поля
 
-                    ui.RefillButtonLayer.gameObject.SetActive(false);
-                    ui.AdRefillButtonLayer.gameObject.SetActive(true);
+                    ui.RefillButtonLayer.gameObject.SetActive(false); //выключаем кнопку перемешать поле на слое нет ходов
+                    ui.AdRefillButtonLayer.gameObject.SetActive(true); //включаем кнопку просмотра рекламы для перемешивания поля на слое нет ходов
                 }
             }
         }
 
-        if (layer == true)
+        if (layer == true) //если метод был запущен со слоя когда нет возможных ходов
         {
-            if (refill > 0)
+            if (refill > 0) //если количество перемешиваний больше 0
             {
-                Time.timeScale = 1f;
-                ui.NoMatchLayer.SetActive(false);
-                PlayerResource.Instance.GameIsPaused = false;
-                AdMob_baner.Instance.Hide();
+                Time.timeScale = 1f; //выключаем паузу в игре
+                ui.NoMatchLayer.SetActive(false); //выключаем слой нет возможных ходов
+                PlayerResource.Instance.GameIsPaused = false; //говорим что уже не пауза
+                AdMob_baner.Instance.Hide(); //прячем рекламный банер
 
-                Debug.LogWarning("Refill");
+                Draw(false); //выключаем все нарисованные линии между цифрами
 
-                Draw(false);
-
-                for (int i = 0; i < width; i++)
+                for (int i = 0; i < width; i++) //столбцы
                 {
-                    for (int j = 0; j < height; j++)
+                    for (int j = 0; j < height; j++) //рядки
                     {
-                        if (allDots[i, j] != null)
+                        if (allDots[i, j] != null) //если нужная ячейка не нуль, содержит цифры
                         {
                             Destroy(allDots[i, j]); //удаляем все собранные объекты
-                            allDots[i, j] = null;
+                            allDots[i, j] = null; //говорим что ячейка равна нуль
                         }
                     }
-
                 }
-                Shuffle();
-                SetUp();
-                CollectBoardToSave();
-                refill--;
 
-                if (refill == 0)
+                Shuffle(); //перемешиваем доску 
+                SetUp(); //ставим новые цифры на поле
+                CollectBoardToSave(); //сохраняем новые цифры с строку для сохранения
+
+                refill--; //отнимаем количество доступных перемешиваний
+
+                if (refill == 0) //если внезапно количество подсказок стало равно 0
                 {
-                    ui.RefillButton.gameObject.SetActive(false);
-                    ui.AdRefillButton.gameObject.SetActive(true);
+                    ui.RefillButton.gameObject.SetActive(false); //выключаем кнопку перемешать поле
+                    ui.AdRefillButton.gameObject.SetActive(true); //включаем кнопку просмотра рекламы для перемешивания поля
 
-                    ui.RefillButtonLayer.gameObject.SetActive(false);
-                    ui.AdRefillButtonLayer.gameObject.SetActive(true);
+                    ui.RefillButtonLayer.gameObject.SetActive(false); //выключаем кнопку перемешать поле на слое нет ходов
+                    ui.AdRefillButtonLayer.gameObject.SetActive(true); //включаем кнопку просмотра рекламы для перемешивания поля на слое нет ходов
                 }
             }
         }
-
     }
 
-    public void AdHint()
+    public void AdHint() //если была нажата кнопка просмотреть виде рекламу для получения доп подсказок
     {
-        ui.AdHintButton.interactable = false;
-        ui.AdsHint.gameObject.SetActive(false);
-        ui.AdsHintLoading.gameObject.SetActive(true);
-        ui.AdHintButton.GetComponentInChildren<Text>().text = "";
+        ui.AdHintButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        ui.AdsHint.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
+        ui.AdsHintLoading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
+        ui.AdHintButton.GetComponentInChildren<Text>().text = ""; //меняем количество доступных доп подсказок за просмотр рекламы на счетчике
 
-        AdMob_baner.Instance.OnGetMoreHintClicked();
+        AdMob_baner.Instance.OnGetMoreHintClicked(); //запускаем просмотр видео рекламы для подсказок в скрипте адмоб
     }
 
-    public void AdHintRecieve()
+    public void AdHintRecieve() //если видео реклама была просмотрена, получение доп подсказок
     {
-        hints = 3;
-        ui.HintButton.gameObject.SetActive(true);
-        ui.AdHintButton.gameObject.SetActive(false);
+        hints = 3; //ставим количество подсказок равным 3
+        ui.HintButton.gameObject.SetActive(true); //включаем кнопку посмотреть подсказку
+        ui.AdHintButton.gameObject.SetActive(false); //выключаем кнопку просмотреть видео рекламу за +3 подсказки
 
-        ui.AdsHint.gameObject.SetActive(true);
-        ui.AdHintButton.GetComponentInChildren<Text>().text = "+3";
-        ui.AdsHintLoading.gameObject.SetActive(false);
+        ui.AdsHint.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.AdHintButton.GetComponentInChildren<Text>().text = "+3"; //меняем количество получаемых подсказок за просмотр рекламы на счетчике
+        ui.AdsHintLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
-        ui.AdHintButton.interactable = true;
+        ui.AdHintButton.interactable = true; //включаем интерактивность кнопки посмотреть рекламу за подсказки
     }
 
-    public void AdHintClose()
+    public void AdHintClose() //если была закрыта реклама для получения доп подсказок
     {
-        ui.AdHintButton.interactable = true;
-        ui.AdsHint.gameObject.SetActive(true);
-        ui.AdHintButton.GetComponentInChildren<Text>().text = "+3";
-        ui.AdsHintLoading.gameObject.SetActive(false);
+        ui.AdHintButton.interactable = true; //включаем интерактивность кнопки посмотреть рекламу за подсказки
+        ui.AdsHint.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.AdHintButton.GetComponentInChildren<Text>().text = "+3"; //меняем количество получаемых подсказок за просмотр рекламы на счетчике
+        ui.AdsHintLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
     }
 
-    public void AdRefill()
+    public void AdRefill() //если была нажата кнопка просмотреть виде рекламу для перемешивания поля
     {
-        ui.AdRefillButton.interactable = false;
-        ui.AdRefillButtonLayer.interactable = false;
+        ui.AdRefillButton.interactable = false; //выключаем интерактивность кнопки
+        ui.AdRefillButtonLayer.interactable = false; //выключаем интерактивность кнопки на слое нет ходов
 
-        ui.AdsRefillOn.gameObject.SetActive(false);
-        ui.AdsRefillOff.gameObject.SetActive(false);
-        ui.AdsRefillLoading.gameObject.SetActive(true);
+        ui.AdsRefillOn.gameObject.SetActive(false); //выключаем картинку что реклама доступна
+        ui.AdsRefillOff.gameObject.SetActive(false); //выключаем картинку что реклама не доступна
+        ui.AdsRefillLoading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
 
-        ui.AdsRefillOnLayer.gameObject.SetActive(false);
-        ui.AdsRefillOffLayer.gameObject.SetActive(false);
-        ui.AdsRefillLoadingLayer.gameObject.SetActive(true);
+        ui.AdsRefillOnLayer.gameObject.SetActive(false); //выключаем картинку что реклама доступна на слое нет ходов
+        ui.AdsRefillOffLayer.gameObject.SetActive(false); //выключаем картинку что реклама не доступна на слое нет ходов
+        ui.AdsRefillLoadingLayer.gameObject.SetActive(true); //включаем анимацию загрузки рекламы на слое нет ходов
 
 
-        ui.AdRefillButton.GetComponentInChildren<Text>().text = "";
-        ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "";
+        ui.AdRefillButton.GetComponentInChildren<Text>().text = ""; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике
+        ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = ""; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике на слое нет ходов
 
-        AdMob_baner.Instance.OnGetMoreRefillClicked();
+        AdMob_baner.Instance.OnGetMoreRefillClicked(); //запускаем просмотр видео рекламы для перемешивания поля в скрипте адмоб
     }
 
-    public void AdRefillRecieve()
+    public void AdRefillRecieve() //если видео реклама была просмотрена, перемешивание поля
     {
-        AdReward = true;
+        AdReward = true; //говорим, что реклама просмотрена, чтобы нельзя было смотреть рекламу несколько раз и перемешивать поле больше чем 1 раз
 
-        ui.AdsRefillOn.gameObject.SetActive(false);
-        ui.AdsRefillOff.gameObject.SetActive(true);
-        ui.AdsRefillLoading.gameObject.SetActive(false);
+        ui.AdsRefillOn.gameObject.SetActive(false); //выключаем картинку что реклама доступна
+        ui.AdsRefillOff.gameObject.SetActive(true); //включаем картинку что реклама не доступна
+        ui.AdsRefillLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
-        ui.AdsRefillOnLayer.gameObject.SetActive(false);
-        ui.AdsRefillOffLayer.gameObject.SetActive(true);
-        ui.AdsRefillLoadingLayer.gameObject.SetActive(false);
+        ui.AdsRefillOnLayer.gameObject.SetActive(false); //выключаем картинку что реклама доступна на слое нет ходов
+        ui.AdsRefillOffLayer.gameObject.SetActive(true); //включаем картинку что реклама не доступна на слое нет ходов
+        ui.AdsRefillLoadingLayer.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы на слое нет ходов
 
-        Time.timeScale = 1f;
-        ui.NoMatchLayer.SetActive(false);
-        PlayerResource.Instance.GameIsPaused = false;
-        AdMob_baner.Instance.Hide();
+        //4 строки ниже нужны для случая когда рекламу стали смотреть со слоя нет ходов, а не из основного интерфейса игры
+        Time.timeScale = 1f; //выключаем паузу
+        ui.NoMatchLayer.SetActive(false); //выключаем слой что нет ходов
+        PlayerResource.Instance.GameIsPaused = false; //гоыорим что уже не пауза
+        AdMob_baner.Instance.Hide(); //прячем рекламный банер
 
-        Debug.LogWarning("Refill");
+        Draw(false); //выключаем все нарисованные линии между цифрами
 
-        Draw(false);
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++) //столбцы
         {
-            for (int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++) //рядки
             {
-                if (allDots[i, j] != null)
+                if (allDots[i, j] != null) //если нужная ячейка не нуль, содержит цифры
                 {
                     Destroy(allDots[i, j]); //удаляем все собранные объекты
-                    allDots[i, j] = null;
+                    allDots[i, j] = null; //говорим что ячейка равна нуль
                 }
             }
-
         }
-        Shuffle();
-        SetUp();
-        CollectBoardToSave();
 
+        Shuffle(); //перемешиваем доску 
+        SetUp(); //ставим новые цифры на поле
+        CollectBoardToSave(); //сохраняем новые цифры с строку для сохранения
     }
 
-    public void AdRefillClose()
+    public void AdRefillClose() //если была закрыта реклама для перемешивания поля
     {
-        if (AdReward == false)
+        if (AdReward == false) //если награда не была получена
         {
-            ui.AdRefillButton.interactable = true;
-            ui.AdRefillButtonLayer.interactable = true;
+            ui.AdRefillButton.interactable = true; //включаем интерактивность кнопки
+            ui.AdRefillButtonLayer.interactable = true; //включаем интерактивность кнопки на слое нет ходов
 
-            ui.AdsRefillOn.gameObject.SetActive(true);
-            ui.AdsRefillOff.gameObject.SetActive(false);
-            ui.AdsRefillLoading.gameObject.SetActive(false);
+            ui.AdsRefillOn.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.AdsRefillOff.gameObject.SetActive(false); //выключаем картинку что реклама не доступна
+            ui.AdsRefillLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
-            ui.AdsRefillOnLayer.gameObject.SetActive(true);
-            ui.AdsRefillOffLayer.gameObject.SetActive(false);
-            ui.AdsRefillLoadingLayer.gameObject.SetActive(false);
+            ui.AdsRefillOnLayer.gameObject.SetActive(true); //включаем картинку что реклама доступна на слое нет ходов
+            ui.AdsRefillOffLayer.gameObject.SetActive(false); //выключаем картинку что реклама не доступна на слое нет ходов
+            ui.AdsRefillLoadingLayer.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы на слое нет ходов
 
 
-            ui.AdRefillButton.GetComponentInChildren<Text>().text = "1";
-            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "1";
+            ui.AdRefillButton.GetComponentInChildren<Text>().text = "1"; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике
+            ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "1"; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике на слое нет ходов
         }
     }
 }
