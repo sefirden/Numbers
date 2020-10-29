@@ -142,32 +142,21 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             case 5:
                 difficult = 3;
                 scaleBoard = 2f;
-                Debug.LogWarning("case 1 " + difficult);
                 break;
-            case 6:
-                difficult = 5;
-                scaleBoard = 1.6f;
-                Debug.LogWarning("case 2 " + difficult);
-                break;
+
             case 7:
                 difficult = 5;
                 scaleBoard = 1.34f;
-                Debug.LogWarning("case 3 " + difficult);
                 break;
-            case 8:
-                difficult = 7;
-                scaleBoard = 1.13f;
-                Debug.LogWarning("case 4 " + difficult);
-                break;
+
             case 9:
                 difficult = 7;
                 scaleBoard = 1f;
-                Debug.LogWarning("case 5 " + difficult);
                 break;
+
             default:
                 difficult = width * 2;
                 scaleBoard = 1f;
-                Debug.LogWarning("case 5 " + difficult);
                 break;
         }
 
@@ -451,14 +440,18 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
             }
 
-            for (int j = 0; j <= level; j++) //каждый раз считаем количество очков для следующего уровня
+            if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
             {
-                scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j]; //плюсуем все значения очков для перехода на след уровень вплоть до теккущего уровня
+                for (int j = 0; j <= level; j++) //каждый раз считаем количество очков для следующего уровня
+                {
+                    scoreToNextLevel += PlayerResource.Instance.scoreToNextLevel[j]; //плюсуем все значения очков для перехода на след уровень вплоть до теккущего уровня
+                }
             }
-
+                       
             //основной кусок по смене уровня
-            if (damage >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length) //если сумарного урона больше чем количество урона нужное для смены уровня и уровень меньше максимального количества
+            if (damage >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length - 1) //если сумарного урона больше чем количество урона нужное для смены уровня и уровень меньше максимального количества
             {
+
                 level++; //увеличиваем уровень 
 
                 Level.ChangeLevel(level); //запускаем смену уровня
@@ -467,6 +460,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
                 damage = scoreToNextLevel; //уравниваем нанесенный урон до уровня нужного для смены, что бы босс появлялся с ровным количеством хп, а не без нескольких пунктов
                 ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
+            }
+            else if (damage >= scoreToNextLevel && level == PlayerResource.Instance.scoreToNextLevel.Length - 1) //переход с последнего уровня с боссом на урвоень конца игры, если не писать -1 то не сработает
+            {
+                ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
+                level++; //увеличиваем уровень 
+                Level.ChangeLevel(level); //запускаем смену уровня
+                PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается, чтобы не считало урон пока идет смена уровня
             }
 
             if (PlayerResource.Instance.gameMode == "timetrial") //если у нас режим игры на время
@@ -755,181 +755,158 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         AdMob_baner.Instance.Show(); //показываем рекламный банер
     }
 
-    public void Hint()
+    public void Hint() //стартовый метод подсказок, ищет последовательность цифр для соединения от случайной цифры на поле
     {
+        int count = 0; //счетчик цифр в цепочке подсказок
 
-        int count = 0;
-        if (hints > 0 && PlayerResource.Instance.GameIsPaused != true)
+        if (hints > 0 && PlayerResource.Instance.GameIsPaused != true) //если доступных подсказок больше 0 и игра не на паузе
         {
-            Debug.LogWarning("Hint");
-            Draw(false);
+            Draw(false); //убираем все нарисованные линии
 
-            hint = false;
+            hint = false; //это мы типа говорим что первая последовательность еще не найдена
 
-            for (int i = UnityEngine.Random.Range(0, width); i < width; i++)
+            for (int i = UnityEngine.Random.Range(0, width); i < width; i++) //выбираем случайный столбей для поиска
             {
-                if (hint != true)
+                if (hint != true) //если первая последовательность не найдена, для выхода потом из цикла
                 {
-                    for (int j = UnityEngine.Random.Range(0, height); j < height; j++)
+                    for (int j = UnityEngine.Random.Range(0, height); j < height; j++) //выбираем случайный рядок для поиска
                     {
-                        if (hint != true)
+                        if (hint != true) //если первая последовательность не найдена для выхода потом из цикла
                         {
-                            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard);
+                            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard); //создаем массив с коллайдерами, записываем все колайдеры в радиусе 1,2*скейл от точки проверки
 
-                            for (var k = 0; k < hitColliders.Length; k++)
+                            for (var k = 0; k < hitColliders.Length; k++) //для всех элементов массива с колайдерами
                             {
-                                if (Convert.ToInt32(allDots[i, j].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1)
+                                if (Convert.ToInt32(allDots[i, j].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1) //если текущая точка проверки - текущий тег колайдера равно 1 (образно если точка проверки равно 2 и рядом мы нашли цифру 1)
                                 {
-                                    Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
-                                    HintNumbers[count] = allDots[i, j];
-                                    count++;
-                                    HintNumbers[count] = hitColliders[k].transform.gameObject;
-                                    count++;
-                                    hint = true;
+                                    HintNumbers[count] = allDots[i, j]; //записываем точку старта проверки как первый элемент массива
+                                    count++; //увеличиваем счетчик
+                                    HintNumbers[count] = hitColliders[k].transform.gameObject; //записываем найденную колайдером цифру как второй элемент массива
+                                    count++; //увеличиваем счетчик
+                                    hint = true; //говорим что есть возможный ход, чтобы остановить цикл
 
-                                    HintSearchMinus(count, hitColliders[k].transform.gameObject, hint);
-                                    break;
+                                    HintSearchMinus(count, hitColliders[k].transform.gameObject, hint); //запускаем метод, который будет искать возможные цифры, которые меньше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+                                    break; //выходим из цикла
                                 }
                             }
-                            Array.Clear(hitColliders, 0, hitColliders.Length);
+                            Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки
                         }
                         else
-                            break;
+                            break; //выходим из цикла
                     }
                 }
                 else
-                    break;
+                    break; //выходим из цикла
             }
 
-            if (hint == false)
+            if (hint == false) //если в коде выше последовательность была не найдена, то запускаем поиск последовательности с начала доски, а не со случайного места на доске
             {
-                for (int i = 0; i < width; i++)
+                for (int i = 0; i < width; i++) //столбец
                 {
-                    if (hint != true)
+                    if (hint != true) //если первая последовательность не найдена, для выхода потом из цикла
                     {
-                        for (int j = 0; j < height; j++)
+                        for (int j = 0; j < height; j++) //рядок
                         {
-                            if (hint != true)
+                            if (hint != true) //если первая последовательность не найдена, для выхода потом из цикла
                             {
-                                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard);
+                                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[i, j].transform.position, 1.2f * scaleBoard); //создаем массив с коллайдерами, записываем все колайдеры в радиусе 1,2*скейл от точки проверки
 
-                                for (var k = 0; k < hitColliders.Length; k++)
+                                for (var k = 0; k < hitColliders.Length; k++) //для всех элементов массива с колайдерами
                                 {
-                                    if (Convert.ToInt32(allDots[i, j].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1)
+                                    if (Convert.ToInt32(allDots[i, j].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1) //если текущая точка проверки - текущий тег колайдера равно 1 (образно если точка проверки равно 2 и рядом мы нашли цифру 1)
                                     {
-                                        Debug.LogWarning("есть возможный ход: " + allDots[i, j].transform.tag + ">" + hitColliders[k].transform.tag);
-                                        HintNumbers[count] = allDots[i, j];
-                                        count++;
-                                        HintNumbers[count] = hitColliders[k].transform.gameObject;
-                                        count++;
-                                        hint = true;
+                                        HintNumbers[count] = allDots[i, j]; //записываем точку старта проверки как первый элемент массива
+                                        count++; //увеличиваем счетчик
+                                        HintNumbers[count] = hitColliders[k].transform.gameObject; //записываем найденную колайдером цифру как второй элемент массива
+                                        count++; //увеличиваем счетчик
+                                        hint = true; //говорим что есть возможный ход, чтобы остановить цикл
 
-                                        HintSearchMinus(count, hitColliders[k].transform.gameObject, hint);
-                                        break;
+                                        HintSearchMinus(count, hitColliders[k].transform.gameObject, hint); //запускаем метод, который будет искать возможные цифры, которые меньше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+                                        break; //выходим из цикла
                                     }
                                 }
-                                Array.Clear(hitColliders, 0, hitColliders.Length);
+                                Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки
                             }
                             else
-                                break;
+                                break; //выходим из цикла
                         }
                     }
                     else
-                        break;
+                        break; //выходим из цикла
                 };
             }
 
-            hints--;
+            hints--; //отнимаем одну подсказку из доступных
 
-            if(hints == 0)
+            if(hints == 0) //если подсказок больше не осталось
             {
-                ui.HintButton.gameObject.SetActive(false);
-                ui.AdHintButton.gameObject.SetActive(true);
+                ui.HintButton.gameObject.SetActive(false); //выключаем кнопку подсказок
+                ui.AdHintButton.gameObject.SetActive(true); //включаем кнопку +3 подсказки за видео рекламу
             }
         }
-
     }
 
-    private void HintSearchPlus(int count, GameObject TempHintItem, bool hint)
+    private void HintSearchMinus(int count, GameObject TempHintItem, bool hint) //запускаем поиск следующей цифры для подсказок по убыванию от предыдущей минимальной цифры
     {
-        if (hint == true)
+        if (hint == true) //если мы продолжаем поиск в минус
         {
-            hint = false;
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f * scaleBoard);
+            hint = false; //это мы типа говорим что первая последовательность еще не найдена, эта ебала нужна для выхода из последовательности и запуска поиска в плюс
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f * scaleBoard); //создаем массив с коллайдерами, записываем все колайдеры в радиусе 1,2*скейл от последней цифры в подсказке
 
-            for (var k = 0; k < hitColliders.Length; k++)
+            for (var k = 0; k < hitColliders.Length; k++) //для всех элементов массива с колайдерами
             {
-                if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(TempHintItem.transform.tag) == 1)
+                if (Convert.ToInt32(TempHintItem.transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1) //если последняя цифра в подсказке - текущий тег колайдера равно 1 (образно если последняя цифра равно 2 и рядом мы нашли цифру 1)
                 {
-                    hint = true;
+                    hint = true; //говорим что есть возможный ход, чтобы остановить цикл
+                    HintNumbers[count] = hitColliders[k].transform.gameObject; //записываем найденную колайдером цифру как следующий элемент массива
+                    count++; //увеличиваем счетчик
 
-                    Debug.LogWarning("есть возможный ход: " + TempHintItem.transform.tag + ">" + hitColliders[k].transform.tag);
+                    break; //выходим из цикла
+                }
+            }
 
-                    HintNumbers[count] = hitColliders[k].transform.gameObject;
-                    count++;
+            HintSearchMinus(count, HintNumbers[count - 1], hint); //запускаем метод, который будет искать возможные цифры, которые меньше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+            Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки
+        }
+        else if (hint == false) //если поиск в минус больше не нашел вариантов
+        {
+            Array.Reverse(HintNumbers, 0, count); //реверсим масив с собранными цифрами для подсказки (типа было 3,2,1 стало 1,2,3)
+            hint = true; //говорим что есть возможный ход
+            HintSearchPlus(count, HintNumbers[count - 1], hint); //запускаем метод, который будет искать возможные цифры, которые больше чем последняя точка проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+        }
+    }
 
-                    break;
+    private void HintSearchPlus(int count, GameObject TempHintItem, bool hint) //запускаем поиск следующей цифры для подсказок по возростанию от предыдущей максимальной цифры
+    {
+        if (hint == true) //если мы продолжаем поиск в плюс
+        {
+            hint = false; //это мы типа говорим что первая последовательность еще не найдена, эта ебала нужна для выхода из последовательности и конца поиска подсказок
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f * scaleBoard); //создаем массив с коллайдерами, записываем все колайдеры в радиусе 1,2*скейл от последней цифры в подсказке
+
+            for (var k = 0; k < hitColliders.Length; k++) //для всех элементов массива с колайдерами
+            {
+                if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(TempHintItem.transform.tag) == 1) //если текущий тег колайдера - последняя цифра в подсказке равно 1 (образно если последняя цифра равно 2 и рядом мы нашли цифру 3)
+                {
+                    hint = true; //говорим что есть возможный ход, чтобы остановить цикл
+                    HintNumbers[count] = hitColliders[k].transform.gameObject; //записываем найденную колайдером цифру как следующий элемент массива
+                    count++; //увеличиваем счетчик
+
+                    break; //выходим из цикла
                 }
 
             }
 
-            HintSearchPlus(count, HintNumbers[count-1], hint);
-            Array.Clear(hitColliders, 0, hitColliders.Length);
+            HintSearchPlus(count, HintNumbers[count-1], hint); //запускаем метод, который будет искать возможные цифры, которые больше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+            Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки
         }
-        else if (hint == false)
+        else if (hint == false) //если поиск в плюс больше не нашел вариантов
         {
-            Debug.LogWarning("Конец подсказки");
-            Draw(true);
+            Draw(true); //рисуем линии между цифрами подсказок и увеличиваем их размеры
         }
 
 
     }
-
-    private void HintSearchMinus(int count, GameObject TempHintItem, bool hint)
-    {
-        if (hint == true)
-        {
-            hint = false;
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(TempHintItem.transform.position, 1.2f * scaleBoard);
-
-            for (var k = 0; k < hitColliders.Length; k++)
-            {
-                if (Convert.ToInt32(TempHintItem.transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1)
-                {
-                    hint = true;
-
-                    Debug.LogWarning("есть возможный ход: " + TempHintItem.transform.tag + ">" + hitColliders[k].transform.tag);
-
-                    HintNumbers[count] = hitColliders[k].transform.gameObject;
-                    count++;
-
-                    break;
-                }
-
-            }
-
-            HintSearchMinus(count, HintNumbers[count - 1], hint);
-            Array.Clear(hitColliders, 0, hitColliders.Length);
-        }
-        else if (hint == false)
-        {
-
-
-            Array.Reverse(HintNumbers, 0, count);
-
-            for(int i = 0; i < count; i++)
-            {
-                Debug.LogWarning(HintNumbers[i].transform.tag);
-            }
-
-            Debug.LogWarning("Запускаем в +");
-            hint = true;
-            HintSearchPlus(count, HintNumbers[count - 1], hint);
-        }
-
-
-    }
-
+       
     private void Draw(bool draw) //метод по рисованию линий между цифрами при подсказках
     {
         int count = -1; //счетчик равно -1, иначе будет рисовать не верно

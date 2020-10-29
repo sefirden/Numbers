@@ -69,11 +69,14 @@ public class Level : MonoBehaviour
         }
         Levels[level].transform.position = endPositionNewLevel;
 
-        PlayerResource.Instance.zeroMove = false; //говорим что босс не двигается
+        PlayerResource.Instance.zeroMove = false; //говорим что ноль не двигается
 
-        boss.gameObject.SetActive(true); //включаем босса
-        board.gameObject.SetActive(true); //когда вышел ноль включаем поле
-        StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
+        if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если переход с последнего босса на уровень конца игры не делаем то что ниже
+        {
+            boss.gameObject.SetActive(true); //включаем босса
+            board.gameObject.SetActive(true); //когда вышел ноль включаем поле
+            StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
+        }
     }
 
     private IEnumerator MoveOldLevel(int level)

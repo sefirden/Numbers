@@ -33,7 +33,14 @@ public class bossPlayer : MonoBehaviour
 
     public void ChangeBoss(int level) //смена босса
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = Sprite[level]; //меняем боссу спрайт в зависимости от уровня, из списка
+        if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = Sprite[level]; //меняем боссу спрайт в зависимости от уровня, из списка
+        }
+        else //если у нас последний уровень
+        {
+            gameObject.SetActive(false); //выключаем босса
+        }
     }
 
     public IEnumerator MoveToStart()
