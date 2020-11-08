@@ -382,7 +382,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     }
 
     private void ClickSelect() //обработчик клика по нажатию на кнопку, ищет райкастом цифры
-    {   
+    {
+        CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
 
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //получаем координаты клика, переводим в нужные координаты
         RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f); //кидаем райкаст по координатам см выше
@@ -641,7 +642,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры, не помню почему именно тут а не в методе скан, лучше не трогать
 
         CollectBoardToSave(); //сохранение всех цифр на поле по порядку в строку, через *
-        CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
+        //попробуем проверять конец игры не в конце хода, а при следующем клике, это даст возможность осмотреть поле и увидеть что ходов нет и попросить подсказку
+        //CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
 
     }
 
@@ -696,7 +698,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         if(countStep == false) //если после всех проверок нет возможных ходов
         {
-            if (refill == 0) //если количество перемешиваний поля равно 0
+            if (refill == 0 && AdReward == true) //если количество перемешиваний поля равно 0 и реклама просмотрена была
             {
                 EndGame(); //показываем всплывающий слой конца игры
             }
@@ -722,12 +724,15 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void EndGame() //запускаем когда нет возможных ходов и вариантов перемешать поле
     {
+        endGame = true; //говорим что конец игры, должно быть перед паузой иначе апдейт не передаст в плеерресоурс что игра окончена, это позволяло при проигрыше выйти в меню и потом нажать продолжить игру даже когда проиграл
+        //если не сработает передать в коде с режимами ниже руками в плеерресоурсес конец игры
 
         Time.timeScale = 0f; //ставим паузу в игре
         ui.NoMatchLayer.SetActive(false); //выключаем слой нет ходов (надо когда из слоя нет ходов мы отказываемся перемешивать поле)
         ui.EndGameLayer.SetActive(true); //показываем слой конца игры
         PlayerResource.Instance.GameIsPaused = true; //говорим что игра на паузе
-        endGame = true; //говорим что конец игры
+
+
 
         ui.EndGameScore.text = Convert.ToString(score); //показываем на слое конца иры очки
         ui.EndGameHiScore.text = Convert.ToString(hiScore); //показываем максимальные очки
@@ -738,13 +743,15 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         if (PlayerResource.Instance.gameMode == "normal") //если режим игры нормальный
         {
-              PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, hiScore); //отправляем лучшие очки в Google Play
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, hiScore); //отправляем лучшие очки в Google Play
+            PlayerResource.Instance.EndGameN = true; 
 
         }
         else if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время
         {
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, hiScore); //отправляем лучшие очки в Google Play
+            PlayerResource.Instance.EndGameT = true;
         }
 
 

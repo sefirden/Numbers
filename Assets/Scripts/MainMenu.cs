@@ -114,6 +114,10 @@ public class MainMenu : MonoBehaviour
         {
             ResumeN.SetActive(true); //включаем кнопку продолжить
         }
+        else
+        {
+            ResumeN.SetActive(false); //включаем кнопку продолжить
+        }
     }
     
     public void NormalModeResume() //кнопка продолжить обычный режим игры
@@ -152,6 +156,10 @@ public class MainMenu : MonoBehaviour
         if (PlayerResource.Instance.scoreT != 0 && PlayerResource.Instance.EndGameT == false)
         {
             ResumeT.SetActive(true); //включаем кнопку продолжить
+        }
+        else
+        {
+            ResumeT.SetActive(false); //включаем кнопку продолжить
         }
     }
 

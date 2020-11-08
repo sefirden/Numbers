@@ -30547,7 +30547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1409055356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49942,6 +49942,12 @@ PrefabInstance:
       propertyPath: sampleLine
       value: 
       objectReference: {fileID: 4885758569382187349, guid: 7b8b4081e5332f346a4bd5504e917222,
+        type: 3}
+    - target: {fileID: 6438401562014285688, guid: ffcac0ff243f86348971bd03d9c268dd,
+        type: 3}
+      propertyPath: dots.Array.data[1]
+      value: 
+      objectReference: {fileID: 918242463621734876, guid: 34e99723e22e17d4085cd1e24aa575ee,
         type: 3}
     - target: {fileID: 6438401562014285689, guid: ffcac0ff243f86348971bd03d9c268dd,
         type: 3}
