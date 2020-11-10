@@ -10,6 +10,7 @@ using TMPro;
 public class Timer : MonoBehaviour
 
 {
+    public GameObject timer;
     public GameObject timerText; //таймер 
     public double timeMin; //минуты в таймере 
     public double timeSec; //секунды в таймере
@@ -22,11 +23,11 @@ public class Timer : MonoBehaviour
 
         if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
         {
-            timerText.SetActive(true);
+            timer.SetActive(true);
         }
         else if(PlayerResource.Instance.gameMode == "normal") //или нет
         {
-            timerText.SetActive(false);
+            timer.SetActive(false);
         }
 
     }

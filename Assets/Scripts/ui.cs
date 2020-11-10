@@ -53,8 +53,8 @@ public class ui : MonoBehaviour
 
     void Awake()
     {
-        LifeBarBackground.transform.position = new Vector3(transform.position.x, 10.5f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
-        LifeBar.transform.position = new Vector3(transform.position.x, 10.5f, transform.position.z);
+        LifeBarBackground.transform.position = new Vector3(transform.position.x, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
+        LifeBar.transform.position = new Vector3(transform.position.x, 10.7f, transform.position.z);
 
     }
 
