@@ -126,7 +126,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.3.37
+  bundleVersion: 0.3.39
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -173,7 +173,7 @@ PlayerSettings:
     Android: com.sefir.den.numbers
     Standalone: com.Company.ProductName
   buildNumber: {}
-  AndroidBundleVersionCode: 37
+  AndroidBundleVersionCode: 39
   AndroidMinSdkVersion: 22
   AndroidTargetSdkVersion: 29
   AndroidPreferredInstallLocation: 1

@@ -12,10 +12,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 {
     public int width; //ширина поля
     public int height; //высота поля
-    public int hints; //количество подсказок, закодировать
-    public int refill; //количество перемешиваний, закодировать
-    public int score; //очки, закодировать
-    public int hiScore; //рекорд, закодировать
+    public string hints; //количество подсказок, закодировать
+    public string refill; //количество перемешиваний, закодировать
+    public string score; //очки, закодировать
+    public string hiScore; //рекорд, закодировать
     public string loadedBoard; //загружаемое поле в виде строки из всех цифр
     public bool endGame; //конец игры или нет
     public int difficult; //сложность, зависит от размера поля, используется в рандоме при заполнении поля новыми цифрами
@@ -48,6 +48,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     public float scaleBoard; //переменная для увеличения размера цифр в полях 5 и 7
 
     public int damage; //урон высчитан из очков, когда босс на уровне, от урона меняется босс и уровень
+
+    public bool changelvl; //будем передавать при смене уровня и перемешивания поля
 
     private void Awake()
     {
@@ -96,19 +98,25 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         lines = new LineRenderer[width - 1]; //размер масива зависит от выбранного размера поля -1 , так как соединить 5 цифр нужно 4 линии и тд
         TagForRandomRefill = new int[width*height]; //размер масива зависит от размера поля, для 5 это 5*5=25, 49 и 81 для других режимов
 
+        ui.scoreText.text = SaveSystem.Decrypt(score); //очки
+        ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
+        ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
+        ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
+        ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
+
         HintNumbers = new GameObject[width]; //размер масива зависит от выбранного размера поля
 
         hint = false; //ставим что подсказка сейчас не активна, если в старте этого не делать, то подсказки потом не работают
 
         index = 0; //индекс обнуляем
 
-        if (hints == 0) //если нет доступных подсказок, переключаем кнопки на рекламу
+        if (Convert.ToInt32(SaveSystem.Decrypt(hints)) == 0) //если нет доступных подсказок, переключаем кнопки на рекламу
         {
             ui.HintButton.gameObject.SetActive(false); //выключаем обычную кнопку
             ui.AdHintButton.gameObject.SetActive(true); //включаем кнопку рекламы и +3 подсказки
         }
 
-        if (refill == 0) //если нет доступных перемешиваний, переключаем кнопки в уи и в слое конца игры
+        if (Convert.ToInt32(SaveSystem.Decrypt(refill)) == 0) //если нет доступных перемешиваний, переключаем кнопки в уи и в слое конца игры
         {
             ui.RefillButton.gameObject.SetActive(false); //выключаем обычную кнопку
             ui.AdRefillButton.gameObject.SetActive(true); //включаем кнопку рекламы и +1 перемешивание
@@ -169,6 +177,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             SetUpLoaded(); //заполняем поле из загруженных цифр
             PlayerResource.Instance.isLoaded = false; //говорим что уже не загружено
             gameObject.SetActive(true); //включаем видимость поля
+            ui.HintButton.interactable = true; //делаем активной кнопку подсказок
+            ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
         }
         else //если была выбрана новая игра
         {
@@ -189,7 +199,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     void Update()
     {
-        if (PlayerResource.Instance.gameMode == "normal") //если нормальный режим, грузим данные для поля из переменных нормального режима, описание переменных см выше
+       /* if (PlayerResource.Instance.gameMode == "normal") //если нормальный режим, грузим данные для поля из переменных нормального режима, описание переменных см выше
         {
             PlayerResource.Instance.hintN = hints;
             PlayerResource.Instance.refillN = refill;
@@ -220,7 +230,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.hintcount.text = Convert.ToString(hints); //количество подсказок
         ui.refillcount.text = Convert.ToString(refill); //количество перемешиваний
         ui.refillcountLayer.text = Convert.ToString(refill); //количество перемешиваний в слое конца игры
-        ui.HighscoreText.text = Convert.ToString(hiScore); //макс очки
+        ui.HighscoreText.text = Convert.ToString(hiScore); //макс очки*/
 
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
@@ -418,6 +428,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         int tempScore = 0; //временное количество очков
         int scoreToNextLevel = 0; //количество очков для перехода на след уровень
 
+        //декодируем переменные для расчетов
+        int scoreI = Convert.ToInt32(SaveSystem.Decrypt(score));
+        int hiScoreI = Convert.ToInt32(SaveSystem.Decrypt(hiScore));
+
         for (int i = 0; i < CollectedNumbers.Length; i++) //считаем количество собранных цифр
         {
             if (CollectedNumbers[i] != null) //если елемент масива не нуль
@@ -428,11 +442,14 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         if (quantity > 1) //если собрана больше чем 1 цифра
         {
-            score += tempScore * quantity; //увеличиваем очки по формуле временные очки множим на количество
+            scoreI += tempScore * quantity; //увеличиваем очки по формуле временные очки множим на количество
 
-            if (score > hiScore) //если количество очков больше чем максимальное
+            if (scoreI > hiScoreI) //если количество очков больше чем максимальное
             {
-                hiScore = score; //приравниваем максимальное к текущему значению
+                hiScoreI = scoreI; //приравниваем максимальное к текущему значению
+                hiScore = SaveSystem.Encrypt(Convert.ToString(hiScoreI)); //кодируем хайскор
+                ToPlayerResources("hiScore"); //передаем в интерфейс и в playerresources
+
             }
 
             if (PlayerResource.Instance.zeroMove == false && PlayerResource.Instance.bossMove == false) //если ноль не двигается и босс не двигается
@@ -452,7 +469,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             //основной кусок по смене уровня
             if (damage >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length - 1) //если сумарного урона больше чем количество урона нужное для смены уровня и уровень меньше максимального количества
             {
-
+                changelvl = true; //говорим что смена уровня
                 level++; //увеличиваем уровень 
 
                 Level.ChangeLevel(level); //запускаем смену уровня
@@ -472,7 +489,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             if (PlayerResource.Instance.gameMode == "timetrial") //если у нас режим игры на время
             {
-                PlayerResource.Instance.time += quantity * (1f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 1,5 до 1,9 сек
+                PlayerResource.Instance.time += quantity * (0.5f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 0.5 + 0,5 до 0.5 + 0,9 сек
             }
             
             Destroy(); //удаляем собранные цифры
@@ -490,8 +507,62 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
         }
 
+        score = SaveSystem.Encrypt(Convert.ToString(scoreI));
+        ToPlayerResources("score");
+
+        ToPlayerResources("damage");
+        ToPlayerResources("level");
     }
     
+    private void ShuffleBoardChangeLevel() //метод, который перемешивает поле при смене босса
+    {
+        //собираем текущее поле в строку
+
+            int[] board = new int[width * width]; //обнуляем предыдущую строку из цифр
+            int ind = 0;
+            for (int i = 0; i < width; i++) //столбцы
+            {
+                for (int j = 0; j < width; j++) //рядки
+                {
+                    board [ind] = Convert.ToInt32(allDots[i, j].transform.tag); //сохраняем теги всех объектов в строку через *
+                    ind++;
+                }
+            }
+        //перемешать собранное поле, метод из интернета
+            for (int t = 0; t < width * width; t++)
+            {
+                int tmp = board[t];
+                int r = UnityEngine.Random.Range(t, width*width);
+                board[t] = board[r];
+                board[r] = tmp;
+            }
+
+        //заполняем поле собранными цифрами, перемешаными
+        int ind2 = 0;
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                float x = (float)i * scaleBoard; //координаты множим на переменную по размеру поля см выше
+                float y = (float)j * scaleBoard;
+
+                Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
+
+                int dotToUse = board[ind2]; //заполняем поле из масива, который предварительно был перемешан и заполнен, см выше метод шафл
+                GameObject dot = Instantiate(dots[dotToUse-1], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+                dot.transform.parent = this.transform; //присваиваем позицию
+                dot.name = "t ( " + i + ", " + j + " )"; //присваиваем имя
+                dot.transform.localScale *= scaleBoard; //увиличиваем по размеру поля
+
+                //удалить текущее цифру перед записью новой
+                Destroy(allDots[i, j]);
+                allDots[i, j] = null;
+                allDots[i, j] = dot; //записываем в масив всех цфир поля
+                ind2++;
+            }
+        }
+    }
+
     private void Destroy() //удаляем собранные элементы
     {
         //удаляем собранные
@@ -641,9 +712,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры, не помню почему именно тут а не в методе скан, лучше не трогать
 
+        if(changelvl == true) //если смена уровня, то мешаем поле
+        {
+            ShuffleBoardChangeLevel(); //мешаем поле
+            changelvl = false; //говорим что смена уровня уже не тру
+        }
         CollectBoardToSave(); //сохранение всех цифр на поле по порядку в строку, через *
-        //попробуем проверять конец игры не в конце хода, а при следующем клике, это даст возможность осмотреть поле и увидеть что ходов нет и попросить подсказку
-        //CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
 
     }
 
@@ -658,6 +732,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 loadedBoard += allDots[i, j].transform.tag + "*"; //сохраняем теги всех объектов в строку через *
             }
         }
+
+        ToPlayerResources("loadedBoard");
     }
 
     private void CheckEndGame() //проверка на конец игры, есть ли возможные варианты ходов
@@ -698,15 +774,16 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         if(countStep == false) //если после всех проверок нет возможных ходов
         {
-            if (refill == 0 && AdReward == true) //если количество перемешиваний поля равно 0 и реклама просмотрена была
+            int refillI = Convert.ToInt32(SaveSystem.Decrypt(refill));
+            if (refillI == 0 && AdReward == true) //если количество перемешиваний поля равно 0 и реклама просмотрена была
             {
                 EndGame(); //показываем всплывающий слой конца игры
             }
-            else if (refill > 0) //если количество перемешиваний больше 0
+            else if (refillI > 0) //если количество перемешиваний больше 0
             {
                 NoMatch(); //показываем всплывающий слой нет ходов с предложением перемешать поле
             }
-            else if (refill == 0 && AdReward == false) //если количество перемешиваний поля равно 0, но человек еще не смотрел видео рекламу для перемешивания в этой игре
+            else if (refillI == 0 && AdReward == false) //если количество перемешиваний поля равно 0, но человек еще не смотрел видео рекламу для перемешивания в этой игре
             {
                 NoMatch(); //показываем всплывающий слой нет ходов с предложением перемешать поле за просмотр видео рекламы
             }
@@ -732,10 +809,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.EndGameLayer.SetActive(true); //показываем слой конца игры
         PlayerResource.Instance.GameIsPaused = true; //говорим что игра на паузе
 
-
-
-        ui.EndGameScore.text = Convert.ToString(score); //показываем на слое конца иры очки
-        ui.EndGameHiScore.text = Convert.ToString(hiScore); //показываем максимальные очки
+        string scoreS = SaveSystem.Decrypt(score);
+        string hiScoreS = SaveSystem.Decrypt(hiScore);
+        ui.EndGameScore.text = scoreS; //показываем на слое конца иры очки
+        ui.EndGameHiScore.text = hiScoreS; //показываем максимальные очки
 
 
 
@@ -743,14 +820,14 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         if (PlayerResource.Instance.gameMode == "normal") //если режим игры нормальный
         {
-            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, hiScore); //отправляем лучшие очки в Google Play
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, Convert.ToInt32(hiScoreS)); //отправляем лучшие очки в Google Play
             PlayerResource.Instance.EndGameN = true; 
 
         }
         else if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время
         {
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
-            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, hiScore); //отправляем лучшие очки в Google Play
+            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(hiScoreS)); //отправляем лучшие очки в Google Play
             PlayerResource.Instance.EndGameT = true;
         }
 
@@ -764,9 +841,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void Hint() //стартовый метод подсказок, ищет последовательность цифр для соединения от случайной цифры на поле
     {
+        int hintsI = Convert.ToInt32(SaveSystem.Decrypt(hints));
+
         int count = 0; //счетчик цифр в цепочке подсказок
 
-        if (hints > 0 && PlayerResource.Instance.GameIsPaused != true) //если доступных подсказок больше 0 и игра не на паузе
+        if (hintsI > 0 && PlayerResource.Instance.GameIsPaused != true) //если доступных подсказок больше 0 и игра не на паузе
         {
             Draw(false); //убираем все нарисованные линии
 
@@ -843,14 +922,16 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 };
             }
 
-            hints--; //отнимаем одну подсказку из доступных
+            hintsI--; //отнимаем одну подсказку из доступных
 
-            if(hints == 0) //если подсказок больше не осталось
+            if(hintsI == 0) //если подсказок больше не осталось
             {
                 ui.HintButton.gameObject.SetActive(false); //выключаем кнопку подсказок
                 ui.AdHintButton.gameObject.SetActive(true); //включаем кнопку +3 подсказки за видео рекламу
             }
         }
+        hints = SaveSystem.Encrypt(Convert.ToString(hintsI));
+        ToPlayerResources("hints");
     }
 
     private void HintSearchMinus(int count, GameObject TempHintItem, bool hint) //запускаем поиск следующей цифры для подсказок по убыванию от предыдущей минимальной цифры
@@ -960,9 +1041,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void Refill(bool layer) //метод по перемешиванию поля, ну а если точнее, то не перемешивание а заполнение новыми цифрами
     {
+        int refillI = Convert.ToInt32(SaveSystem.Decrypt(refill));
+
         if (layer == false) //если метод был запущен не со слоя когда нет возможных ходов
         {
-            if (refill > 0 && PlayerResource.Instance.GameIsPaused != true) //если количество перемешиваний больше 0 и игра не на паузе
+            if (refillI > 0 && PlayerResource.Instance.GameIsPaused != true) //если количество перемешиваний больше 0 и игра не на паузе
             {
                 Draw(false); //выключаем все нарисованные линии между цифрами
 
@@ -982,9 +1065,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 SetUp(); //ставим новые цифры на поле
                 CollectBoardToSave(); //сохраняем новые цифры с строку для сохранения
 
-                refill--; //отнимаем количество доступных перемешиваний
+                refillI--; //отнимаем количество доступных перемешиваний
 
-                if (refill == 0) //если внезапно количество подсказок стало равно 0
+                if (refillI == 0) //если внезапно количество подсказок стало равно 0
                 {
                     ui.RefillButton.gameObject.SetActive(false); //выключаем кнопку перемешать поле
                     ui.AdRefillButton.gameObject.SetActive(true); //включаем кнопку просмотра рекламы для перемешивания поля
@@ -997,7 +1080,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         if (layer == true) //если метод был запущен со слоя когда нет возможных ходов
         {
-            if (refill > 0) //если количество перемешиваний больше 0
+            if (refillI > 0) //если количество перемешиваний больше 0
             {
                 Time.timeScale = 1f; //выключаем паузу в игре
                 ui.NoMatchLayer.SetActive(false); //выключаем слой нет возможных ходов
@@ -1022,9 +1105,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 SetUp(); //ставим новые цифры на поле
                 CollectBoardToSave(); //сохраняем новые цифры с строку для сохранения
 
-                refill--; //отнимаем количество доступных перемешиваний
+                refillI--; //отнимаем количество доступных перемешиваний
 
-                if (refill == 0) //если внезапно количество подсказок стало равно 0
+                if (refillI == 0) //если внезапно количество подсказок стало равно 0
                 {
                     ui.RefillButton.gameObject.SetActive(false); //выключаем кнопку перемешать поле
                     ui.AdRefillButton.gameObject.SetActive(true); //включаем кнопку просмотра рекламы для перемешивания поля
@@ -1032,6 +1115,119 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                     ui.RefillButtonLayer.gameObject.SetActive(false); //выключаем кнопку перемешать поле на слое нет ходов
                     ui.AdRefillButtonLayer.gameObject.SetActive(true); //включаем кнопку просмотра рекламы для перемешивания поля на слое нет ходов
                 }
+            }
+        }
+
+        refill = SaveSystem.Encrypt(Convert.ToString(refillI));
+        ToPlayerResources("refill");
+    }
+
+    public void ToPlayerResources(string data) //убрал обновление данных из апдейта, вызывать этот метод с параметром стринг, когда нужен обновить данные в PlayerResources и в полях на экране, тут потом мы их будем кодировать/декодировать
+    {
+        if (PlayerResource.Instance.gameMode == "normal") //если нормальный режим, грузим данные для поля из переменных нормального режима, описание переменных см выше
+        {
+
+            switch (data) //вешаем на элементы ui текст
+            {
+                case "hints":
+                    ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
+                    PlayerResource.Instance.hintN = hints;
+                    break;
+
+                case "refill":
+                    ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
+                    ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
+                    PlayerResource.Instance.refillN = refill;
+
+                    break;
+
+                case "score":
+                    ui.scoreText.text = SaveSystem.Decrypt(score); //очки
+                    PlayerResource.Instance.scoreN = score;
+                    break;
+
+                case "hiScore":
+                    ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
+                    PlayerResource.Instance.hiScoreN = hiScore;
+                    break;
+
+                case "loadedBoard":
+                    PlayerResource.Instance.loadedBoardN = loadedBoard;
+                    break;
+
+                case "endGame":
+                    PlayerResource.Instance.EndGameN = endGame;
+                    break;
+
+                case "AdReward":
+                    PlayerResource.Instance.AdRewardN = AdReward;
+                    break;
+
+                case "level":
+                    PlayerResource.Instance.levelN = level;
+                    break;
+
+                case "damage":
+                    PlayerResource.Instance.damageN = damage;
+
+                    break;
+
+                default:
+                    Debug.Log("default");
+                    break;
+            }
+        }
+
+        else if (PlayerResource.Instance.gameMode == "timetrial") //если режим на время, грузим данные из переменных режима на время
+        {
+            switch (data) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
+            {
+                case "hints":
+                    ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
+                    PlayerResource.Instance.hintT = hints;
+                    break;
+
+                case "refill":
+                    ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
+                    ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
+                    PlayerResource.Instance.refillT = refill;
+
+                    break;
+
+                case "score":
+                    ui.scoreText.text = SaveSystem.Decrypt(score); //очки
+                    PlayerResource.Instance.scoreT = score;
+                    break;
+
+                case "hiScore":
+                    ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
+                    PlayerResource.Instance.hiScoreT = hiScore;
+                    break;
+
+                case "loadedBoard":
+                    PlayerResource.Instance.loadedBoardT = loadedBoard;
+                    break;
+
+                case "endGame":
+                    PlayerResource.Instance.EndGameT = endGame;
+                    break;
+
+                case "AdReward":
+                    PlayerResource.Instance.AdRewardT = AdReward;
+                    break;
+
+                case "level":
+                    PlayerResource.Instance.levelT = level;
+                    break;
+
+                case "damage":
+                    PlayerResource.Instance.damageT = damage;
+
+                    break;
+
+                default:
+                    Debug.Log("default");
+                    break;
             }
         }
     }
@@ -1048,7 +1244,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdHintRecieve() //если видео реклама была просмотрена, получение доп подсказок
     {
-        hints = 3; //ставим количество подсказок равным 3
+        int hintsI = 3;
+        hints = SaveSystem.Encrypt(Convert.ToString(hintsI)); ; //ставим количество подсказок равным 3
+        ToPlayerResources("hints");
+
         ui.HintButton.gameObject.SetActive(true); //включаем кнопку посмотреть подсказку
         ui.AdHintButton.gameObject.SetActive(false); //выключаем кнопку просмотреть видео рекламу за +3 подсказки
 

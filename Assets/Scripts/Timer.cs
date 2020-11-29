@@ -58,15 +58,15 @@ public class Timer : MonoBehaviour
                 Time.timeScale = 0f;
                 NoTimeLayer.SetActive(true); //показываем всплывающее окно, что время вышло
 
-                ui.NoTimeScore.text = Convert.ToString(PlayerResource.Instance.scoreT); //присваиваем очки и мак очки для всплывающего окна
-                ui.NoTimeHiScore.text = Convert.ToString(PlayerResource.Instance.hiScoreT);
+                ui.NoTimeScore.text = SaveSystem.Decrypt(PlayerResource.Instance.scoreT); //присваиваем очки и мак очки для всплывающего окна
+                ui.NoTimeHiScore.text = SaveSystem.Decrypt(PlayerResource.Instance.hiScoreT);
 
                 PlayerResource.Instance.GameIsPaused = true; //ставим паузу
                 PlayerResource.Instance.EndGameT = true; //ставим конец игры
 
                 PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
-                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, PlayerResource.Instance.hiScoreT); //отправляем лучшие очки в Google Play
+                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.hiScoreT))); //отправляем лучшие очки в Google Play
 
                 PlayServicesGoogle.Instance.CollectData(); //собираем данные
                 PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON

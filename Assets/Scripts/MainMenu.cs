@@ -110,7 +110,7 @@ public class MainMenu : MonoBehaviour
         NormalLayer.SetActive(true);
         PlayServicesGoogle.Instance.ReadFromJson(); //читаем из JSON сохранения
         PlayServicesGoogle.Instance.LoadFromJson(); //применяем в игре
-        if (PlayerResource.Instance.scoreN != 0 && PlayerResource.Instance.EndGameN == false) //если очков в сейве было больше 0 и там не проиграли
+        if (Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.scoreN)) != 0 && PlayerResource.Instance.EndGameN == false) //если очков в сейве было больше 0 и там не проиграли
         {
             ResumeN.SetActive(true); //включаем кнопку продолжить
         }
@@ -131,17 +131,18 @@ public class MainMenu : MonoBehaviour
 
     public void NormalModeStart() //кнопка старт обычного ержима новой игры
     {
+        int zeroInt = 0;
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameN = false; //ставим что конец игры не тру
         PlayerResource.Instance.AdRewardN = false; //ставим что рекламу мы не смотрели ради перемешивания
-        PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, PlayerResource.Instance.hiScoreN); //отправляем лучшее время прошлой игры в Google Play
-        PlayerResource.Instance.hintN = 3; //количество подсказок
-        PlayerResource.Instance.refillN = 1; //количество перемешиваний поля
+        PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.hiScoreN))); //отправляем лучшее время прошлой игры в Google Play
+        PlayerResource.Instance.hintN = SaveSystem.Encrypt(Convert.ToString(3)); //количество подсказок
+        PlayerResource.Instance.refillN = SaveSystem.Encrypt(Convert.ToString(1)); //количество перемешиваний поля
         PlayerResource.Instance.gameMode = "normal"; //говорим что это норм режим
-        PlayerResource.Instance.scoreN = 0; //обнуляем очки
-        PlayerResource.Instance.levelN = 0; //стартуем с 0 левела
-        PlayerResource.Instance.damageN = 0; //обнуляем урон
+        PlayerResource.Instance.scoreN = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
+        PlayerResource.Instance.levelN = zeroInt; //стартуем с 0 левела
+        PlayerResource.Instance.damageN = zeroInt; //обнуляем урон
         PlayerResource.Instance.heightN = height; //высота поля
         PlayerResource.Instance.widthN = width; //ширина поля
         SceneManager.LoadScene("Main"); //тупо загружаем основной уровень, потом добавить сюда туториал
@@ -153,7 +154,7 @@ public class MainMenu : MonoBehaviour
         TimeLayer.SetActive(true);
         PlayServicesGoogle.Instance.ReadFromJson(); //читаем из JSON
         PlayServicesGoogle.Instance.LoadFromJson(); //применяем в игре
-        if (PlayerResource.Instance.scoreT != 0 && PlayerResource.Instance.EndGameT == false)
+        if (Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.scoreT)) != 0 && PlayerResource.Instance.EndGameT == false)
         {
             ResumeT.SetActive(true); //включаем кнопку продолжить
         }
@@ -182,12 +183,12 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.EndGameT = false; //ставим что конец игры не тру
         PlayerResource.Instance.AdRewardT = false;
         PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
-        PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, PlayerResource.Instance.hiScoreT); //отправляем лучшие очки в Google Play
-        PlayerResource.Instance.hintT = 3;
-        PlayerResource.Instance.refillT = 1;
+        PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.hiScoreT))); //отправляем лучшие очки в Google Play
+        PlayerResource.Instance.hintT = SaveSystem.Encrypt(Convert.ToString(3));
+        PlayerResource.Instance.refillT = SaveSystem.Encrypt(Convert.ToString(1));
         PlayerResource.Instance.gameMode = "timetrial";
         PlayerResource.Instance.time = 120f;
-        PlayerResource.Instance.scoreT = 0;
+        PlayerResource.Instance.scoreT = SaveSystem.Encrypt(Convert.ToString(0)); //обнуляем очки
         PlayerResource.Instance.levelT = 0;
         PlayerResource.Instance.damageT = 0;
         PlayerResource.Instance.heightT = height;

@@ -95,10 +95,10 @@ public class PlayServicesGoogle : MonoBehaviour
         public bool GameIsPaused; //если игра на паузе
 
         //переменные для Normal режима
-        public int scoreN; 
-        public int hiScoreN;
-        public int hintN;
-        public int refillN;
+        public string scoreN; 
+        public string hiScoreN;
+        public string hintN;
+        public string refillN;
         public int heightN;
         public int widthN;
 
@@ -111,10 +111,10 @@ public class PlayServicesGoogle : MonoBehaviour
         //переменные для Time Limit режима
         public float time;
         public float playedTime;
-        public int scoreT;
-        public int hiScoreT;
-        public int hintT;
-        public int refillT;
+        public string scoreT;
+        public string hiScoreT;
+        public string hintT;
+        public string refillT;
         public int heightT;
         public int widthT;
         public int levelT;
@@ -192,35 +192,49 @@ public class PlayServicesGoogle : MonoBehaviour
 
     public void LoadFromJson() //применяем данные из JSON
     {
-        PlayerResource.Instance.scoreN = fullsave.scoreN;
-        PlayerResource.Instance.hiScoreN = fullsave.hiScoreN;
-        PlayerResource.Instance.hintN = fullsave.hintN;
-        PlayerResource.Instance.refillN = fullsave.refillN;
-        PlayerResource.Instance.heightN = fullsave.heightN;
-        PlayerResource.Instance.widthN = fullsave.widthN;
-        PlayerResource.Instance.EndGameN = fullsave.EndGameN;
-        PlayerResource.Instance.loadedBoardN = fullsave.loadedBoardN;
-        PlayerResource.Instance.AdRewardN = fullsave.AdRewardN;
-        PlayerResource.Instance.levelN = fullsave.levelN;
-        PlayerResource.Instance.damageN = fullsave.damageN;
+#if UNITY_ANDROID && !UNITY_EDITOR
+        path = Path.Combine(Application.persistentDataPath, "FullSave.json");
+#else
+        path = Path.Combine(Application.dataPath, "FullSave.json");
+#endif
+        if (File.Exists(path))
+        {
+            PlayerResource.Instance.scoreN = fullsave.scoreN;
+            PlayerResource.Instance.hiScoreN = fullsave.hiScoreN;
+            PlayerResource.Instance.hintN = fullsave.hintN;
+            PlayerResource.Instance.refillN = fullsave.refillN;
+            PlayerResource.Instance.heightN = fullsave.heightN;
+            PlayerResource.Instance.widthN = fullsave.widthN;
+            PlayerResource.Instance.EndGameN = fullsave.EndGameN;
+            PlayerResource.Instance.loadedBoardN = fullsave.loadedBoardN;
+            PlayerResource.Instance.AdRewardN = fullsave.AdRewardN;
+            PlayerResource.Instance.levelN = fullsave.levelN;
+            PlayerResource.Instance.damageN = fullsave.damageN;
 
-        PlayerResource.Instance.scoreT = fullsave.scoreT;
-        PlayerResource.Instance.hiScoreT = fullsave.hiScoreT;
-        PlayerResource.Instance.hintT = fullsave.hintT;
-        PlayerResource.Instance.refillT = fullsave.refillT;
-        PlayerResource.Instance.heightT = fullsave.heightT;
-        PlayerResource.Instance.widthT = fullsave.widthT;
-        PlayerResource.Instance.EndGameT = fullsave.EndGameT;
-        PlayerResource.Instance.loadedBoardT = fullsave.loadedBoardT;
-        PlayerResource.Instance.AdRewardT = fullsave.AdRewardT;
-        PlayerResource.Instance.time = fullsave.time;
-        PlayerResource.Instance.playedTime = fullsave.playedTime;
-        PlayerResource.Instance.levelT = fullsave.levelT;
-        PlayerResource.Instance.damageT = fullsave.damageT;
+            PlayerResource.Instance.scoreT = fullsave.scoreT;
+            PlayerResource.Instance.hiScoreT = fullsave.hiScoreT;
+            PlayerResource.Instance.hintT = fullsave.hintT;
+            PlayerResource.Instance.refillT = fullsave.refillT;
+            PlayerResource.Instance.heightT = fullsave.heightT;
+            PlayerResource.Instance.widthT = fullsave.widthT;
+            PlayerResource.Instance.EndGameT = fullsave.EndGameT;
+            PlayerResource.Instance.loadedBoardT = fullsave.loadedBoardT;
+            PlayerResource.Instance.AdRewardT = fullsave.AdRewardT;
+            PlayerResource.Instance.time = fullsave.time;
+            PlayerResource.Instance.playedTime = fullsave.playedTime;
+            PlayerResource.Instance.levelT = fullsave.levelT;
+            PlayerResource.Instance.damageT = fullsave.damageT;
+            SaveTime = Convert.ToDateTime(fullsave.SaveTime);
+        }
+        else
+        {
+            int zeroInt = 0;
 
+            PlayerResource.Instance.hiScoreN = SaveSystem.Encrypt(Convert.ToString(zeroInt));//иначе не начинает новую игру
+            
+            PlayerResource.Instance.hiScoreT = SaveSystem.Encrypt(Convert.ToString(zeroInt));
+        }
 
-
-        SaveTime = Convert.ToDateTime(fullsave.SaveTime);
         Debug.LogWarning("LoadFromJson Done!!!");
     }
 

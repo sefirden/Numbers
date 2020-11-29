@@ -18,10 +18,10 @@ public class PlayerResource : MonoBehaviour
 
 
     //переменные для Normal режима
-    public int scoreN; //количество очков
-    public int hiScoreN; //количество макс очков
-    public int hintN; //количество подсказок
-    public int refillN; //количество перезаполнений поля
+    public string scoreN; //количество очков
+    public string hiScoreN; //количество макс очков
+    public string hintN; //количество подсказок
+    public string refillN; //количество перезаполнений поля
     public int heightN; //высота поля
     public int widthN; //ширина поля
     public bool AdRewardN; //была ли просмотрена реклама для перезаполнения поля
@@ -35,10 +35,10 @@ public class PlayerResource : MonoBehaviour
     //переменные для Time Limit режима, половина та же что и выше
     public float time; //оставшееся время
     public float playedTime; //общее время игры
-    public int scoreT; 
-    public int hiScoreT;
-    public int hintT;
-    public int refillT;
+    public string scoreT; 
+    public string hiScoreT;
+    public string hintT;
+    public string refillT;
     public int heightT;
     public int widthT;
     public bool AdRewardT;

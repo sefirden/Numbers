@@ -8,11 +8,13 @@ public class Level : MonoBehaviour
     public GameObject[] Levels; //список уровней
     private bossPlayer boss; //скрипт босса
     public Board board; //объект поля
+    private ui ui; //скрипт всего УИ
 
     private void Awake()
     {
         boss = FindObjectOfType<bossPlayer>(); ////присваиваем скрипт к переменной
         board = FindObjectOfType<Board>();
+        ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
     }
 
     public void LoadLevel(int level) //загрузка уровня, перебираем все уровни
@@ -75,6 +77,8 @@ public class Level : MonoBehaviour
         {
             boss.gameObject.SetActive(true); //включаем босса
             board.gameObject.SetActive(true); //когда вышел ноль включаем поле
+            ui.HintButton.interactable = true; //делаем активной кнопку подсказок
+            ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
             StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
         }
     }
