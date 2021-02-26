@@ -8,6 +8,9 @@ public class PlayerResource : MonoBehaviour
 {
     public static PlayerResource Instance { get; private set; } //определяем
 
+
+    public bool anim_board_destroy = false;
+
     public string gameMode; //режим игры
     public bool GameIsPaused; //если игра на паузе
     public bool isLoaded; //тру если игра была загружена
