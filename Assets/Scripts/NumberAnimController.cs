@@ -21,8 +21,15 @@ public class NumberAnimController : MonoBehaviour
 
     void Start()
     {
+        Invoke("RandomAnimStart", UnityEngine.Random.Range(1, 10));
+    }
+
+
+    private void RandomAnimStart()
+    {
         StartCoroutine(PlayRandomly());
     }
+
 
     private IEnumerator PlayRandomly()
     {

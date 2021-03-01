@@ -1,73 +1,31 @@
 fileFormatVersion: 2
-guid: b390f0d9f2d547c459850e6e0925200e
+guid: 59365c894a5987242b486e65e7c66a78
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4776574909256564735
-    second: board_1_0
+      213: -3980950410701356757
+    second: board_3_0
   - first:
-      213: 5861679459189418306
-    second: board_1_1
+      213: -6007241120062227241
+    second: board_3_1
   - first:
-      213: 8783060960435439520
-    second: board_1_2
+      213: 3273770504342599967
+    second: board_3_2
   - first:
-      213: -4770430047635865875
-    second: board_1_3
+      213: 7802664710316448024
+    second: board_3_3
   - first:
-      213: -1311192414159177377
-    second: board_1_4
+      213: 320154528953069525
+    second: board_3_4
   - first:
-      213: -8307933168867177913
-    second: board_1_5
+      213: -1018616786110215414
+    second: board_3_5
   - first:
-      213: 7000570046157438897
-    second: board_1_6
+      213: 2435754702275221791
+    second: board_3_6
   - first:
-      213: -5985375352729063688
-    second: board_1_7
-  - first:
-      213: 4968490483433924743
-    second: board_1_8
-  - first:
-      213: -7621059976917754568
-    second: 1_idle_9
-  - first:
-      213: -844041980836155091
-    second: 1_idle_10
-  - first:
-      213: 5702883993727700149
-    second: 1_idle_11
-  - first:
-      213: -7699313325362794800
-    second: 1_idle_12
-  - first:
-      213: -2695024235440468868
-    second: board_1_0
-  - first:
-      213: 5152567513619312134
-    second: board_1_1
-  - first:
-      213: 403240518562305753
-    second: board_1_2
-  - first:
-      213: 3243766328391576252
-    second: board_1_3
-  - first:
-      213: -5019084333105642098
-    second: board_1_4
-  - first:
-      213: -7182129091449801912
-    second: board_1_7
-  - first:
-      213: 8461679634295543814
-    second: board_1_8
-  - first:
-      213: 4155106583618608280
-    second: board_1_5
-  - first:
-      213: 1845857211847115868
-    second: board_1_6
+      213: 4361285217781274794
+    second: board_3_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -191,7 +149,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: board_1_0
+      name: board_3_0
       rect:
         serializedVersion: 2
         x: 0
@@ -205,14 +163,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7c80899cb9599ad0800000000000000
-      internalID: -2695024235440468868
+      spriteID: b2143b581b2d0c8c0800000000000000
+      internalID: -3980950410701356757
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: board_1_1
+      name: board_3_1
       rect:
         serializedVersion: 2
         x: 32
@@ -226,14 +184,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60e2f7aaad8918740800000000000000
-      internalID: 5152567513619312134
+      spriteID: 7dc329e670ef1aca0800000000000000
+      internalID: -6007241120062227241
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: board_1_2
+      name: board_3_2
       rect:
         serializedVersion: 2
         x: 64
@@ -247,14 +205,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d653fb7d19989500800000000000000
-      internalID: 403240518562305753
+      spriteID: f19fd73bde4ce6d20800000000000000
+      internalID: 3273770504342599967
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: board_1_3
+      name: board_3_3
       rect:
         serializedVersion: 2
         x: 96
@@ -268,35 +226,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cba272a1a4c240d20800000000000000
-      internalID: 3243766328391576252
+      spriteID: 81953e7b632a84c60800000000000000
+      internalID: 7802664710316448024
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: board_1_7
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 843b225d4a3f35c90800000000000000
-      internalID: -7182129091449801912
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: board_1_4
+      name: board_3_4
       rect:
         serializedVersion: 2
         x: 0
@@ -310,14 +247,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f59fad14275bdcde0800000000000000
-      internalID: -1311192414159177377
+      spriteID: 5dfea7b09da617400800000000000000
+      internalID: 320154528953069525
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: board_1_5
+      name: board_3_5
       rect:
         serializedVersion: 2
         x: 32
@@ -331,14 +268,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 89c59705c67e9a930800000000000000
-      internalID: 4155106583618608280
+      spriteID: a0b86ad0e652dd1f0800000000000000
+      internalID: -1018616786110215414
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: board_1_6
+      name: board_3_6
       rect:
         serializedVersion: 2
         x: 64
@@ -352,8 +289,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c548d3aba5dcd9910800000000000000
-      internalID: 1845857211847115868
+      spriteID: f191a1d1ff98dc120800000000000000
+      internalID: 2435754702275221791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: board_3_7
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa8d30a6cc5668c30800000000000000
+      internalID: 4361285217781274794
       vertices: []
       indices: 
       edges: []
