@@ -21,7 +21,7 @@ public class NumberAnimController : MonoBehaviour
 
     void Start()
     {
-        Invoke("RandomAnimStart", UnityEngine.Random.Range(1, 10));
+        Invoke("RandomAnimStart", UnityEngine.Random.Range(1f, 10f));
     }
 
 
@@ -37,7 +37,7 @@ public class NumberAnimController : MonoBehaviour
         {
             animator.SetTrigger(clips[UnityEngine.Random.Range(0, clips.Length)]);
 
-            yield return new WaitForSeconds(UnityEngine.Random.Range(5,10));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(5f,10f));
         }
     }
 }

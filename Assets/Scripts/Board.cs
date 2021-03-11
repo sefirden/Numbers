@@ -26,6 +26,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     public LineRenderer sampleLine; //тут добавлен префаб линн в инспекторе как образец для содания линий
 
     private ui ui; //скрипт уи
+    private zeroPlayer zero; //скрипт ноля
     private bossPlayer boss; //скрипт босса
     private Level Level; //скрипт уровней
 
@@ -56,6 +57,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     private void Awake()
     {
         //присваиваем переменным скрипты
+        zero = FindObjectOfType<zeroPlayer>();
         ui = FindObjectOfType<ui>();
         Level = FindObjectOfType<Level>();
         boss = FindObjectOfType<bossPlayer>();
@@ -279,11 +281,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
 
         //кусок с запуском удаления цифр, после того как анимация доиграла, да, кривой способ, но пока единственный
-        if (PlayerResource.Instance.anim_board_destroy == true)
+       /* if (PlayerResource.Instance.anim_board_destroy == true)
         {
             PlayerResource.Instance.anim_board_destroy = false;
             Destroy();
-        }
+        }*/
     }
 
     public void OnPointerClick(PointerEventData eventData) //чтобы работало UI
@@ -384,13 +386,14 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false; //выключаем уоллайдер, чтобы не ловить этот же обьект следующим райкастом
             tempObject = hit.transform.gameObject; //говорим что временный объект это наш пойманный кастом
 
-            CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив собрыннх цифр
+            //ебань чтобы во время анимации удаления не напихать в метод еще цифр кликая на все попало
 
-            CollectedNumbers[index].transform.localScale *= 1.25f; //увеличиваем размер цифры
-            CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //делаем размер колайдера стандартного размера
+                CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив собрыннх цифр
 
-            index++; //увеличиваем индекс, для заполнения масива по порядку
+                CollectedNumbers[index].transform.localScale *= 1.25f; //увеличиваем размер цифры
+                CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //делаем размер колайдера стандартного размера
 
+                index++; //увеличиваем индекс, для заполнения масива по порядку
         }
         else //если райкастом ничего не поймали
         {
@@ -430,6 +433,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             if (PlayerResource.Instance.zeroMove == false && PlayerResource.Instance.bossMove == false) //если ноль не двигается и босс не двигается
             {
+                //тут добавить проверку на конец уровня, на последнем уровне играть другую анимацию или вместо боса кидать ножи в мишень
+                zero.Attack();
+
+
                 damage += tempScore * quantity; //считаем урон по формуле как и очки см выше
                 ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
             }
@@ -469,7 +476,6 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
 
             AnimDestroy(); //удаляем собранные цифры
-
         }
         else //если собрана всего одна цифра и мы отпустили клик
         {
@@ -550,8 +556,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         //анимация удаления
         for (int i = 0; i < index; i++)
         {
-            allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)].GetComponent<Animator>().SetTrigger("destroy");
+            //выключаем колайдер
+            CollectedNumbers[i].GetComponent<BoxCollider2D>().enabled = false; //выключаем коллайдер иначе пока идет анимация можно выбрать еще цифру
+            CollectedNumbers[i].GetComponent<Animator>().SetTrigger("destroy");
         }
+
+        Invoke("Destroy", 0.5f); //туть
     }
       
     public void Destroy() //удаляем собранные элементы
@@ -566,7 +576,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
         index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
 
-        //двигаем ряды вниз
+       //двигаем ряды вниз
        StartCoroutine(DecreaseRow());
     }
     

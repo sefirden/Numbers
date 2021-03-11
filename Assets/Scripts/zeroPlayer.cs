@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class zeroPlayer : MonoBehaviour
 {
     public bossPlayer boss; //скрипт босса
     private Level Level; //скрипт уровней
+    public GameObject weapon;
 
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
 
@@ -31,6 +33,7 @@ public class zeroPlayer : MonoBehaviour
     private IEnumerator MoveToStart() //метод плавного движения ноля к старту
     {
         PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
+        gameObject.GetComponent<Animator>().SetBool("run", true);
         float step; //количество шагов, зависит от растояния
         float moveTime = 0; //не помню зачем, но нужно
         float speed = 1;  //скорость движения
@@ -49,4 +52,13 @@ public class zeroPlayer : MonoBehaviour
         PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается
         Level.StartNewGameLevel(0); //меняем стартовую локацию на первый уровень при старте игры
     }
+
+    public void Attack() //создание объекта с летящими ножами
+    {
+        gameObject.GetComponent<Animator>().SetTrigger("attack"); //анимация атаки ноля
+        GameObject weapon_temp = Instantiate(weapon, weapon.transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+        weapon_temp.transform.parent = this.transform; //присваиваем позицию
+        weapon_temp.name = "weapon_temp"; //присваиваем имя
+    }
+
 }

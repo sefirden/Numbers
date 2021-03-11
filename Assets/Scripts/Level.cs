@@ -7,11 +7,13 @@ public class Level : MonoBehaviour
 {
     public GameObject[] Levels; //список уровней
     private bossPlayer boss; //скрипт босса
+    private zeroPlayer zero;
     public Board board; //объект поля
     private ui ui; //скрипт всего УИ
 
     private void Awake()
     {
+        zero = FindObjectOfType<zeroPlayer>(); ////присваиваем скрипт к переменной
         boss = FindObjectOfType<bossPlayer>(); ////присваиваем скрипт к переменной
         board = FindObjectOfType<Board>();
         ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
@@ -34,6 +36,7 @@ public class Level : MonoBehaviour
 
     public void ChangeLevel(int level) //смена уровня
     {
+        zero.GetComponent<Animator>().SetBool("run", true);
         boss.gameObject.SetActive(false); //выключаем босса
 
         Levels[level].SetActive(true); //включаем следующий уровень
@@ -72,6 +75,8 @@ public class Level : MonoBehaviour
         Levels[level].transform.position = endPositionNewLevel;
 
         PlayerResource.Instance.zeroMove = false; //говорим что ноль не двигается
+        zero.GetComponent<Animator>().SetBool("run", false);
+
 
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если переход с последнего босса на уровень конца игры не делаем то что ниже
         {
