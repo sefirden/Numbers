@@ -44,7 +44,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     private Vector2 startPosition, endPosition; //вектор 2 стартовой и конечной позиции, нужно для отслеживания вектора направления при соединении цифр
     private GameObject tempObject; //записываем сюда выбранную цифру на предыдущем этапе, если соединили 3 цифры, то эта переменная будет второй цифрой, нужно для сравнивания выбранной предыдущей цифрой и текущей выбранной
     private int index; //индекс записанной в масив собраных цифр
-    
+
     private bool hint; //переменная учавствует в поиске цифр при подсказке
        
     public float scaleBoard; //переменная для увеличения размера цифр в полях 5 и 7
@@ -114,7 +114,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         hint = false; //ставим что подсказка сейчас не активна, если в старте этого не делать, то подсказки потом не работают
 
         index = 0; //индекс обнуляем
-               
+
         if (Convert.ToInt32(SaveSystem.Decrypt(hints)) == 0) //если нет доступных подсказок, переключаем кнопки на рекламу
         {
             ui.HintButton.gameObject.SetActive(false); //выключаем обычную кнопку
@@ -277,15 +277,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             }
 
-            Score(); //считаем очки
-        }
+            Score(CollectedNumbers, index); //считаем очки
 
-        //кусок с запуском удаления цифр, после того как анимация доиграла, да, кривой способ, но пока единственный
-       /* if (PlayerResource.Instance.anim_board_destroy == true)
-        {
-            PlayerResource.Instance.anim_board_destroy = false;
-            Destroy();
-        }*/
+            Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
+            index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
+
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData) //чтобы работало UI
@@ -371,6 +368,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void ClickSelect() //обработчик клика по нажатию на кнопку, ищет райкастом цифры
     {
+
         CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
 
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //получаем координаты клика, переводим в нужные координаты
@@ -401,8 +399,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
     }
 
-    private void Score() //считает очки, содержит запуск смены босса, уровня и изменение хп босса
+    private void Score(GameObject[] CollectedNumbers, int index) //считает очки, содержит запуск смены босса, уровня и изменение хп босса
     {
+
+
         int quantity = 0; //количество собранных цифр
         int tempScore = 0; //временное количество очков
         int scoreToNextLevel = 0; //количество очков для перехода на след уровень
@@ -475,7 +475,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 PlayerResource.Instance.time += quantity * (0.5f + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 0.5 + 0,5 до 0.5 + 0,9 сек
             }
 
-            AnimDestroy(); //удаляем собранные цифры
+            AnimDestroy(CollectedNumbers, index); //удаляем собранные цифры
         }
         else //если собрана всего одна цифра и мы отпустили клик
         {
@@ -545,7 +545,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
     }
 
-    private void AnimDestroy()
+    private void AnimDestroy(GameObject[] CollectedNumbers, int index)
     {
 
         for (int i = 0; i < index - 1; i++)
@@ -556,19 +556,27 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         //анимация удаления
         for (int i = 0; i < index; i++)
         {
-            //выключаем колайдер
-            CollectedNumbers[i].GetComponent<BoxCollider2D>().enabled = false; //выключаем коллайдер иначе пока идет анимация можно выбрать еще цифру
-            CollectedNumbers[i].GetComponent<Animator>().SetTrigger("destroy");
-        }
+            float x = CollectedNumbers[i].transform.position.x; //координаты множим на переменную по размеру поля см выше
+            float y = CollectedNumbers[i].transform.position.y;
 
-        Invoke("Destroy", 0.5f); //туть
+            Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
+            GameObject dot = Instantiate(CollectedNumbers[i], tempPosition, Quaternion.identity);
+            dot.name = "anim"; //присваиваем имя
+            dot.tag = "anim";
+            dot.transform.localScale = new Vector3(scaleBoard, scaleBoard, scaleBoard); //увеличиваем по размеру поля
+            dot.GetComponent<BoxCollider2D>().enabled = false; //выключаем коллайдер иначе пока идет анимация можно выбрать еще цифру
+            dot.GetComponent<Animator>().SetTrigger("destroy");
+        }
+        
+        Destroy(CollectedNumbers, index);
     }
-      
-    public void Destroy() //удаляем собранные элементы
+       
+    private void Destroy(GameObject[] CollectedNumbers, int index) //удаляем собранные элементы
     {
         //удаляем собранные
         for (int i = 0; i < index; i++)
         {
+
             Destroy(allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)]); //удаляем все собранные объекты
             allDots[Convert.ToInt32(CollectedNumbers[i].transform.position.x / scaleBoard), Convert.ToInt32(CollectedNumbers[i].transform.position.y / scaleBoard)] = null; //обнуляем нужные элементы массива всех цифр            
         }
@@ -582,6 +590,15 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     
     private IEnumerator DecreaseRow()//короутина, которая двигает цифры вниз, на место собранных ранее
     {
+       /* while(PlayerResource.Instance.anim_board_destroy == true)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }*/
+
+        PlayerResource.Instance.anim_board_destroy = true;
+        yield return new WaitForSeconds(0.32f);
+
+        DeleteAnim();
 
         int nullCount = 0; //количество пустых ячеек на поле
 
@@ -604,10 +621,21 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
             nullCount = 0; //обнуляем количество пустх ячеек и переходим к проверке следующего столбца
         }
-        yield return new WaitForSeconds(0.4f); //ожидание 0,4с, хрен пойми на что влияет, потестить, теоретически скорость сдвига ячеек вниз
+       // yield return new WaitForSeconds(0.1f); //ожидание 0,4с, хрен пойми на что влияет, потестить, теоретически скорость сдвига ячеек вниз
 
         //запускаем заполнение пустых ячеек на поле
+
         Refilling();
+    }
+
+    private void DeleteAnim()
+    {
+        GameObject[] Wally = GameObject.FindGameObjectsWithTag("anim");
+
+        foreach (var item in Wally)
+        {
+            Destroy(item);
+        }
     }
 
     private int[] Scan() //метод, который проверяет количество всех цифр на поле и возвращает масив, который содержит только те цифры, которых мало на поле
@@ -713,6 +741,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         CollectBoardToSave(); //сохранение всех цифр на поле по порядку в строку, через *
 
+        PlayerResource.Instance.anim_board_destroy = false;
     }
 
     private void CollectBoardToSave() //сохранение всех цифр на поле по порядку в строку, через *

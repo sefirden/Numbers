@@ -16,6 +16,7 @@ TagManager:
   - 9
   - null
   - boss
+  - anim
   layers:
   - Default
   - TransparentFX
