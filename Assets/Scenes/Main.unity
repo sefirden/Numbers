@@ -20231,6 +20231,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 576136662354486289, guid: 97eb1a44a1ad1844393ea6c1ba902eea,
         type: 3}
+    - target: {fileID: 6438401562014285688, guid: ffcac0ff243f86348971bd03d9c268dd,
+        type: 3}
+      propertyPath: pause
+      value: 
+      objectReference: {fileID: 548310975}
     - target: {fileID: 6438401562014285689, guid: ffcac0ff243f86348971bd03d9c268dd,
         type: 3}
       propertyPath: m_LocalPosition.x

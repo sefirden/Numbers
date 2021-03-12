@@ -4,6 +4,7 @@ settings:Настройки
 quit:Выход
 test:Тест
 game_label:Numbers_alpha
+exit_label:Нажмите еще раз для выхода из игры
 music_off:выкл
 sfx_off:выкл
 music_vol:Громкость Музыки

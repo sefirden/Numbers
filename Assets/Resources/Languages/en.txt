@@ -4,6 +4,7 @@ settings:Settings
 quit:Quit
 test:Test
 game_label:Numbers_alpha
+exit_label:Press again to exit the game
 music_off:off
 sfx_off:off
 music_vol:Music volume

@@ -23,12 +23,37 @@ public class MainMenu : MonoBehaviour
     public GameObject NormalLayer; //слой нормального режима
     public Dropdown size_dropN; //выбор размера уровня норм режима
     public Dropdown size_dropT; //выбор размера режима на время
+    public GameObject ExitLabel; //всплывающее окно про выход из игры
 
     [SerializeField]
     int[] BoardSize; //варианты размеров поля
 
     int width;
     int height;
+
+    void Update()
+    {
+        // Check if Back was pressed this frame
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(ExitLabel.gameObject.activeSelf == true)
+            {
+                Quit();
+            }
+            else
+            {
+                StartCoroutine(BackButtonExit());
+            }
+
+        }
+    }
+
+    private IEnumerator BackButtonExit()
+    {
+        ExitLabel.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        ExitLabel.SetActive(false);
+    }
 
     private void Start() //при старте игры
     {

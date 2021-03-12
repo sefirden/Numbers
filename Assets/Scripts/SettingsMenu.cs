@@ -50,6 +50,17 @@ public class SettingsMenu : MonoBehaviour
         SceneManager.LoadScene(lvl); //и загружаем ее заново
     }
 
+    void Update()
+    {
+        // Check if Back was pressed this frame
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+
+            // Quit the application
+            Menu();
+        }
+    }
+
 
     public void SetVolumeMusic (float volume) //регулятор громкости
     {

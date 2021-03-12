@@ -13,6 +13,16 @@ public class Pause : MonoBehaviour
     public GameObject SettingsLayer;
     private Board board;
 
+    void Update()
+    {
+            // Check if Back was pressed this frame
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+
+                // Quit the application
+                Resume();
+            }
+    }
 
     public void PauseClick() //клик на паузу в игре
     {

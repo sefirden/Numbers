@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Settings.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\Multiplayer\TurnBasedMatch.cs" />
     <Compile Include="Assets\GooglePlayGames\GameInfo.cs" />
+    <Compile Include="Assets\Scripts\weaponControl.cs" />
     <Compile Include="Assets\Scripts\ui.cs" />
     <Compile Include="Assets\GPGSIds.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\PlayerStats.cs" />
@@ -140,7 +141,7 @@
     <Compile Include="Assets\GooglePlayGames\OurUtils\Misc.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\Nearby\ConnectionResponse.cs" />
     <Compile Include="Assets\Scripts\SettingsPause.cs" />
-    <Compile Include="Assets\weaponControl.cs" />
+    <Compile Include="Assets\Scripts\Back_button.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

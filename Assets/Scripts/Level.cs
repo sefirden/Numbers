@@ -36,9 +36,6 @@ public class Level : MonoBehaviour
 
     public void ChangeLevel(int level) //смена уровня
     {
-        zero.GetComponent<Animator>().SetBool("run", true);
-        boss.gameObject.SetActive(false); //выключаем босса
-
         Levels[level].SetActive(true); //включаем следующий уровень
         
         StartCoroutine(MoveNewLevel(level)); //двигаем новый уровень

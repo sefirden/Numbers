@@ -97,7 +97,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boss: {fileID: 0}
-  weapon: {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
+  weapon:
+  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  Animation:
+  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
+  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!95 &6336438537049825056
 Animator:
   serializedVersion: 3

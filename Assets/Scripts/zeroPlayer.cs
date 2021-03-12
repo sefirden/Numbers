@@ -7,7 +7,9 @@ public class zeroPlayer : MonoBehaviour
 {
     public bossPlayer boss; //скрипт босса
     private Level Level; //скрипт уровней
-    public GameObject weapon;
+    public GameObject[] weapon;
+    public RuntimeAnimatorController[] Animation; //список с анимациями боссов
+
 
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
 
@@ -28,8 +30,7 @@ public class zeroPlayer : MonoBehaviour
             PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается, не помню но где-то было нужно
         }
     }
-
-
+    
     private IEnumerator MoveToStart() //метод плавного движения ноля к старту
     {
         PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
@@ -53,12 +54,18 @@ public class zeroPlayer : MonoBehaviour
         Level.StartNewGameLevel(0); //меняем стартовую локацию на первый уровень при старте игры
     }
 
-    public void Attack() //создание объекта с летящими ножами
+    public void Attack(int level) //создание объекта с летящими ножами
     {
         gameObject.GetComponent<Animator>().SetTrigger("attack"); //анимация атаки ноля
-        GameObject weapon_temp = Instantiate(weapon, weapon.transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+        GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
+    }
+
+    public void ChangeZero(int level)
+    {
+        gameObject.GetComponent<Animator>().SetBool("run", true); //анимацмя бега
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
     }
 
 }
