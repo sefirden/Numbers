@@ -119,6 +119,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  kill_boss_point:
+  - {x: 2, y: 13.6, z: 1}
+  - {x: 6, y: 19, z: 1}
+  - {x: 9, y: 13.6, z: 1}
+  - {x: 6, y: 13.6, z: 1}
+  - {x: 2, y: 13.6, z: 1}
+  timing:
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  speed:
+  - 10
+  - 10
+  - 10
+  - 10
+  - 10
 --- !u!95 &6336438537049825056
 Animator:
   serializedVersion: 3

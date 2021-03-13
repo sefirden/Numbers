@@ -9,6 +9,9 @@ public class zeroPlayer : MonoBehaviour
     private Level Level; //скрипт уровней
     public GameObject[] weapon;
     public RuntimeAnimatorController[] Animation; //список с анимациями боссов
+    public Vector3[] kill_boss_point;
+    public float[] timing;
+    public float[] speed;
 
 
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
@@ -30,7 +33,7 @@ public class zeroPlayer : MonoBehaviour
             PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается, не помню но где-то было нужно
         }
     }
-    
+
     private IEnumerator MoveToStart() //метод плавного движения ноля к старту
     {
         PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
@@ -60,6 +63,8 @@ public class zeroPlayer : MonoBehaviour
         GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
+
+        StartCoroutine(KillTheBoss());
     }
 
     public void ChangeZero(int level)
@@ -68,4 +73,38 @@ public class zeroPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
     }
 
+
+    private IEnumerator KillTheBoss() //метод плавного движения ноля к старту
+    {
+        PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
+                                                 // gameObject.GetComponent<Animator>().SetTrigger("kill");
+        yield return new WaitForSeconds(1.5f);
+        Vector3 startPosition, endPosition;
+        int point = 0;
+
+        while (point < 5)
+        {
+            float step; //количество шагов, зависит от растояния
+            float moveTime = 0; //не помню зачем, но нужно
+
+            startPosition = transform.position;
+            endPosition = kill_boss_point[point];
+
+            step = (speed[point] / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
+                                                                                            //ниже формула для плавного движения
+            while (moveTime <= 1.0f)
+            {
+                moveTime += step;
+                transform.position = Vector3.Lerp(startPosition, endPosition, moveTime);
+                yield return new WaitForFixedUpdate();
+            }
+            transform.position = endPosition;
+            yield return new WaitForSeconds(timing[point]);
+            point++;
+
+        }
+
+        PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается
+
+    }
 }
