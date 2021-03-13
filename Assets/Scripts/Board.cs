@@ -382,7 +382,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //получаем координаты клика, переводим в нужные координаты
         RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f); //кидаем райкаст по координатам см выше
 
-        if (hit) //если райкастом что-то поймали
+        if (hit && hit.transform.tag != "boss") //если райкастом что-то поймали
         {
             Draw(false); //убираем нарисованные ранее линии, соединяющие цифры
 
@@ -509,8 +509,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         yield return new WaitForSeconds(5f);
     }
-
-    
+        
     private void ShuffleBoardChangeLevel() //метод, который перемешивает поле при смене босса
     {
         //собираем текущее поле в строку

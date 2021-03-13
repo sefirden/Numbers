@@ -64,7 +64,7 @@ public class zeroPlayer : MonoBehaviour
 
     public void ChangeZero(int level)
     {
-        gameObject.GetComponent<Animator>().SetBool("run", true); //анимацмя бега
+        //gameObject.GetComponent<Animator>().SetBool("run", true); //анимацмя бега
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
     }
 
