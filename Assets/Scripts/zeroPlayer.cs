@@ -12,10 +12,14 @@ public class zeroPlayer : MonoBehaviour
     public Vector3[] kill_boss_point;
     public float[] timing;
     public float[] speed;
-
+    float timer = 0f;
 
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
-
+   
+    private void Update()
+    {
+        timer += Time.deltaTime;
+    }
     void Awake()
     {
         Level = FindObjectOfType<Level>(); //присваиваем скрипт к переменной
@@ -24,12 +28,12 @@ public class zeroPlayer : MonoBehaviour
         if (PlayerResource.Instance.isLoaded == false) //если игре НЕ была загружена, новая игра
         {
             startPosition = transform.position; //ставим стартовую позицию ноля как текущую
-            endPosition = new Vector3(2f, 13.6f, transform.position.z); //конечная позиция ноля, подправить потом под уровень
+            endPosition = new Vector3(1f, 13.6f, transform.position.z); //конечная позиция ноля, подправить потом под уровень
             StartCoroutine(MoveToStart()); //запускаем движения ноля к стартовой позиции
         }
         else if (PlayerResource.Instance.isLoaded == true) //если игру БЫЛА загружена, то
         {
-            transform.position = new Vector3(2f, 13.6f, transform.position.z); //сразу ставим нужну позицию
+            transform.position = new Vector3(1f, 13.6f, transform.position.z); //сразу ставим нужну позицию
             PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается, не помню но где-то было нужно
         }
     }
@@ -64,7 +68,7 @@ public class zeroPlayer : MonoBehaviour
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
 
-        StartCoroutine(KillTheBoss());
+        //StartCoroutine(KillTheBoss());
     }
 
     public void ChangeZero(int level)
@@ -74,15 +78,18 @@ public class zeroPlayer : MonoBehaviour
     }
 
 
-    private IEnumerator KillTheBoss() //метод плавного движения ноля к старту
+    public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
     {
         PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
-                                                 // gameObject.GetComponent<Animator>().SetTrigger("kill");
+                       
         yield return new WaitForSeconds(1.5f);
+        gameObject.GetComponent<Animator>().SetTrigger("kill");
+
+        timer = 0;
         Vector3 startPosition, endPosition;
         int point = 0;
 
-        while (point < 5)
+        while (point < 6)
         {
             float step; //количество шагов, зависит от растояния
             float moveTime = 0; //не помню зачем, но нужно
@@ -99,11 +106,12 @@ public class zeroPlayer : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
             transform.position = endPosition;
+            Debug.LogError(timer);
             yield return new WaitForSeconds(timing[point]);
             point++;
 
         }
-
+        timer = 0;
         PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается
 
     }
