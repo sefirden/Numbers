@@ -285,10 +285,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 tempObject.GetComponent<BoxCollider2D>().enabled = true; //включаем коллайдер у последнего тайла
             }
 
-            Score(CollectedNumbers, index); //считаем очки
+            if (index >= 1)
+            {
+                Score(CollectedNumbers, index); //считаем очки
 
-            Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
-            index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
+                Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
+                index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
+            }
 
         }
     }
@@ -376,7 +379,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void ClickSelect() //обработчик клика по нажатию на кнопку, ищет райкастом цифры
     {
-
+        Debug.LogError("ClickSelect");
         CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
 
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //получаем координаты клика, переводим в нужные координаты
@@ -384,6 +387,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         if (hit && hit.transform.tag != "boss") //если райкастом что-то поймали
         {
+            PlayerResource.Instance.TurnIsOn = true;
+            Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
+
             Draw(false); //убираем нарисованные ранее линии, соединяющие цифры
 
             startPosition = hit.transform.position; //говорим что стартовая позиция это наши координаты каста
@@ -404,12 +410,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         else //если райкастом ничего не поймали
         {
             Debug.Log("not item"); //просто выводим в лог
+
         }
     }
 
     private void Score(GameObject[] CollectedNumbers, int index) //считает очки, содержит запуск смены босса, уровня и изменение хп босса
     {
-
+        Debug.LogError("Score");
 
         int quantity = 0; //количество собранных цифр
         int tempScore = 0; //временное количество очков
@@ -465,6 +472,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
             Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
             index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
+
+            PlayerResource.Instance.TurnIsOn = false;
+            Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
         }
 
         score = SaveSystem.Encrypt(Convert.ToString(scoreI));
@@ -564,7 +574,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void AnimDestroy(GameObject[] CollectedNumbers, int index)
     {
-
+        Debug.LogError("AnimDestroy");
         for (int i = 0; i < index - 1; i++)
         {
             lines[i].gameObject.SetActive(false); //выключаем все включенные линии по этой хитрой схеме
@@ -590,6 +600,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
        
     private void Destroy(GameObject[] CollectedNumbers, int index) //удаляем собранные элементы
     {
+        Debug.LogError("Destroy");
         //удаляем собранные
         for (int i = 0; i < index; i++)
         {
@@ -607,11 +618,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     
     private IEnumerator DecreaseRow()//короутина, которая двигает цифры вниз, на место собранных ранее
     {
-       /* while(PlayerResource.Instance.anim_board_destroy == true)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }*/
-
+        /* while(PlayerResource.Instance.anim_board_destroy == true)
+         {
+             yield return new WaitForSeconds(0.1f);
+         }*/
+        Debug.LogError("DecreaseRow");
         PlayerResource.Instance.anim_board_destroy = true;
         yield return new WaitForSeconds(0.32f);
 
@@ -647,6 +658,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void DeleteAnim()
     {
+        Debug.LogError("DeleteAnim");
         GameObject[] Wally = GameObject.FindGameObjectsWithTag("anim");
 
         foreach (var item in Wally)
@@ -721,6 +733,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void Refilling() //заполнение поля, на место пустых ячеек
     {
+        Debug.LogError("Refilling");
         int dotToUse; //номер цифры из списка префабов для заполнения ячейки поля
 
         for (int i = 0; i < width; i++) //столбцы
@@ -761,6 +774,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void CollectBoardToSave() //сохранение всех цифр на поле по порядку в строку, через *
     {
+        Debug.LogError("CollectBoardToSave");
         loadedBoard = null; //обнуляем предыдущую строку из цифр
 
         for (int i = 0; i < width; i++) //столбцы
@@ -772,6 +786,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
 
         ToPlayerResources("loadedBoard");
+
+        PlayerResource.Instance.TurnIsOn = false;
+        Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
     }
 
     private void CheckEndGame() //проверка на конец игры, есть ли возможные варианты ходов

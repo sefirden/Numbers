@@ -13,6 +13,7 @@ public class PlayerResource : MonoBehaviour
 
     public string gameMode; //режим игры
     public bool GameIsPaused; //если игра на паузе
+    public bool TurnIsOn; //отмечаем ход
     public bool isLoaded; //тру если игра была загружена
     public int[] scoreToNextLevel; //количество очков до следующего уровня
 
@@ -62,6 +63,8 @@ public class PlayerResource : MonoBehaviour
         {
             Destroy(gameObject); //то ломаем его к херам
         }
+
+        Input.multiTouchEnabled = false;
 
     }
 }

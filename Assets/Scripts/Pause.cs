@@ -26,16 +26,24 @@ public class Pause : MonoBehaviour
 
     public void PauseClick() //клик на паузу в игре
     {
-        Time.timeScale = 0f; //ставим паузу
         pauseMenuUI.SetActive(true); //включаем слой с меню паузы
         PlayerResource.Instance.GameIsPaused = true; //говорим переменной что тут пауза
+        AdMob_baner.Instance.Show(); //показываем банер внизу экрана
+
+        StartCoroutine(SaveGame());
+    }
+
+    IEnumerator SaveGame()
+    {
+        while (PlayerResource.Instance.TurnIsOn == true)
+        {
+            yield return new WaitForFixedUpdate();
+        }
 
         PlayServicesGoogle.Instance.CollectData(); //собираем данные
         PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
         PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако
-
-        AdMob_baner.Instance.Show(); //показываем банер внизу экрана
-
+        Time.timeScale = 0f; //ставим паузу
     }
 
     public void Resume() //вернуться в игру
