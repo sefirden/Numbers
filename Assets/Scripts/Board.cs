@@ -186,6 +186,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             gameObject.SetActive(true); //включаем видимость поля
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
+            zero.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         }
         else //если была выбрана новая игра
         {
@@ -379,7 +380,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void ClickSelect() //обработчик клика по нажатию на кнопку, ищет райкастом цифры
     {
-        Debug.LogError("ClickSelect");
+        //Debug.LogError("ClickSelect");
         CheckEndGame(); //проверка на конец игры, есть ли возможные варианты ходов
 
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //получаем координаты клика, переводим в нужные координаты
@@ -416,7 +417,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void Score(GameObject[] CollectedNumbers, int index) //считает очки, содержит запуск смены босса, уровня и изменение хп босса
     {
-        Debug.LogError("Score");
+        //Debug.LogError("Score");
 
         int quantity = 0; //количество собранных цифр
         int tempScore = 0; //временное количество очков
@@ -502,8 +503,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             level++; //увеличиваем уровень 
             StartCoroutine(zero.KillTheBoss());
             ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
-            yield return new WaitForSeconds(16f);
-
+            yield return new WaitForSeconds(14.5f);
+            zero.ChangeZero(level);
+            zero.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
+            yield return new WaitForSeconds(1.5f);
             Level.ChangeLevel(level); //запускаем смену уровня
             boss.gameObject.SetActive(false); //выключаем босса
             zero.ChangeZero(level);
@@ -574,7 +577,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void AnimDestroy(GameObject[] CollectedNumbers, int index)
     {
-        Debug.LogError("AnimDestroy");
+        //Debug.LogError("AnimDestroy");
         for (int i = 0; i < index - 1; i++)
         {
             lines[i].gameObject.SetActive(false); //выключаем все включенные линии по этой хитрой схеме
@@ -600,7 +603,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
        
     private void Destroy(GameObject[] CollectedNumbers, int index) //удаляем собранные элементы
     {
-        Debug.LogError("Destroy");
+       //Debug.LogError("Destroy");
         //удаляем собранные
         for (int i = 0; i < index; i++)
         {
@@ -622,7 +625,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
          {
              yield return new WaitForSeconds(0.1f);
          }*/
-        Debug.LogError("DecreaseRow");
+        //Debug.LogError("DecreaseRow");
         PlayerResource.Instance.anim_board_destroy = true;
         yield return new WaitForSeconds(0.32f);
 
@@ -658,7 +661,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void DeleteAnim()
     {
-        Debug.LogError("DeleteAnim");
+        //Debug.LogError("DeleteAnim");
         GameObject[] Wally = GameObject.FindGameObjectsWithTag("anim");
 
         foreach (var item in Wally)
@@ -733,7 +736,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void Refilling() //заполнение поля, на место пустых ячеек
     {
-        Debug.LogError("Refilling");
+        //Debug.LogError("Refilling");
         int dotToUse; //номер цифры из списка префабов для заполнения ячейки поля
 
         for (int i = 0; i < width; i++) //столбцы
@@ -774,7 +777,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     private void CollectBoardToSave() //сохранение всех цифр на поле по порядку в строку, через *
     {
-        Debug.LogError("CollectBoardToSave");
+        //Debug.LogError("CollectBoardToSave");
         loadedBoard = null; //обнуляем предыдущую строку из цифр
 
         for (int i = 0; i < width; i++) //столбцы

@@ -22,3 +22,4 @@ nopair:No possible moves, mixed field?
 yes:Yes
 no:No
 no_time:Time is up, game over!
+restart_menu:All progress will be lost, restart the game?

@@ -99,26 +99,26 @@ MonoBehaviour:
   boss: {fileID: 0}
   weapon:
   - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
-  - {fileID: 840125590445493384, guid: 534ae43daf2d9ba458521f0c9107e132, type: 3}
+  - {fileID: 6260191088809541524, guid: e462d9d35bbbeb44f9204668b95c7559, type: 3}
+  - {fileID: 5982897019880653484, guid: ada6ea99e9f1a99468037ac1710baf31, type: 3}
+  - {fileID: 2862232713878871747, guid: 8a0ac65471cef8243a7da1ae6d7562c6, type: 3}
+  - {fileID: 6975788222664052026, guid: 65eab849b1485aa45af8f34f57f857a0, type: 3}
+  - {fileID: 115355298807447577, guid: 195341040ec713d409fde51c82b91148, type: 3}
+  - {fileID: 5949375577507221637, guid: d1b82fa53c7445b409eadf5fbf3eef04, type: 3}
+  - {fileID: 1078220597827121417, guid: 04b96684860edd840a052a5cb59aea7e, type: 3}
+  - {fileID: 4825343769391911411, guid: 35ede42ea8e287647ad7d7676f2e9436, type: 3}
+  - {fileID: 5415449679607518357, guid: c6db06dd38b34f14da658a8222a9fd60, type: 3}
   Animation:
   - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
-  - {fileID: 9100000, guid: 79a9c5e37e6334c42bb938894a652660, type: 2}
+  - {fileID: 9100000, guid: 6cb493745ce1cd14ba1fdd298f632330, type: 2}
+  - {fileID: 9100000, guid: 88efc3d25af375d458d19be2e4237f79, type: 2}
+  - {fileID: 9100000, guid: 7bb75065d0d0a7a42a910953e6b49007, type: 2}
+  - {fileID: 9100000, guid: b9bb2ebccd818a0498aa6ca6b13a0752, type: 2}
+  - {fileID: 9100000, guid: a032d47234aed604a866d0b5a045f175, type: 2}
+  - {fileID: 9100000, guid: 3bf856832da79f74d881c86e658a93b2, type: 2}
+  - {fileID: 9100000, guid: 087c950a56d8bfb459d6bf86a450b2c1, type: 2}
+  - {fileID: 9100000, guid: 5fde22fad639e5d4bb8592a52356506c, type: 2}
+  - {fileID: 9100000, guid: 13b2750a99f70504ebebbbad5e1a257a, type: 2}
   kill_boss_point:
   - {x: 4, y: 18.6, z: 1}
   - {x: 5, y: 19.2, z: 1}

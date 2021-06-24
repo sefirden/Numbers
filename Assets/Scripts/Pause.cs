@@ -10,6 +10,7 @@ public class Pause : MonoBehaviour
 {
 
     public GameObject pauseMenuUI;
+    public GameObject restartMenuUI;
     public GameObject SettingsLayer;
     private Board board;
 
@@ -23,6 +24,7 @@ public class Pause : MonoBehaviour
                 Resume();
             }
     }
+    
 
     public void PauseClick() //клик на паузу в игре
     {
@@ -57,58 +59,71 @@ public class Pause : MonoBehaviour
 
     }
 
-    public void Restart() //рестарт игры
+    public void RestartLayer() //срабатывает по клику на кнопку рестарт
     {
-        int zeroInt = 0;
-        AdMob_baner.Instance.Hide(); //выключаем рекламный банер
+        pauseMenuUI.SetActive(false); //прячем паузу
+        restartMenuUI.SetActive(true); //показываем рестарт
+    }
 
-        board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
-
-        if (PlayerResource.Instance.gameMode == "normal" && board != null) //если режим нормальный
+    public void Restart(bool answer) //рестарт игры, передаем тру или фалс по клику на да и нет соответственно из рестарт меню
+    {
+        if (answer == true) //если нажали да рестарт
         {
-            //если сдесь делать не через board. а сразу в плеерресоурсес то не сработает
-            board.endGame = false; //ставим что конец игры не тру
-            board.ToPlayerResources("endGame");
-            board.hints = SaveSystem.Encrypt(Convert.ToString(3)); //даем 3 подсказки
-            board.ToPlayerResources("hints");
-            board.refill = SaveSystem.Encrypt(Convert.ToString(1)); //даем 1 перемешивание
-            board.ToPlayerResources("refill");
-            board.score = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
-            board.ToPlayerResources("score");
-            board.AdReward = false; //говорим что рекламу не смотрел
-            board.ToPlayerResources("AdReward");
-            board.level = zeroInt; //уровень ставим 0
-            board.ToPlayerResources("level");
-            board.damage = zeroInt; //обнуляем урон
-            board.ToPlayerResources("damage");
+            int zeroInt = 0;
+            AdMob_baner.Instance.Hide(); //выключаем рекламный банер
 
-            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, Convert.ToInt32(SaveSystem.Decrypt(board.hiScore))); //отправляем лучшее время в Google Play
+            board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
+
+            if (PlayerResource.Instance.gameMode == "normal" && board != null) //если режим нормальный
+            {
+                //если сдесь делать не через board. а сразу в плеерресоурсес то не сработает
+                board.endGame = false; //ставим что конец игры не тру
+                board.ToPlayerResources("endGame");
+                board.hints = SaveSystem.Encrypt(Convert.ToString(3)); //даем 3 подсказки
+                board.ToPlayerResources("hints");
+                board.refill = SaveSystem.Encrypt(Convert.ToString(1)); //даем 1 перемешивание
+                board.ToPlayerResources("refill");
+                board.score = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
+                board.ToPlayerResources("score");
+                board.AdReward = false; //говорим что рекламу не смотрел
+                board.ToPlayerResources("AdReward");
+                board.level = zeroInt; //уровень ставим 0
+                board.ToPlayerResources("level");
+                board.damage = zeroInt; //обнуляем урон
+                board.ToPlayerResources("damage");
+
+                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, Convert.ToInt32(SaveSystem.Decrypt(board.hiScore))); //отправляем лучшее время в Google Play
+            }
+            else if (PlayerResource.Instance.gameMode == "timetrial" && board != null) //см выше но для режима на время
+            {
+                PlayerResource.Instance.time = 120f; //даем 2 минуты в начале игры
+                board.endGame = false; //ставим что конец игры не тру
+                board.ToPlayerResources("endGame");
+                board.hints = SaveSystem.Encrypt(Convert.ToString(3)); //даем 3 подсказки
+                board.ToPlayerResources("hints");
+                board.refill = SaveSystem.Encrypt(Convert.ToString(1)); //даем 1 перемешивание
+                board.ToPlayerResources("refill");
+                board.score = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
+                board.ToPlayerResources("score");
+                board.AdReward = false; //говорим что рекламу не смотрел
+                board.ToPlayerResources("AdReward");
+                board.level = zeroInt; //уровень ставим 0
+                board.ToPlayerResources("level");
+                board.damage = zeroInt; //обнуляем урон
+                board.ToPlayerResources("damage");
+                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
+                PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(board.hiScore))); //отправляем лучшие очки в Google Play
+            }
+
+            SceneManager.LoadScene("Main"); //тупо загружаем основной уровень
+            PlayerResource.Instance.GameIsPaused = false; //убираем паузу
+            Time.timeScale = 1f;//убираем паузу
         }
-        else if (PlayerResource.Instance.gameMode == "timetrial" && board != null) //см выше но для режима на время
+        else //если нажали нет рестарту
         {
-            PlayerResource.Instance.time = 120f; //даем 2 минуты в начале игры
-            board.endGame = false; //ставим что конец игры не тру
-            board.ToPlayerResources("endGame");
-            board.hints = SaveSystem.Encrypt(Convert.ToString(3)); //даем 3 подсказки
-            board.ToPlayerResources("hints");
-            board.refill = SaveSystem.Encrypt(Convert.ToString(1)); //даем 1 перемешивание
-            board.ToPlayerResources("refill");
-            board.score = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
-            board.ToPlayerResources("score");
-            board.AdReward = false; //говорим что рекламу не смотрел
-            board.ToPlayerResources("AdReward");
-            board.level = zeroInt; //уровень ставим 0
-            board.ToPlayerResources("level");
-            board.damage = zeroInt; //обнуляем урон
-            board.ToPlayerResources("damage");
-            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
-            PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(board.hiScore))); //отправляем лучшие очки в Google Play
+            pauseMenuUI.SetActive(true);
+            restartMenuUI.SetActive(false);
         }
-
-        SceneManager.LoadScene("Main"); //тупо загружаем основной уровень
-        PlayerResource.Instance.GameIsPaused = false; //убираем паузу
-        Time.timeScale = 1f;//убираем паузу
-
     }
 
     public void Menu() //кнопка в меню

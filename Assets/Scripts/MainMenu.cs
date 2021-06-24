@@ -21,6 +21,8 @@ public class MainMenu : MonoBehaviour
     public GameObject LanguageLayer; //слой выбора языка
     public GameObject TimeLayer; //слой режима на время
     public GameObject NormalLayer; //слой нормального режима
+    public GameObject NormalLayerNewGame; //слой вопроса запускать ли новую игру
+    public GameObject TimeLayerNewGame; //слой вопроса запускать ли новую игру на время
     public Dropdown size_dropN; //выбор размера уровня норм режима
     public Dropdown size_dropT; //выбор размера режима на время
     public GameObject ExitLabel; //всплывающее окно про выход из игры
@@ -141,7 +143,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            ResumeN.SetActive(false); //включаем кнопку продолжить
+            ResumeN.SetActive(false); //выключаем кнопку продолжить
         }
     }
     
@@ -152,6 +154,25 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.gameMode = "normal"; //говорим что режим нормальный
         Time.timeScale = 1f; //это для отключения паузы в игре
         SceneManager.LoadScene("Main"); //тупо загружаем основной уровень
+    }
+
+    public void NormalModeNewGame() //если есть кнопка продолжить игру и мы нажали новая игра то задать вопрос, если кнопки продолжить нет, то просто начать новую игру
+    {
+            if (ResumeN.activeSelf == true)
+            {
+                NormalLayer.SetActive(false);
+                NormalLayerNewGame.SetActive(true);
+            }
+            else
+            {
+                NormalModeStart();
+            }
+    }
+
+    public void NormalModeNewGameNO()
+    {
+        NormalLayer.SetActive(true);
+        NormalLayerNewGame.SetActive(false);
     }
 
     public void NormalModeStart() //кнопка старт обычного ержима новой игры
@@ -198,8 +219,28 @@ public class MainMenu : MonoBehaviour
         Debug.LogWarning("TimeModeResume");
         SceneManager.LoadScene("Main");
 
-    }    
-    
+    }
+
+    public void TimeModeNewGame() //если есть кнопка продолжить игру и мы нажали новая игра то задать вопрос, если кнопки продолжить нет, то просто начать новую игру
+    {
+        if (ResumeT.activeSelf == true)
+        {
+            TimeLayer.SetActive(false);
+            TimeLayerNewGame.SetActive(true);
+        }
+        else
+        {
+            TimeTrialModeStart();
+        }
+    }
+
+    public void TimeModeNewGameNO()
+    {
+        TimeLayer.SetActive(true);
+        TimeLayerNewGame.SetActive(false);
+    }
+
+
     public void TimeTrialModeStart() //см выше нормал мод
     {
         

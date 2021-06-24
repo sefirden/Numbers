@@ -35,6 +35,7 @@ public class zeroPlayer : MonoBehaviour
         {
             transform.position = new Vector3(1f, 13.6f, transform.position.z); //сразу ставим нужну позицию
             PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается, не помню но где-то было нужно
+
         }
     }
 
@@ -73,8 +74,8 @@ public class zeroPlayer : MonoBehaviour
 
     public void ChangeZero(int level)
     {
-        //gameObject.GetComponent<Animator>().SetBool("run", true); //анимацмя бега
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
+        gameObject.GetComponent<Animator>().SetBool("run", true); //анимацмя бега
     }
 
 

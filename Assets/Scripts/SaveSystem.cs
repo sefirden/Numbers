@@ -171,6 +171,7 @@ public class SaveSystem : MonoBehaviour
 #endif
     private void OnApplicationQuit() //при выходе из приложения
     {
+
         PlayServicesGoogle.Instance.CollectData(); //собираем данные
         PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
 
