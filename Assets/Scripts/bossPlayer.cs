@@ -11,8 +11,7 @@ public class bossPlayer : MonoBehaviour
 
     private ui ui; //скрипт всего УИ
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции босса
-    public Sprite[] Sprite; //список со спрайтами боссов
-    public Animation[] Animation; //список с анимациями боссов
+    public RuntimeAnimatorController[] Animation; //список с анимациями боссов
 
     void Awake()
     {
@@ -35,7 +34,7 @@ public class bossPlayer : MonoBehaviour
     {
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = Sprite[level]; //меняем боссу спрайт в зависимости от уровня, из списка
+            gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
         }
         else //если у нас последний уровень
         {
@@ -49,6 +48,7 @@ public class bossPlayer : MonoBehaviour
         endPosition = new Vector3(4.92f, 13f, transform.position.z); //конечная позиция босса
 
         PlayerResource.Instance.bossMove = true; //говорим что босс двигается
+        gameObject.GetComponent<Animator>().SetBool("run", true); //анимацмя бега
         float step; //количество шагов, зависит от растояния
         float moveTime = 0; //не помню зачем, но нужно
         float speed = 1f; //скорость движения
@@ -65,6 +65,7 @@ public class bossPlayer : MonoBehaviour
         transform.position = endPosition;
 
         PlayerResource.Instance.bossMove = false; //говорим что босс не двигается
+        gameObject.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
 
     }

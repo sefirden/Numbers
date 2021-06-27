@@ -174,7 +174,6 @@ public class SaveSystem : MonoBehaviour
 
         PlayServicesGoogle.Instance.CollectData(); //собираем данные
         PlayServicesGoogle.Instance.SaveToJson(); //пишем в JSON
-
         PlayServicesGoogle.Instance.SaveToCloud(); //пишем в облако true
         SettingsSave(); //сохраняем настройки
     }

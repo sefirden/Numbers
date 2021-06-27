@@ -6,6 +6,7 @@ using UnityEngine;
 public class zeroPlayer : MonoBehaviour
 {
     public bossPlayer boss; //скрипт босса
+    public Board board; //объект поля
     private Level Level; //скрипт уровней
     public GameObject[] weapon;
     public RuntimeAnimatorController[] Animation; //список с анимациями боссов
@@ -23,6 +24,7 @@ public class zeroPlayer : MonoBehaviour
     void Awake()
     {
         Level = FindObjectOfType<Level>(); //присваиваем скрипт к переменной
+        board = FindObjectOfType<Board>();
         boss = FindObjectOfType<bossPlayer>(); //присваиваем скрипт к переменной
 
         if (PlayerResource.Instance.isLoaded == false) //если игре НЕ была загружена, новая игра
@@ -39,10 +41,8 @@ public class zeroPlayer : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveToStart() //метод плавного движения ноля к старту
+    public IEnumerator MoveToStart() //метод плавного движения ноля к старту
     {
-        PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
-        gameObject.GetComponent<Animator>().SetBool("run", true);
         float step; //количество шагов, зависит от растояния
         float moveTime = 0; //не помню зачем, но нужно
         float speed = 1;  //скорость движения
@@ -58,7 +58,6 @@ public class zeroPlayer : MonoBehaviour
         }
         transform.position = endPosition;
 
-        PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается
         Level.StartNewGameLevel(0); //меняем стартовую локацию на первый уровень при старте игры
     }
 
@@ -68,17 +67,13 @@ public class zeroPlayer : MonoBehaviour
         GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
-
-        //StartCoroutine(KillTheBoss());
     }
 
-    public void ChangeZero(int level)
+    public void ChangeZero(int level) //при смене уровня меняем аниматор и говорим что ноль идет
     {
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
-        gameObject.GetComponent<Animator>().SetBool("run", true); //анимацмя бега
     }
-
-
+    
     public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
     {
         PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
@@ -113,7 +108,15 @@ public class zeroPlayer : MonoBehaviour
 
         }
         timer = 0;
-        PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается
+
+        boss.gameObject.SetActive(false); //выключаем босса
+        ChangeZero(board.level);
+        boss.ChangeBoss(board.level); //запускаем смену босса
+
+  
+        gameObject.GetComponent<Animator>().SetBool("run", true);
+        Level.ChangeLevel(board.level); //запускаем смену уровня
+
 
     }
 }

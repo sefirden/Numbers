@@ -24,7 +24,16 @@ public class Pause : MonoBehaviour
                 Resume();
             }
     }
-    
+
+
+    void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
+    {
+
+        if (focusStatus == false)
+        {
+            PauseClick();
+        }
+    }
 
     public void PauseClick() //клик на паузу в игре
     {

@@ -186,10 +186,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             gameObject.SetActive(true); //включаем видимость поля
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
-            zero.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
+
         }
         else //если была выбрана новая игра
         {
+            PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
+            zero.GetComponent<Animator>().SetBool("run", true);
             gameObject.SetActive(false); //выключаем поле
             Level.LoadLevel(10); //загрузка уровня новой игры
             Shuffle(); //перемешиваем стандартный набор цифр при новой игре
@@ -501,17 +503,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         {
             changelvl = true; //говорим что смена уровня
             level++; //увеличиваем уровень 
-            StartCoroutine(zero.KillTheBoss());
             ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
-            yield return new WaitForSeconds(14.5f);
-            zero.ChangeZero(level);
-            zero.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
-            yield return new WaitForSeconds(1.5f);
-            Level.ChangeLevel(level); //запускаем смену уровня
-            boss.gameObject.SetActive(false); //выключаем босса
-            zero.ChangeZero(level);
-            boss.ChangeBoss(level); //запускаем смену босса
-            PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается, чтобы не считало урон пока идет смена уровня
+
+            StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
 
             damage = scoreToNextLevel; //уравниваем нанесенный урон до уровня нужного для смены, что бы босс появлялся с ровным количеством хп, а не без нескольких пунктов
             ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
@@ -621,13 +615,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     
     private IEnumerator DecreaseRow()//короутина, которая двигает цифры вниз, на место собранных ранее
     {
-        /* while(PlayerResource.Instance.anim_board_destroy == true)
-         {
-             yield return new WaitForSeconds(0.1f);
-         }*/
-        //Debug.LogError("DecreaseRow");
         PlayerResource.Instance.anim_board_destroy = true;
-        yield return new WaitForSeconds(0.32f);
+        yield return new WaitForSeconds(0.32f); //время анимации удаления
 
         DeleteAnim();
 
@@ -659,9 +648,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Refilling();
     }
 
-    private void DeleteAnim()
+    private void DeleteAnim() //удяляем все обьекты созданные для анимации
     {
-        //Debug.LogError("DeleteAnim");
         GameObject[] Wally = GameObject.FindGameObjectsWithTag("anim");
 
         foreach (var item in Wally)
@@ -1083,6 +1071,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             HintNumbers.Add(collectHint[rndm][i]);
         }
 
+        //Debug.LogError(collectHint.Count());
         collectHint.Clear();
         Draw(true); //рисуем линии между цифрами подсказок и увеличиваем их размеры
     }

@@ -45,10 +45,8 @@ public class Level : MonoBehaviour
     public void StartNewGameLevel(int level)
     {
         Levels[level].SetActive(true); //включаем первый уровень
-
         StartCoroutine(MoveNewLevel(level)); //двигаем новый уровень
         StartCoroutine(MoveOldLevel(11)); //двигаем стартовый уровень
-
     }
 
     private IEnumerator MoveNewLevel(int level) 
