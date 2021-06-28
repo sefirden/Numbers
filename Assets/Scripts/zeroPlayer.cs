@@ -67,6 +67,8 @@ public class zeroPlayer : MonoBehaviour
         GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
+
+        StartCoroutine(KillTheBossTEST());
     }
 
     public void ChangeZero(int level) //при смене уровня меняем аниматор и говорим что ноль идет
@@ -116,7 +118,55 @@ public class zeroPlayer : MonoBehaviour
   
         gameObject.GetComponent<Animator>().SetBool("run", true);
         Level.ChangeLevel(board.level); //запускаем смену уровня
+    }
 
 
+
+    public IEnumerator KillTheBossTEST() //метод плавного движения ноля к старту
+    {
+
+           // PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
+           // yield return new WaitForSeconds(1.5f);
+
+            gameObject.GetComponent<Animator>().SetTrigger("kill");
+
+            //анимация от старта до приземления 2,32
+
+            timer = 0;
+            Vector3 startPosition, endPosition;
+
+            float step; //количество шагов, зависит от растояния
+            float moveTime = 0; //не помню зачем, но нужно
+
+            startPosition = transform.position;
+            endPosition = new Vector3(8f,13.6f,1f);
+
+            step = (3f / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
+                                                                                         //ниже формула для плавного движения
+            while (moveTime <= 1.0f)
+            {
+                moveTime += step;
+
+            Vector3 center = (startPosition + endPosition) * 0.5F;
+
+            center -= new Vector3(0, 0.2f, 0);
+
+            Vector3 riseRelCenter = startPosition - center;
+            Vector3 setRelCenter = endPosition - center;
+
+            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, moveTime);
+            transform.position += center;
+
+            yield return new WaitForFixedUpdate();
+            }
+            Debug.LogError(timer);
+            transform.position = endPosition;
+
+            gameObject.GetComponent<Animator>().SetTrigger("kill_idle");
+            boss.GetComponent<Animator>().SetTrigger("dead");
+
+            //тут делаем паузу около секунды и разворачиваем ноль, запускаем анимацию ходьбы без оружия и сам метод движения до нужной точки, как доходит до точки меняем анимацию
+            yield return new WaitForSeconds(5f);
+            transform.position = new Vector3(1f, 13.6f, transform.position.z);
     }
 }
