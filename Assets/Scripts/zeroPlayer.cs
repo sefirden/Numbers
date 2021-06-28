@@ -10,9 +10,9 @@ public class zeroPlayer : MonoBehaviour
     private Level Level; //скрипт уровней
     public GameObject[] weapon;
     public RuntimeAnimatorController[] Animation; //список с анимациями боссов
-    public Vector3[] kill_boss_point;
-    public float[] timing;
+    public Vector3[] pick_up_weapon; //масив для сохранения всех подсказок и подальшего их сравнения
     public float[] speed;
+    public float[] timing;
     float timer = 0f;
 
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
@@ -37,9 +37,9 @@ public class zeroPlayer : MonoBehaviour
         {
             transform.position = new Vector3(1f, 13.6f, transform.position.z); //сразу ставим нужну позицию
             PlayerResource.Instance.zeroMove = false; //ну и тут говорим что ноль не двигается, не помню но где-то было нужно
-
         }
     }
+
 
     public IEnumerator MoveToStart() //метод плавного движения ноля к старту
     {
@@ -68,7 +68,7 @@ public class zeroPlayer : MonoBehaviour
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
 
-        StartCoroutine(KillTheBossTEST());
+        StartCoroutine(KillTheBoss());
     }
 
     public void ChangeZero(int level) //при смене уровня меняем аниматор и говорим что ноль идет
@@ -76,7 +76,7 @@ public class zeroPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
     }
     
-    public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
+  /*  public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
     {
         PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
                        
@@ -119,14 +119,14 @@ public class zeroPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().SetBool("run", true);
         Level.ChangeLevel(board.level); //запускаем смену уровня
     }
+    */
 
 
-
-    public IEnumerator KillTheBossTEST() //метод плавного движения ноля к старту
+    public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
     {
 
            // PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
-           // yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(1.5f);
 
             gameObject.GetComponent<Animator>().SetTrigger("kill");
 
@@ -141,7 +141,7 @@ public class zeroPlayer : MonoBehaviour
             startPosition = transform.position;
             endPosition = new Vector3(8f,13.6f,1f);
 
-            step = (3f / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
+            step = (speed[0] / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
                                                                                          //ниже формула для плавного движения
             while (moveTime <= 1.0f)
             {
@@ -160,13 +160,35 @@ public class zeroPlayer : MonoBehaviour
             yield return new WaitForFixedUpdate();
             }
             Debug.LogError(timer);
+            transform.position = endPosition; //конец прыжка
+
+            boss.GetComponent<Animator>().SetTrigger("dead"); //после завершения прыжка включаем анимацию убийства босса
+
+            yield return new WaitForSeconds(timing[0]); //ждем конца анимации и идем за оружием
+            gameObject.GetComponent<Animator>().SetBool("empy_run", true);
+
+        //ниже двигаем босса к точке с оружием
+            moveTime = 0; //не помню зачем, но нужно
+            startPosition = transform.position;
+            endPosition = pick_up_weapon[board.level];
+
+            step = (speed[1] / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
+                                                                                               //ниже формула для плавного движения
+            while (moveTime <= 1.0f)
+            {
+                moveTime += step;
+                transform.position = Vector3.Lerp(startPosition, endPosition, moveTime);
+                yield return new WaitForFixedUpdate();
+            }
             transform.position = endPosition;
+            gameObject.GetComponent<Animator>().SetBool("empy_run", false);
+            boss.GetComponent<Animator>().SetTrigger("clear");
+            gameObject.GetComponent<Animator>().SetBool("new_weapon_run", true);
 
-            gameObject.GetComponent<Animator>().SetTrigger("kill_idle");
-            boss.GetComponent<Animator>().SetTrigger("dead");
+            //ниже двигаем к началу карты
 
-            //тут делаем паузу около секунды и разворачиваем ноль, запускаем анимацию ходьбы без оружия и сам метод движения до нужной точки, как доходит до точки меняем анимацию
-            yield return new WaitForSeconds(5f);
+        //тут делаем паузу около секунды и разворачиваем ноль, запускаем анимацию ходьбы без оружия и сам метод движения до нужной точки, как доходит до точки меняем анимацию
+        yield return new WaitForSeconds(5f);
             transform.position = new Vector3(1f, 13.6f, transform.position.z);
     }
 }
