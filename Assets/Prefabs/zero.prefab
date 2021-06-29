@@ -136,6 +136,7 @@ MonoBehaviour:
   - 1.5
   timing:
   - 1.4
+  - 0.35
 --- !u!95 &6336438537049825056
 Animator:
   serializedVersion: 3

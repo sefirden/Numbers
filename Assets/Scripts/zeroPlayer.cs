@@ -68,7 +68,7 @@ public class zeroPlayer : MonoBehaviour
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
 
-        StartCoroutine(KillTheBoss());
+        //StartCoroutine(KillTheBoss());
     }
 
     public void ChangeZero(int level) //при смене уровня меняем аниматор и говорим что ноль идет
@@ -111,13 +111,7 @@ public class zeroPlayer : MonoBehaviour
         }
         timer = 0;
 
-        boss.gameObject.SetActive(false); //выключаем босса
-        ChangeZero(board.level);
-        boss.ChangeBoss(board.level); //запускаем смену босса
 
-  
-        gameObject.GetComponent<Animator>().SetBool("run", true);
-        Level.ChangeLevel(board.level); //запускаем смену уровня
     }
     */
 
@@ -183,12 +177,32 @@ public class zeroPlayer : MonoBehaviour
             transform.position = endPosition;
             gameObject.GetComponent<Animator>().SetBool("empy_run", false);
             boss.GetComponent<Animator>().SetTrigger("clear");
+            boss.gameObject.SetActive(false); //выключаем босса
             gameObject.GetComponent<Animator>().SetBool("new_weapon_run", true);
 
-            //ниже двигаем к началу карты
+        //ниже двигаем к началу карты
 
-        //тут делаем паузу около секунды и разворачиваем ноль, запускаем анимацию ходьбы без оружия и сам метод движения до нужной точки, как доходит до точки меняем анимацию
-        yield return new WaitForSeconds(5f);
-            transform.position = new Vector3(1f, 13.6f, transform.position.z);
+        moveTime = 0; //не помню зачем, но нужно
+        startPosition = transform.position;
+        endPosition = new Vector3(1f, 13.6f, transform.position.z);
+
+        step = (speed[1] / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
+                                                                                           //ниже формула для плавного движения
+        while (moveTime <= 1.0f)
+        {
+            moveTime += step;
+            transform.position = Vector3.Lerp(startPosition, endPosition, moveTime);
+            yield return new WaitForFixedUpdate();
+        }
+        gameObject.GetComponent<Animator>().SetBool("new_weapon_run", false);
+        gameObject.GetComponent<Animator>().SetTrigger("change");
+
+        yield return new WaitForSeconds(timing[1]);
+
+        ChangeZero(board.level);
+        boss.ChangeBoss(board.level); //запускаем смену босса
+
+        gameObject.GetComponent<Animator>().SetBool("run", true);
+        Level.ChangeLevel(board.level); //запускаем смену уровня
     }
 }
