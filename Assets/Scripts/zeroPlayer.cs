@@ -17,10 +17,6 @@ public class zeroPlayer : MonoBehaviour
 
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
    
-    private void Update()
-    {
-        timer += Time.deltaTime;
-    }
     void Awake()
     {
         Level = FindObjectOfType<Level>(); //присваиваем скрипт к переменной
@@ -126,7 +122,6 @@ public class zeroPlayer : MonoBehaviour
 
             //анимация от старта до приземления 2,32
 
-            timer = 0;
             Vector3 startPosition, endPosition;
 
             float step; //количество шагов, зависит от растояния
@@ -153,7 +148,6 @@ public class zeroPlayer : MonoBehaviour
 
             yield return new WaitForFixedUpdate();
             }
-            Debug.LogError(timer);
             transform.position = endPosition; //конец прыжка
 
             boss.GetComponent<Animator>().SetTrigger("dead"); //после завершения прыжка включаем анимацию убийства босса
@@ -195,7 +189,7 @@ public class zeroPlayer : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         gameObject.GetComponent<Animator>().SetBool("new_weapon_run", false);
-        gameObject.GetComponent<Animator>().SetTrigger("change");
+        gameObject.GetComponent<Animator>().SetTrigger("change_zero");
 
         yield return new WaitForSeconds(timing[1]);
 

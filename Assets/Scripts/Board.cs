@@ -512,14 +512,20 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         else if (damage >= scoreToNextLevel && level == PlayerResource.Instance.scoreToNextLevel.Length - 1) //переход с последнего уровня с боссом на урвоень конца игры, если не писать -1 то не сработает
         {
-            ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
+            /*ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
             level++; //увеличиваем уровень 
             Level.ChangeLevel(level); //запускаем смену уровня
-            PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается, чтобы не считало урон пока идет смена уровня
+            PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается, чтобы не считало урон пока идет смена уровня*/
+
+            changelvl = true; //говорим что смена уровня
+            level++; //увеличиваем уровень 
+            ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
+
+            StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
         }
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForFixedUpdate();
     }
-        
+
     private void ShuffleBoardChangeLevel() //метод, который перемешивает поле при смене босса
     {
         //собираем текущее поле в строку
