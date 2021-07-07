@@ -63,8 +63,6 @@ public class zeroPlayer : MonoBehaviour
         GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
-
-        //StartCoroutine(KillTheBoss());
     }
 
     public void ChangeZero(int level) //при смене уровня меняем аниматор и говорим что ноль идет
@@ -72,50 +70,10 @@ public class zeroPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Animation[level];
     }
     
-  /*  public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
-    {
-        PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
-                       
-        yield return new WaitForSeconds(1.5f);
-        gameObject.GetComponent<Animator>().SetTrigger("kill");
-
-        timer = 0;
-        Vector3 startPosition, endPosition;
-        int point = 0;
-
-        while (point < 6)
-        {
-            float step; //количество шагов, зависит от растояния
-            float moveTime = 0; //не помню зачем, но нужно
-
-            startPosition = transform.position;
-            endPosition = kill_boss_point[point];
-
-            step = (speed[point] / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
-                                                                                            //ниже формула для плавного движения
-            while (moveTime <= 1.0f)
-            {
-                moveTime += step;
-                transform.position = Vector3.Lerp(startPosition, endPosition, moveTime);
-                yield return new WaitForFixedUpdate();
-            }
-            transform.position = endPosition;
-            Debug.LogError(timer);
-            yield return new WaitForSeconds(timing[point]);
-            point++;
-
-        }
-        timer = 0;
-
-
-    }
-    */
-
-
     public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
     {
 
-           // PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
+            PlayerResource.Instance.bossMove = true; //говорим что босс двигается, иначе он будет кидаться оружием когда его убивают
             yield return new WaitForSeconds(1.5f);
 
             gameObject.GetComponent<Animator>().SetTrigger("kill");
@@ -158,7 +116,7 @@ public class zeroPlayer : MonoBehaviour
         //ниже двигаем босса к точке с оружием
             moveTime = 0; //не помню зачем, но нужно
             startPosition = transform.position;
-            endPosition = pick_up_weapon[board.level];
+            endPosition = pick_up_weapon[board.level-1]; //точка сбора оружия
 
             step = (speed[1] / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов
                                                                                                //ниже формула для плавного движения

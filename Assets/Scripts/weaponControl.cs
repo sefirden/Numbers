@@ -22,7 +22,7 @@ public class weaponControl : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveKnife() //метод плавного движения ноля к старту
+    private IEnumerator MoveKnife() 
     {
         
         float step; //количество шагов, зависит от растояния

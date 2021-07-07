@@ -7,26 +7,55 @@ public class bossPlayer : MonoBehaviour
 {
     public GameObject boss; //объект босса
     public GameObject zero; //объект ноля
+    public Board board; //объект поля
 
 
     private ui ui; //скрипт всего УИ
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции босса
+    public GameObject[] weapon;
     public RuntimeAnimatorController[] Animation; //список с анимациями боссов
 
     void Awake()
     {
         ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
+        board = FindObjectOfType<Board>();
 
         if (PlayerResource.Instance.isLoaded == false) //если игре НЕ была загружена, новая игра
         {
+            PlayerResource.Instance.bossMove = true; //говорим что босс двигается
             ui.LifeBarBackground.SetActive(false); //выключаем лайфбар
         }
         else if (PlayerResource.Instance.isLoaded == true) //если игру БЫЛА загружена, то
         {
             transform.position = new Vector3(4.92f, 13f, transform.position.z); //сразу ставим нужну позицию
-
+            Invoke("RandomAttackTimer", UnityEngine.Random.Range(5f, 15f)); //запускаем атаку
             ui.LifeBarBackground.SetActive(true); //включаем лайфбар
             PlayerResource.Instance.bossMove = false; //говорим что босс не двигается
+        }
+    }
+
+    private void RandomAttackTimer()
+    {
+        StartCoroutine(Attack(board.level));
+    }
+
+    private IEnumerator Attack(int level) //создание объекта с летящими ножами
+    {
+        if (PlayerResource.Instance.bossMove == false)
+        {
+            gameObject.GetComponent<Animator>().SetTrigger("attack"); //анимация атаки ноля
+            GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+            weapon_temp.transform.parent = this.transform; //присваиваем позицию
+            weapon_temp.name = "weapon_boss_temp"; //присваиваем имя
+
+            yield return new WaitForSeconds(UnityEngine.Random.Range(10f, 15f));
+
+            StartCoroutine(Attack(board.level));
+        }
+        else
+        {
+            yield return new WaitForSeconds(UnityEngine.Random.Range(10f, 15f));
+            StartCoroutine(Attack(board.level));
         }
     }
 
@@ -65,6 +94,7 @@ public class bossPlayer : MonoBehaviour
         transform.position = endPosition;
 
         PlayerResource.Instance.bossMove = false; //говорим что босс не двигается
+        Invoke("RandomAttackTimer", UnityEngine.Random.Range(5f, 15f)); //запускаем атаку
         gameObject.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
 

@@ -99,6 +99,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boss: {fileID: 8044510159105726959}
   zero: {fileID: 0}
+  board: {fileID: 0}
+  weapon:
+  - {fileID: 6260191088809541524, guid: 201b92afc940d434daacb5a94399334d, type: 3}
+  - {fileID: 5982897019880653484, guid: a74a126a2ec17184dbbd60871937b25e, type: 3}
+  - {fileID: 2862232713878871747, guid: 6fd248366103d7c4aa82dc2c3b5a09cb, type: 3}
+  - {fileID: 6975788222664052026, guid: c74880ba2d5da8e41acc0415ad81e0ee, type: 3}
+  - {fileID: 115355298807447577, guid: 29fbf5a6fd2462146a82eb188b24819d, type: 3}
+  - {fileID: 5949375577507221637, guid: 36a09cfc8cf304b44972c92071e2717f, type: 3}
+  - {fileID: 1078220597827121417, guid: a277cf0d61acb1f44ad9235cec4aa2c6, type: 3}
+  - {fileID: 4825343769391911411, guid: 92cb0c26c4842f4468defdd72dd1e6fa, type: 3}
+  - {fileID: 5415449679607518357, guid: 30ccb5a461d9f8945b421fa4a4071df2, type: 3}
   Animation:
   - {fileID: 9100000, guid: 573a05b65f43c3049a8c65586234d777, type: 2}
   - {fileID: 9100000, guid: f4909e04eaea3124c85a08379b482b17, type: 2}
