@@ -9,6 +9,8 @@ public class bossPlayer : MonoBehaviour
     public GameObject zero; //объект ноля
     public Board board; //объект поля
 
+    public Tutorial tutorial;
+
 
     private ui ui; //скрипт всего УИ
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции босса
@@ -19,6 +21,7 @@ public class bossPlayer : MonoBehaviour
     {
         ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
         board = FindObjectOfType<Board>();
+        tutorial = FindObjectOfType<Tutorial>();
 
         if (PlayerResource.Instance.isLoaded == false) //если игре НЕ была загружена, новая игра
         {
@@ -41,7 +44,7 @@ public class bossPlayer : MonoBehaviour
 
     private IEnumerator Attack(int level) //создание объекта с летящими ножами
     {
-        if (PlayerResource.Instance.bossMove == false)
+        if (PlayerResource.Instance.bossMove == false && PlayerResource.Instance.GameIsPaused == false)
         {
             gameObject.GetComponent<Animator>().SetTrigger("attack"); //анимация атаки ноля
             GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
@@ -98,5 +101,10 @@ public class bossPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
 
+        //запускаем тут подсказки
+        if (Settings.Instance.showtutorial == false)
+        {
+            StartCoroutine(tutorial.ShowTip());
+        }
     }
 }

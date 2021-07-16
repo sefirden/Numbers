@@ -186,6 +186,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             gameObject.SetActive(true); //включаем видимость поля
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
+            if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
+            {
+                ui.timerimg.SetActive(true);
+            }
 
         }
         else //если была выбрана новая игра

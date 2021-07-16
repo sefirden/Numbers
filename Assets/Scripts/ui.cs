@@ -9,6 +9,7 @@ public class ui : MonoBehaviour
 {
 
     //ниже все переменные интерфейса, какбы названия говорят сами за себя
+    public GameObject timerimg;
 
     public Text scoreText;
     public Text HighscoreText;

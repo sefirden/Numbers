@@ -20,6 +20,8 @@ public class PlayerResource : MonoBehaviour
     public bool bossMove; //если босс двигается
     public bool zeroMove; //если ноль двигается
 
+    public bool starttimer;
+
 
     //переменные для Normal режима
     public string scoreN; //количество очков

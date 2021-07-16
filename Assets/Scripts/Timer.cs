@@ -17,7 +17,7 @@ public class Timer : MonoBehaviour
     public GameObject NoTimeLayer; //слой когда кончилось время
     private ui ui;
 
-    void Start()
+    /*void Start()
     {
         ui = FindObjectOfType<ui>();//прикрепляем крипт ui
 
@@ -30,13 +30,13 @@ public class Timer : MonoBehaviour
             timer.SetActive(false);
         }
 
-    }
+    }*/
 
 
 
     void Update()
     {
-        if (PlayerResource.Instance.GameIsPaused == false && PlayerResource.Instance.gameMode == "timetrial") //таймер отсчитывает назад в режиме игры на время и когда нет паузы
+        if (PlayerResource.Instance.GameIsPaused == false && PlayerResource.Instance.gameMode == "timetrial" && PlayerResource.Instance.starttimer == true) //таймер отсчитывает назад в режиме игры на время и когда нет паузы
         {
             PlayerResource.Instance.time -= Time.deltaTime; //отнимаем секунду
 

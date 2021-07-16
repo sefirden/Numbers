@@ -119,6 +119,7 @@ public class SaveSystem : MonoBehaviour
             Settings.Instance.music_vol = settings.music_vol;
             Settings.Instance.sfx_vol = settings.sfx_vol;
             Settings.Instance.language = settings.language;
+            Settings.Instance.showtutorial = settings.showtutorial;
 
             LoadLanguage(settings.language); //загружаем язык
             Debug.Log("SettingsLoad");
@@ -130,6 +131,7 @@ public class SaveSystem : MonoBehaviour
             Settings.Instance.music_vol = 0f;
             Settings.Instance.sfx_vol = 0f;
             Settings.Instance.language = "en";
+            Settings.Instance.showtutorial = false;
 
             LoadLanguage("en"); //по умолчанию английский язык
             Debug.Log("SettingsDefault");
@@ -149,6 +151,7 @@ public class SaveSystem : MonoBehaviour
             settings.music_vol = Settings.Instance.music_vol;
             settings.sfx_vol = Settings.Instance.sfx_vol;
             settings.language = Settings.Instance.language;
+            settings.showtutorial = Settings.Instance.showtutorial;
 
             File.WriteAllText(path, JsonUtility.ToJson(settings)); //берем все и записываем в жсон
             Debug.Log("SettingsSave");
@@ -187,4 +190,5 @@ public class SettingsSaves //класс с настройками, нужен д
     public float music_vol;
     public float sfx_vol;
     public string language;
+    public bool showtutorial;
 }

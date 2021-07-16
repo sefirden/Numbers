@@ -106,6 +106,7 @@ public class Pause : MonoBehaviour
             else if (PlayerResource.Instance.gameMode == "timetrial" && board != null) //см выше но для режима на время
             {
                 PlayerResource.Instance.time = 120f; //даем 2 минуты в начале игры
+                PlayerResource.Instance.starttimer = false;
                 board.endGame = false; //ставим что конец игры не тру
                 board.ToPlayerResources("endGame");
                 board.hints = SaveSystem.Encrypt(Convert.ToString(3)); //даем 3 подсказки

@@ -15,6 +15,8 @@ public class Settings : MonoBehaviour
     public float music_vol;
     public float sfx_vol;
     public string language;
+    public bool showtutorial;
+
 
     public AudioMixer audioMixer;
 

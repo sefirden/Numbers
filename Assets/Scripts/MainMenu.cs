@@ -245,6 +245,7 @@ public class MainMenu : MonoBehaviour
     {
         
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
+        PlayerResource.Instance.starttimer = false;
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameT = false; //ставим что конец игры не тру
         PlayerResource.Instance.AdRewardT = false;

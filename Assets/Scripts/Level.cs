@@ -75,6 +75,12 @@ public class Level : MonoBehaviour
 
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если переход с последнего босса на уровень конца игры не делаем то что ниже
         {
+            if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
+            {
+                PlayerResource.Instance.starttimer = true;
+                ui.timerimg.SetActive(true);
+            }
+
             boss.gameObject.SetActive(true); //включаем босса
             board.gameObject.SetActive(true); //когда вышел ноль включаем поле
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок

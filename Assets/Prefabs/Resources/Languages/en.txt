@@ -23,3 +23,10 @@ yes:Yes
 no:No
 no_time:Time is up, game over!
 restart_menu:All progress will be lost, restart the game?
+tip_1: Тут про сюжет
+tip_2: Тут про боссов
+tip_3: Тут про UI 
+tip_4: Тут про соединение цифр
+tip_5: Тут про дилтельность последовательности
+tip_6: Тут урон и смену уровня
+tip_7: Тут про время

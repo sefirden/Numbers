@@ -13,7 +13,7 @@ public class zeroPlayer : MonoBehaviour
     public Vector3[] pick_up_weapon; //масив для сохранения всех подсказок и подальшего их сравнения
     public float[] speed;
     public float[] timing;
-    float timer = 0f;
+
 
     private Vector3 startPosition, endPosition; //вектор3 стартовой и конечной позиции ноля
    
