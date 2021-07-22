@@ -51,8 +51,72 @@ MonoBehaviour:
     loop: 1
     mixer: {fileID: 6569750144773612065, guid: b587287a72c4e1144876c30e39870b4c, type: 2}
     source: {fileID: 0}
-  - name: coin
-    clip: {fileID: 8300000, guid: 9eb5ca0eacf2c8248b9de28e14258b71, type: 3}
+  - name: number_select_0
+    clip: {fileID: 8300000, guid: 3c851012b8727a14a9277b32648eb5b4, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_1
+    clip: {fileID: 8300000, guid: b97a3b535b9a5404191a2cfc7ef78f21, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_2
+    clip: {fileID: 8300000, guid: 39ae3b51204bf264ba11a8cb5ab59f0d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_3
+    clip: {fileID: 8300000, guid: 11f62c20b3dd2584781b3bca59b6bd52, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_4
+    clip: {fileID: 8300000, guid: 9a89a3289ca50584f9d1429824dbe562, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_5
+    clip: {fileID: 8300000, guid: d085a5e379e807b4ea38d16e43a0bc1b, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_6
+    clip: {fileID: 8300000, guid: 94e7f616e02899e4e95a20866745745d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_7
+    clip: {fileID: 8300000, guid: a6f4fa5df1cd143459962b511f5e1cf8, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixer: {fileID: -2330216911865514590, guid: b587287a72c4e1144876c30e39870b4c,
+      type: 2}
+    source: {fileID: 0}
+  - name: number_select_8
+    clip: {fileID: 8300000, guid: 2eb79c9ed7a835945811e260e54c268d, type: 3}
     volume: 1
     pitch: 1
     loop: 0
