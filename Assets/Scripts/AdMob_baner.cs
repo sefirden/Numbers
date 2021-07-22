@@ -176,15 +176,22 @@ public class AdMob_baner : MonoBehaviour
         adRewardHint.OnAdFailedToLoad += this.HandleRewardBasedVideoFailedToLoadHint;
     }
 
-    public void ShowRewardAdHint() //показываем видео
+    public IEnumerator ShowRewardAdHint() //показываем видео
     {
         if (adRewardHint.IsLoaded())
+        {
+            while (PlayerResource.Instance.TurnIsOn == true)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
             adRewardHint.Show(); //показывает сразу как загрузится
+        }
     }
     
     public void HandleOnRewardedAdLoadedHint(object sender, EventArgs args) //когда реклама загружена
     {
-        ShowRewardAdHint(); //показывает видео
+        StartCoroutine(ShowRewardAdHint()); //показывает видео
     }
 
     public void HandleOnAdRewardedHint(object sender, EventArgs args) //когда видео досмотрели до конца
@@ -232,15 +239,23 @@ public class AdMob_baner : MonoBehaviour
         adRewardRefill.OnAdFailedToLoad += this.HandleRewardBasedVideoFailedToLoadRefill;
     }
 
-    public void ShowRewardAdRefill()
+    public IEnumerator ShowRewardAdRefill()
     {
         if (adRewardRefill.IsLoaded())
+        {
+            while (PlayerResource.Instance.TurnIsOn == true)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
             adRewardRefill.Show();
+        }
+
     }
 
     public void HandleOnRewardedAdLoadedRefill(object sender, EventArgs args)
     {
-        ShowRewardAdRefill();
+        StartCoroutine(ShowRewardAdRefill());
     }
 
     public void HandleOnAdRewardedRefill(object sender, EventArgs args)

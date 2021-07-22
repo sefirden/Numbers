@@ -13,6 +13,7 @@ public class Pause : MonoBehaviour
     public GameObject restartMenuUI;
     public GameObject SettingsLayer;
     private Board board;
+    public Tutorial tutorial;
 
     void Update()
     {
@@ -26,14 +27,17 @@ public class Pause : MonoBehaviour
     }
 
 
-    void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
+   /* void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
     {
 
         if (focusStatus == false)
         {
             PauseClick();
         }
-    }
+    }*/
+
+
+
 
     public void PauseClick() //клик на паузу в игре
     {
@@ -134,6 +138,16 @@ public class Pause : MonoBehaviour
             pauseMenuUI.SetActive(true);
             restartMenuUI.SetActive(false);
         }
+    }
+
+
+    public void Tutorial()
+    {
+        StartCoroutine(tutorial.ShowTip());
+        Time.timeScale = 1f; //выключаем паузу
+        pauseMenuUI.SetActive(false); //выключаем слой паузы
+        SettingsLayer.SetActive(false); //выключаем слой настроек
+        AdMob_baner.Instance.Hide(); //выключаем рекламный банер
     }
 
     public void Menu() //кнопка в меню

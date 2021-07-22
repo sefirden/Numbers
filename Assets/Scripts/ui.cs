@@ -35,6 +35,7 @@ public class ui : MonoBehaviour
     public Button AdRefillButtonLayer;
     public Button RefillButton;
     public Button RefillButtonLayer;
+    public Button Tutorial;
 
     public GameObject LifeBarBackground;
     public GameObject LifeBar;
@@ -51,15 +52,29 @@ public class ui : MonoBehaviour
     public Image AdsRefillOffLayer;
     public Image AdsRefillLoadingLayer;
 
+    public Pause PauseLayer;
 
     void Awake()
     {
         LifeBarBackground.transform.position = new Vector3(transform.position.x, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
         LifeBar.transform.position = new Vector3(transform.position.x, 10.7f, transform.position.z);
-
     }
 
-    public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
+
+#if UNITY_ANDROID || UNITY_EDITOR
+    void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
+    {
+
+        if (focusStatus == false)
+        {
+            //PauseLayer = FindObjectOfType<Pause>();
+            PauseLayer.PauseClick();
+        }
+    }
+#endif
+
+
+        public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
     {
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
         {

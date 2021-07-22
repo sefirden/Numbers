@@ -186,8 +186,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             gameObject.SetActive(true); //включаем видимость поля
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
+            ui.Tutorial.interactable = true;
             if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
             {
+                PlayerResource.Instance.starttimer = true;
                 ui.timerimg.SetActive(true);
             }
 
@@ -392,7 +394,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //получаем координаты клика, переводим в нужные координаты
         RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f); //кидаем райкаст по координатам см выше
 
-        if (hit && hit.transform.tag != "boss") //если райкастом что-то поймали
+        if (hit && hit.transform.tag != "boss" && hit.transform.tag != "zero") //если райкастом что-то поймали
         {
             PlayerResource.Instance.TurnIsOn = true;
             Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
@@ -1086,7 +1088,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Draw(true); //рисуем линии между цифрами подсказок и увеличиваем их размеры
     }
        
-    private void Draw(bool draw) //метод по рисованию линий между цифрами при подсказках
+    public void Draw(bool draw) //метод по рисованию линий между цифрами при подсказках
     {
         int count = -1; //счетчик равно -1, иначе будет рисовать не верно
 

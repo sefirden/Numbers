@@ -87,6 +87,7 @@ public class Level : MonoBehaviour
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
             StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
         }
+
     }
 
     private IEnumerator MoveOldLevel(int level)

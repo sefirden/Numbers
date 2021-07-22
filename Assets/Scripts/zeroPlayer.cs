@@ -8,6 +8,7 @@ public class zeroPlayer : MonoBehaviour
     public bossPlayer boss; //скрипт босса
     public Board board; //объект поля
     private Level Level; //скрипт уровней
+    private ui ui; //скрипт всего УИ
     public GameObject[] weapon;
     public RuntimeAnimatorController[] Animation; //список с анимациями боссов
     public Vector3[] pick_up_weapon; //масив для сохранения всех подсказок и подальшего их сравнения
@@ -22,6 +23,7 @@ public class zeroPlayer : MonoBehaviour
         Level = FindObjectOfType<Level>(); //присваиваем скрипт к переменной
         board = FindObjectOfType<Board>();
         boss = FindObjectOfType<bossPlayer>(); //присваиваем скрипт к переменной
+        ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
 
         if (PlayerResource.Instance.isLoaded == false) //если игре НЕ была загружена, новая игра
         {
@@ -72,6 +74,7 @@ public class zeroPlayer : MonoBehaviour
     
     public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
     {
+            ui.Tutorial.interactable = false;
 
             PlayerResource.Instance.bossMove = true; //говорим что босс двигается, иначе он будет кидаться оружием когда его убивают
             yield return new WaitForSeconds(1.5f);

@@ -100,6 +100,8 @@ public class bossPlayer : MonoBehaviour
         Invoke("RandomAttackTimer", UnityEngine.Random.Range(5f, 15f)); //запускаем атаку
         gameObject.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
+        ui.Tutorial.interactable = true;
+
 
         //запускаем тут подсказки
         if (Settings.Instance.showtutorial == false)

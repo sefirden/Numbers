@@ -17,20 +17,10 @@ public class Timer : MonoBehaviour
     public GameObject NoTimeLayer; //слой когда кончилось время
     private ui ui;
 
-    /*void Start()
+    void Start()
     {
         ui = FindObjectOfType<ui>();//прикрепляем крипт ui
-
-        if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
-        {
-            timer.SetActive(true);
-        }
-        else if(PlayerResource.Instance.gameMode == "normal") //или нет
-        {
-            timer.SetActive(false);
-        }
-
-    }*/
+    }
 
 
 
