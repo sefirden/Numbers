@@ -22,6 +22,8 @@ public class PlayServicesGoogle : MonoBehaviour
     public Button Achievement; //кнопка ачивки
     public Button CloudLoad; //кнопка загрузка из облака
 
+    public MainMenu mainMenu;
+
     public DateTime SaveTime; //текущая дата и время, нужно для облачного сейва
 
     private void Awake() //запускается до всех стартов
@@ -329,6 +331,8 @@ public class PlayServicesGoogle : MonoBehaviour
             File.WriteAllText(path, SaveSystem.Encrypt(JsonUtility.ToJson(fullsave))); //кодируем и пишем в жсон, не помню зачем оно тут, но лучше не трогать
 
             Debug.LogWarning("saveData " + saveData);
+
+            mainMenu.Loading.SetActive(false);
         }
     }
 

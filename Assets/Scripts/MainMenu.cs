@@ -26,6 +26,8 @@ public class MainMenu : MonoBehaviour
     public Dropdown size_dropN; //выбор размера уровня норм режима
     public Dropdown size_dropT; //выбор размера режима на время
     public GameObject ExitLabel; //всплывающее окно про выход из игры
+    public GameObject QuestionCloudGame; //слой вопроса переписать ли сохранение
+    public GameObject Loading; //лого загрузки из облака сейвов
 
     [SerializeField]
     int[] BoardSize; //варианты размеров поля
@@ -149,6 +151,7 @@ public class MainMenu : MonoBehaviour
     
     public void NormalModeResume() //кнопка продолжить обычный режим игры
     {
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("NormalModeResume_Button_click");
         PlayerResource.Instance.isLoaded = true; //говорим что игра зугружена, нужно при старте сцены с доской и для уровней и прочего
         PlayerResource.Instance.GameIsPaused = false; //говорим что уже не на паузе, надо когда вышли из игры из меню паузы
         PlayerResource.Instance.gameMode = "normal"; //говорим что режим нормальный
@@ -177,6 +180,8 @@ public class MainMenu : MonoBehaviour
 
     public void NormalModeStart() //кнопка старт обычного ержима новой игры
     {
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("NormalModeStart", "width", width);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("NormalModeStart", "language", Settings.Instance.language);
         int zeroInt = 0;
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         Time.timeScale = 1f;        //убираем паузу
@@ -212,6 +217,7 @@ public class MainMenu : MonoBehaviour
 
     public void TimeModeResume() //см выше нормал мод
     {
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("TimeModeResume_Button_click");
         PlayerResource.Instance.isLoaded = true;
         PlayerResource.Instance.GameIsPaused = false;
         PlayerResource.Instance.gameMode = "timetrial";
@@ -243,7 +249,8 @@ public class MainMenu : MonoBehaviour
 
     public void TimeTrialModeStart() //см выше нормал мод
     {
-        
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("TimeTrialModeStart" ,"width", width);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("TimeTrialModeStart", "language", Settings.Instance.language);
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         PlayerResource.Instance.starttimer = false;
         Time.timeScale = 1f;        //убираем паузу
@@ -284,17 +291,48 @@ public class MainMenu : MonoBehaviour
 
     public void ShowLeaderBoard() //показать лидерборд
     {
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("ShowLeaderBoard_Button_click");
         PlayServicesGoogle.ShowLeaderboardsUI();
     }
 
     public void ShowAchievement() //показать ачивки
     {
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("ShowAchievement_Button_click");
         PlayServicesGoogle.ShowAchievementUI();
     }
 
     public void CloudLoad() //загрузить данные из облака
     {
-        PlayServicesGoogle.Instance.LoadFromCloud(); //было false
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("CloudLoad_Button_click");
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        path = Path.Combine(Application.persistentDataPath, "FullSave.json");
+#else
+        path = Path.Combine(Application.dataPath, "FullSave.json");
+#endif
+        if (File.Exists(path))
+        {
+            QuestionCloudGame.SetActive(true);
+        }
+        else
+        {
+            Loading.SetActive(true);
+            PlayServicesGoogle.Instance.LoadFromCloud(); //было false
+        }
+    }
+
+    public void ReWrite(bool rewrite)
+    {
+        if(rewrite == true)
+        {
+            QuestionCloudGame.SetActive(false);
+            Loading.SetActive(true);
+            PlayServicesGoogle.Instance.LoadFromCloud(); //было false
+        }
+        else
+        {
+            QuestionCloudGame.SetActive(false);
+        }
     }
 
 }

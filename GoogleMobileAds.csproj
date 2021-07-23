@@ -330,6 +330,42 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="Google.IOSResolver_v1.2.166">
+      <HintPath>Assets\ExternalDependencyManager\Editor\Google.IOSResolver_v1.2.166.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.JarResolver_v1.2.166">
+      <HintPath>Assets\ExternalDependencyManager\Editor\Google.JarResolver_v1.2.166.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.PackageManagerResolver_v1.2.166">
+      <HintPath>Assets\ExternalDependencyManager\Editor\Google.PackageManagerResolver_v1.2.166.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.VersionHandlerImpl_v1.2.166">
+      <HintPath>Assets\ExternalDependencyManager\Editor\Google.VersionHandlerImpl_v1.2.166.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Editor">
+      <HintPath>Assets\Firebase\Editor\Firebase.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Analytics">
+      <HintPath>Assets\Firebase\Plugins\Firebase.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.App">
+      <HintPath>Assets\Firebase\Plugins\Firebase.App.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Platform">
+      <HintPath>Assets\Firebase\Plugins\Firebase.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.TaskExtension">
+      <HintPath>Assets\Firebase\Plugins\Firebase.TaskExtension.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.MiniJson">
+      <HintPath>Assets\Firebase\Plugins\Google.MiniJson.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Compat">
+      <HintPath>Assets\Parse\Plugins\dotNet45\Unity.Compat.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Tasks">
+      <HintPath>Assets\Parse\Plugins\dotNet45\Unity.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="Google.IOSResolver_v1.2.156">
       <HintPath>Library\PackageCache\com.google.external-dependency-manager@1.2.156\ExternalDependencyManager\Editor\Google.IOSResolver_v1.2.156.dll</HintPath>
     </Reference>

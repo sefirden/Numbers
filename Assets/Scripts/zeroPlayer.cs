@@ -114,6 +114,37 @@ public class zeroPlayer : MonoBehaviour
             boss.GetComponent<Animator>().SetTrigger("dead"); //после завершения прыжка включаем анимацию убийства босса
 
             yield return new WaitForSeconds(timing[0]); //ждем конца анимации и идем за оружием
+
+            switch (board.level)
+            {
+            case 1:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_calculator); 
+                break;
+            case 2:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_tetris); 
+                break;
+            case 3:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_tamagotchi); 
+                break;
+            case 4:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_gamewatch); 
+                break;
+            case 5:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_gameboy); 
+                break;
+            case 6:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_tape_player); 
+                break;
+            case 7:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_pager); 
+                break;
+            case 8:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_first_mobile);
+                break;
+            case 9:
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_old_computer);
+                break;
+            }
             gameObject.GetComponent<Animator>().SetBool("empy_run", true);
 
         //ниже двигаем босса к точке с оружием

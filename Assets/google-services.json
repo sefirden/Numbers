@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "432321501604",
+    "project_id": "numbers-96807110",
+    "storage_bucket": "numbers-96807110.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432321501604:android:55b6e4f3ddc8f2bbc78931",
+        "android_client_info": {
+          "package_name": "com.sefir.den.numbers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432321501604-n9gns4n9fnbr4lgi9rb5pmsh3glrtq1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM-6DWn8MaSPwLKytcC1EK_tngG2srjBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432321501604-n9gns4n9fnbr4lgi9rb5pmsh3glrtq1o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

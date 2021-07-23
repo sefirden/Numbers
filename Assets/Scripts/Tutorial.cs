@@ -22,7 +22,6 @@ public class Tutorial : MonoBehaviour
     {
         if (Settings.Instance.showtutorial == false && PlayerResource.Instance.isLoaded == false)
         {
-            Debug.Log("Показываем туториал");
             gameObject.SetActive(true);
             Tips[0].SetActive(true);
 
@@ -31,7 +30,6 @@ public class Tutorial : MonoBehaviour
         }
         else if (Settings.Instance.showtutorial == true)
         {
-            Debug.Log("Выключаем туториал");
             gameObject.SetActive(false);
             Tips[0].SetActive(false);
         }
@@ -188,6 +186,5 @@ public class Tutorial : MonoBehaviour
         Tips[1].SetActive(true);
         //Time.timeScale = 0f; //ставим паузу
         PlayerResource.Instance.GameIsPaused = true;
-        Debug.Log("Включаем подсказки в начале и из меню паузы");
     }
 }

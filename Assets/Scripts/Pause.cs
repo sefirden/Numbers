@@ -27,17 +27,6 @@ public class Pause : MonoBehaviour
     }
 
 
-   /* void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
-    {
-
-        if (focusStatus == false)
-        {
-            PauseClick();
-        }
-    }*/
-
-
-
 
     public void PauseClick() //клик на паузу в игре
     {
@@ -82,6 +71,7 @@ public class Pause : MonoBehaviour
     {
         if (answer == true) //если нажали да рестарт
         {
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("Restart_Button_click_yes");
             int zeroInt = 0;
             AdMob_baner.Instance.Hide(); //выключаем рекламный банер
 
@@ -135,6 +125,7 @@ public class Pause : MonoBehaviour
         }
         else //если нажали нет рестарту
         {
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("Restart_Button_click_no");
             pauseMenuUI.SetActive(true);
             restartMenuUI.SetActive(false);
         }
@@ -143,6 +134,7 @@ public class Pause : MonoBehaviour
 
     public void Tutorial()
     {
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Tutorial_Button_click");
         StartCoroutine(tutorial.ShowTip());
         Time.timeScale = 1f; //выключаем паузу
         pauseMenuUI.SetActive(false); //выключаем слой паузы

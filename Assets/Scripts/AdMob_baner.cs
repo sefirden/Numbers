@@ -151,6 +151,7 @@ public class AdMob_baner : MonoBehaviour
     public void Show() //показывает банер
     {   
         adBannerDown.Show();
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("adBanner_Show");
     }
 
     public void DestroyBannerAd() //уничтожает банер, после этого надо заново отправвлять реквест
@@ -197,6 +198,7 @@ public class AdMob_baner : MonoBehaviour
     public void HandleOnAdRewardedHint(object sender, EventArgs args) //когда видео досмотрели до конца
     {
         rewardHint = true; //тут говорим что просмотрели, дальше см в апдейте
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("adRewardHint_Show");
     }
 
     public void HandleRewardBasedVideoFailedToLoadHint(object sender, AdFailedToLoadEventArgs args) //если реклама не загрузилась, например нажали кнопку а интернета нет, это этот случай
@@ -205,6 +207,7 @@ public class AdMob_baner : MonoBehaviour
             "HandleRewardBasedVideoFailedToLoad event received with message: "
                              + args.Message);
         closeHint = true; //говорим что реклама была закрыта, см в апдейте, иначе кнопка загрузки не отлипнет с нажатого состояния когде нет инета
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("adRewardHint_FailToLoad");
 
         adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
@@ -215,6 +218,7 @@ public class AdMob_baner : MonoBehaviour
     public void HandleOnRewardedAdClosedHint(object sender, EventArgs args) //когда рекламу закрыл пользователь сам
     {
         closeHint = true; //говорим что реклама закрыта, см в апдейте
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("adRewardHint_Close");
 
         adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
         adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
@@ -261,6 +265,7 @@ public class AdMob_baner : MonoBehaviour
     public void HandleOnAdRewardedRefill(object sender, EventArgs args)
     {
         rewardRefill = true;
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("adRewardRefill_Show");
     }
 
     public void HandleRewardBasedVideoFailedToLoadRefill(object sender, AdFailedToLoadEventArgs args)
@@ -269,6 +274,7 @@ public class AdMob_baner : MonoBehaviour
             "HandleRewardBasedVideoFailedToLoad event received with message: "
                              + args.Message);
         closeRefill = true;
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("adRewardRefill_FailToLoad");
 
         adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
         adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;
@@ -280,6 +286,7 @@ public class AdMob_baner : MonoBehaviour
     public void HandleOnRewardedAdClosedRefill(object sender, EventArgs args)
     {
         closeRefill = true;
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("adRewardRefill_Close");
 
         adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
         adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;

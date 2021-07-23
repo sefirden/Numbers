@@ -25,9 +25,22 @@
 public static class GPGSIds
 {
         public const string leaderboard_play_time_time_limit_mode = "CgkIpLP6wsoMEAIQAw"; // <GPGSID>
-        public const string achievement_end_game = "CgkIpLP6wsoMEAIQBA"; // <GPGSID>
+        public const string achievement_score_1000k = "CgkIpLP6wsoMEAIQEQ"; // <GPGSID>
+        public const string achievement_kill_gamewatch = "CgkIpLP6wsoMEAIQCA"; // <GPGSID>
+        public const string achievement_kill_tetris = "CgkIpLP6wsoMEAIQBg"; // <GPGSID>
+        public const string achievement_kill_calculator = "CgkIpLP6wsoMEAIQBQ"; // <GPGSID>
+        public const string achievement_kill_pager = "CgkIpLP6wsoMEAIQCw"; // <GPGSID>
+        public const string achievement_score_250k = "CgkIpLP6wsoMEAIQDw"; // <GPGSID>
         public const string leaderboard_top_score__normal_mode = "CgkIpLP6wsoMEAIQAQ"; // <GPGSID>
+        public const string achievement_kill_first_mobile = "CgkIpLP6wsoMEAIQDA"; // <GPGSID>
+        public const string achievement_score_50k = "CgkIpLP6wsoMEAIQDQ"; // <GPGSID>
+        public const string achievement_kill_tape_player = "CgkIpLP6wsoMEAIQCg"; // <GPGSID>
+        public const string achievement_kill_tamagotchi = "CgkIpLP6wsoMEAIQBw"; // <GPGSID>
+        public const string achievement_score_500k = "CgkIpLP6wsoMEAIQEA"; // <GPGSID>
+        public const string achievement_kill_old_computer = "CgkIpLP6wsoMEAIQBA"; // <GPGSID>
         public const string leaderboard_top_score__time_limit_mode = "CgkIpLP6wsoMEAIQAg"; // <GPGSID>
+        public const string achievement_score_100k = "CgkIpLP6wsoMEAIQDg"; // <GPGSID>
+        public const string achievement_kill_gameboy = "CgkIpLP6wsoMEAIQCQ"; // <GPGSID>
 
 }
 

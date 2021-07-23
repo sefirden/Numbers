@@ -159,12 +159,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 break;
 
             case 7:
-                difficult = 5;
+                difficult = 8;
                 scaleBoard = 1.34f;
                 break;
 
             case 9:
-                difficult = 7;
+                difficult = 10;
                 scaleBoard = 1f;
                 break;
 
@@ -449,6 +449,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         {
             scoreI += tempScore * quantity; //увеличиваем очки по формуле временные очки множим на количество
 
+            ScoreToAchieve(scoreI);
+
             if (scoreI > hiScoreI) //если количество очков больше чем максимальное
             {
                 hiScoreI = scoreI; //приравниваем максимальное к текущему значению
@@ -495,6 +497,20 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ToPlayerResources("level");
     }
 
+    private void ScoreToAchieve(int score)
+    {
+        if (score >= 50000 && score < 51000)
+            PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_score_50k);
+        else if (score >= 100000 && score < 101000)
+            PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_score_100k);
+        else if (score >= 250000 && score < 251000)
+            PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_score_250k);
+        else if (score >= 500000 && score < 501000)
+            PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_score_500k);
+        else if (score >= 1000000 && score < 1001000)
+            PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_score_1000k);
+    }
+
     private IEnumerator ChangeLevel()
     {
         int scoreToNextLevel = 0; //количество очков для перехода на след уровень
@@ -517,6 +533,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             damage = scoreToNextLevel; //уравниваем нанесенный урон до уровня нужного для смены, что бы босс появлялся с ровным количеством хп, а не без нескольких пунктов
             ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ChangeLevel", "To_level", level);
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ChangeLevel", "GameMode", PlayerResource.Instance.gameMode);
         }
         else if (damage >= scoreToNextLevel && level == PlayerResource.Instance.scoreToNextLevel.Length - 1) //переход с последнего уровня с боссом на урвоень конца игры, если не писать -1 то не сработает
         {
@@ -530,6 +548,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
 
             StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ChangeLevel", "To_level", level);
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ChangeLevel", "GameMode", PlayerResource.Instance.gameMode);
         }
         yield return new WaitForFixedUpdate();
     }
@@ -864,7 +884,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         endGame = true; //говорим что конец игры, должно быть перед паузой иначе апдейт не передаст в плеерресоурс что игра окончена, это позволяло при проигрыше выйти в меню и потом нажать продолжить игру даже когда проиграл
         //если не сработает передать в коде с режимами ниже руками в плеерресоурсес конец игры
         ToPlayerResources("endGame");
-
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame_NoMatch", "width", width);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame_NoMatch", "level", level);
 
         Time.timeScale = 0f; //ставим паузу в игре
         ui.NoMatchLayer.SetActive(false); //выключаем слой нет ходов (надо когда из слоя нет ходов мы отказываемся перемешивать поле)
@@ -875,10 +896,6 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         string hiScoreS = SaveSystem.Decrypt(hiScore);
         ui.EndGameScore.text = scoreS; //показываем на слое конца иры очки
         ui.EndGameHiScore.text = hiScoreS; //показываем максимальные очки
-
-
-
-        PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
 
         if (PlayerResource.Instance.gameMode == "normal") //если режим игры нормальный
         {
@@ -910,7 +927,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         {
             Hint(0, 0);
             hintsI--; //отнимаем одну подсказку из доступных
-
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("Hint_Button_click");
         }
 
         if (hintsI == 0) //если подсказок больше не осталось
@@ -1159,7 +1176,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 Shuffle(); //перемешиваем доску 
                 SetUp(); //ставим новые цифры на поле
                 CollectBoardToSave(); //сохраняем новые цифры с строку для сохранения
-
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("Refill_Button_click");
                 refillI--; //отнимаем количество доступных перемешиваний
 
                 if (refillI == 0) //если внезапно количество подсказок стало равно 0

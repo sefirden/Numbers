@@ -16,10 +16,12 @@ public class Timer : MonoBehaviour
     public double timeSec; //секунды в таймере
     public GameObject NoTimeLayer; //слой когда кончилось время
     private ui ui;
+    public Board board; //объект поля
 
     void Start()
     {
         ui = FindObjectOfType<ui>();//прикрепляем крипт ui
+        board = FindObjectOfType<Board>();
     }
 
 
@@ -54,7 +56,9 @@ public class Timer : MonoBehaviour
                 PlayerResource.Instance.GameIsPaused = true; //ставим паузу
                 PlayerResource.Instance.EndGameT = true; //ставим конец игры
 
-                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_end_game); //ачивка прошел игру получена
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame_NoTime", "width", board.width);
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame_NoTime", "level", board.level);
+
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.hiScoreT))); //отправляем лучшие очки в Google Play
 

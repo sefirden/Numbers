@@ -24,6 +24,7 @@ no:No
 no_time:Time is up, game over!
 restart_menu:All progress will be lost, restart the game?
 tutorial:Tutorial
+rewrite_local_save:The local save file will be overwritten, continue?
 tip_0: “ут про сюжет
 tip_1: “ут про боссов
 tip_2: “ут про hint
