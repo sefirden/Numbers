@@ -56,8 +56,16 @@ public class Timer : MonoBehaviour
                 PlayerResource.Instance.GameIsPaused = true; //ставим паузу
                 PlayerResource.Instance.EndGameT = true; //ставим конец игры
 
-                Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame_NoTime", "width", board.width);
-                Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame_NoTime", "level", board.level);
+                Firebase.Analytics.Parameter[] EndGame =
+{
+                    new Firebase.Analytics.Parameter("width", board.width),
+                    new Firebase.Analytics.Parameter("Why?", "no time"),
+                    new Firebase.Analytics.Parameter("level", board.level),
+                    new Firebase.Analytics.Parameter("GameMode", PlayerResource.Instance.gameMode),
+                    new Firebase.Analytics.Parameter("score", Convert.ToInt32(SaveSystem.Decrypt(board.score))),
+                };
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame", EndGame);
+
 
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.hiScoreT))); //отправляем лучшие очки в Google Play

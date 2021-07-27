@@ -118,7 +118,7 @@ public class zeroPlayer : MonoBehaviour
             switch (board.level)
             {
             case 1:
-                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_calculator); 
+                PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_calculator);
                 break;
             case 2:
                 PlayServicesGoogle.UnlockAchievement(GPGSIds.achievement_kill_tetris); 

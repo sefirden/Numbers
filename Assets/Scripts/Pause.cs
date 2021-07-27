@@ -14,6 +14,7 @@ public class Pause : MonoBehaviour
     public GameObject SettingsLayer;
     private Board board;
     public Tutorial tutorial;
+    public Button turorial_button;
 
     void Update()
     {
@@ -33,6 +34,14 @@ public class Pause : MonoBehaviour
         pauseMenuUI.SetActive(true); //включаем слой с меню паузы
         PlayerResource.Instance.GameIsPaused = true; //говорим переменной что тут пауза
         AdMob_baner.Instance.Show(); //показываем банер внизу экрана
+
+        board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
+
+        if (PlayerResource.Instance.isLoaded == true)
+        {
+            if(board.level > 8)
+            turorial_button.interactable = false;
+        }
 
         StartCoroutine(SaveGame());
     }
@@ -71,7 +80,8 @@ public class Pause : MonoBehaviour
     {
         if (answer == true) //если нажали да рестарт
         {
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("Restart_Button_click_yes");
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("Button_click", "Button", "Restart_Yes");
+
             int zeroInt = 0;
             AdMob_baner.Instance.Hide(); //выключаем рекламный банер
 
@@ -125,7 +135,7 @@ public class Pause : MonoBehaviour
         }
         else //если нажали нет рестарту
         {
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("Restart_Button_click_no");
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("Button_click", "Button", "Restart_No");
             pauseMenuUI.SetActive(true);
             restartMenuUI.SetActive(false);
         }
@@ -134,7 +144,7 @@ public class Pause : MonoBehaviour
 
     public void Tutorial()
     {
-        Firebase.Analytics.FirebaseAnalytics.LogEvent("Tutorial_Button_click");
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Button_click", "Button", "Tutorial");
         StartCoroutine(tutorial.ShowTip());
         Time.timeScale = 1f; //выключаем паузу
         pauseMenuUI.SetActive(false); //выключаем слой паузы

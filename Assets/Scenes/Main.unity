@@ -5303,6 +5303,7 @@ MonoBehaviour:
   timeMin: 0
   timeSec: 0
   NoTimeLayer: {fileID: 1785839379}
+  board: {fileID: 0}
 --- !u!1 &405039276
 GameObject:
   m_ObjectHideFlags: 0
@@ -6828,6 +6829,7 @@ MonoBehaviour:
   restartMenuUI: {fileID: 747103877}
   SettingsLayer: {fileID: 119718861}
   tutorial: {fileID: 1237369725}
+  turorial_button: {fileID: 2064189171}
 --- !u!1 &551590653
 GameObject:
   m_ObjectHideFlags: 0
@@ -8349,6 +8351,7 @@ MonoBehaviour:
   restartMenuUI: {fileID: 747103877}
   SettingsLayer: {fileID: 119718861}
   tutorial: {fileID: 0}
+  turorial_button: {fileID: 0}
 --- !u!1 &756216550
 GameObject:
   m_ObjectHideFlags: 0
@@ -12950,6 +12953,7 @@ MonoBehaviour:
   restartMenuUI: {fileID: 747103877}
   SettingsLayer: {fileID: 119718861}
   tutorial: {fileID: 0}
+  turorial_button: {fileID: 0}
 --- !u!114 &1256686751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17444,6 +17448,7 @@ MonoBehaviour:
   restartMenuUI: {fileID: 747103877}
   SettingsLayer: {fileID: 119718861}
   tutorial: {fileID: 0}
+  turorial_button: {fileID: 0}
 --- !u!114 &1668300203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18957,6 +18962,7 @@ MonoBehaviour:
   restartMenuUI: {fileID: 747103877}
   SettingsLayer: {fileID: 119718861}
   tutorial: {fileID: 0}
+  turorial_button: {fileID: 0}
 --- !u!114 &1785839382
 MonoBehaviour:
   m_ObjectHideFlags: 0

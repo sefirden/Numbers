@@ -20,12 +20,15 @@ public class Tutorial : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        zero = FindObjectOfType<zeroPlayer>(); ////присваиваем скрипт к переменной
+        boss = FindObjectOfType<bossPlayer>(); ////присваиваем скрипт к переменной
+        board = FindObjectOfType<Board>();
+        ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
+
         if (Settings.Instance.showtutorial == false && PlayerResource.Instance.isLoaded == false)
         {
             gameObject.SetActive(true);
             Tips[0].SetActive(true);
-
-            //Time.timeScale = 0f; //ставим паузу
             PlayerResource.Instance.GameIsPaused = true;
         }
         else if (Settings.Instance.showtutorial == true)
@@ -33,16 +36,16 @@ public class Tutorial : MonoBehaviour
             gameObject.SetActive(false);
             Tips[0].SetActive(false);
         }
-        else if (Settings.Instance.showtutorial == false && PlayerResource.Instance.isLoaded == true)
+        else if (Settings.Instance.showtutorial == false && PlayerResource.Instance.isLoaded == true && board.level < 9)
         {
             Tips[0].SetActive(false);
             StartCoroutine(ShowTip());
         }
+        else if(Settings.Instance.showtutorial == false && PlayerResource.Instance.isLoaded == true && board.level > 8)
+        {
+            gameObject.SetActive(false);
+        }
 
-        zero = FindObjectOfType<zeroPlayer>(); ////присваиваем скрипт к переменной
-        boss = FindObjectOfType<bossPlayer>(); ////присваиваем скрипт к переменной
-        board = FindObjectOfType<Board>();
-        ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
 
     }
 
@@ -174,17 +177,19 @@ public class Tutorial : MonoBehaviour
 
     public IEnumerator ShowTip() //про боссов
     {
-        while (PlayerResource.Instance.TurnIsOn == true || Tips[0].activeSelf == true)
-        {
-            yield return new WaitForFixedUpdate();
-        }
 
-        boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 201;
-        fingerBoss.transform.position = new Vector3(3f, 12f, transform.position.z);
+            while (PlayerResource.Instance.TurnIsOn == true || Tips[0].activeSelf == true)
+            {
+                yield return new WaitForFixedUpdate();
+            }
 
-        gameObject.SetActive(true);
-        Tips[1].SetActive(true);
-        //Time.timeScale = 0f; //ставим паузу
-        PlayerResource.Instance.GameIsPaused = true;
+            boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 201;
+            fingerBoss.transform.position = new Vector3(3f, 12f, transform.position.z);
+
+            gameObject.SetActive(true);
+            Tips[1].SetActive(true);
+            //Time.timeScale = 0f; //ставим паузу
+            PlayerResource.Instance.GameIsPaused = true;
+        
     }
 }

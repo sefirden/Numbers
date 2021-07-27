@@ -39,6 +39,7 @@ public class bossPlayer : MonoBehaviour
 
     private void RandomAttackTimer()
     {
+        if (boss.activeSelf)
         StartCoroutine(Attack(board.level));
     }
 
