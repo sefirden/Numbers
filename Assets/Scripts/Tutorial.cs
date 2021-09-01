@@ -154,6 +154,7 @@ public class Tutorial : MonoBehaviour
                     Tips[index - 1].SetActive(false);
                     Tips[index].SetActive(false);
                     gameObject.SetActive(false);
+                    ui.Tutorial.interactable = true;
                     Settings.Instance.showtutorial = true;
                     SaveSystem.Instance.SettingsSave();
                     Time.timeScale = 1f; //убираем паузу
@@ -165,6 +166,7 @@ public class Tutorial : MonoBehaviour
                 ui.timerimg.gameObject.GetComponent<Transform>().SetSiblingIndex(3);
                 Tips[index - 1].SetActive(false);
                 gameObject.SetActive(false);
+                ui.Tutorial.interactable = true;
                 Settings.Instance.showtutorial = true;
                 SaveSystem.Instance.SettingsSave();
                 Time.timeScale = 1f; //ставим паузу
@@ -183,9 +185,12 @@ public class Tutorial : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
 
+
+            board.Draw(false);
+            ui.Tutorial.interactable = false;
             boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 201;
             fingerBoss.transform.position = new Vector3(3f, 12f, transform.position.z);
-
+            
             gameObject.SetActive(true);
             Tips[1].SetActive(true);
             //Time.timeScale = 0f; //ставим паузу

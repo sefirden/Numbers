@@ -105,6 +105,8 @@ public class MainMenu : MonoBehaviour
         size_dropN.onValueChanged.AddListener(delegate {
             DropdownValueChangedN(size_dropN);
         });
+
+        FindObjectOfType<AudioManager>().Play("music_menu");
     }
 
     //от выбранного пункта выпадающего меня меняем ширину и высоту
@@ -212,7 +214,7 @@ public class MainMenu : MonoBehaviour
 
         Firebase.Analytics.Parameter[] StartGame =
     {
-            new Firebase.Analytics.Parameter("width", width),
+            new Firebase.Analytics.Parameter("width", Convert.ToString(width)),
             new Firebase.Analytics.Parameter("language", Settings.Instance.language),
             new Firebase.Analytics.Parameter("GameMode", PlayerResource.Instance.gameMode),
             };
@@ -282,6 +284,7 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.refillT = SaveSystem.Encrypt(Convert.ToString(1));
         PlayerResource.Instance.gameMode = "timetrial";
         PlayerResource.Instance.time = 120f;
+        PlayerResource.Instance.playedTime = 0f;
         PlayerResource.Instance.scoreT = SaveSystem.Encrypt(Convert.ToString(0)); //обнуляем очки
         PlayerResource.Instance.levelT = 0;
         PlayerResource.Instance.damageT = 0;
@@ -290,7 +293,7 @@ public class MainMenu : MonoBehaviour
 
         Firebase.Analytics.Parameter[] StartGame =
     {
-            new Firebase.Analytics.Parameter("width", width),
+            new Firebase.Analytics.Parameter("width", Convert.ToString(width)),
             new Firebase.Analytics.Parameter("language", Settings.Instance.language),
             new Firebase.Analytics.Parameter("GameMode", PlayerResource.Instance.gameMode),
             };
@@ -314,7 +317,7 @@ public class MainMenu : MonoBehaviour
 
     public void Quit() //выход из игры
     {
-        FindObjectOfType<AudioManager>().Stop("Theme");
+        FindObjectOfType<AudioManager>().Stop("music_menu");
         Application.Quit();
     }
 

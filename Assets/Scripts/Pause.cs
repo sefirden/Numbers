@@ -78,15 +78,29 @@ public class Pause : MonoBehaviour
 
     public void Restart(bool answer) //рестарт игры, передаем тру или фалс по клику на да и нет соответственно из рестарт меню
     {
+        board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
+
         if (answer == true) //если нажали да рестарт
         {
             Firebase.Analytics.FirebaseAnalytics.LogEvent("Button_click", "Button", "Restart_Yes");
 
+            if (restartMenuUI.activeSelf == true && board != null)
+            {
+                Debug.LogError("restart with firebase");
+                Firebase.Analytics.Parameter[] EndGame =
+    {
+                    new Firebase.Analytics.Parameter("width", Convert.ToString(board.width)),
+                    new Firebase.Analytics.Parameter("Why", "restart"),
+                    new Firebase.Analytics.Parameter("level", Convert.ToString(board.level)),
+                    new Firebase.Analytics.Parameter("GameMode", PlayerResource.Instance.gameMode),
+                    new Firebase.Analytics.Parameter("score", Convert.ToInt32(SaveSystem.Decrypt(board.score))),
+                };
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("EndGame", EndGame);
+            }
+
             int zeroInt = 0;
             AdMob_baner.Instance.Hide(); //выключаем рекламный банер
-
-            board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
-
+                       
             if (PlayerResource.Instance.gameMode == "normal" && board != null) //если режим нормальный
             {
                 //если сдесь делать не через board. а сразу в плеерресоурсес то не сработает
@@ -154,6 +168,8 @@ public class Pause : MonoBehaviour
 
     public void Menu() //кнопка в меню
     {
+        FindObjectOfType<AudioManager>().StopShuffle();
+        FindObjectOfType<AudioManager>().Play("music_menu");
         SceneManager.LoadScene("Menu"); //загружаем сцену меню
         AdMob_baner.Instance.Hide(); //выключаем рекламный банер
     }
@@ -166,7 +182,7 @@ public class Pause : MonoBehaviour
 
     public void Quit() //кнопка выход
     {
-        FindObjectOfType<AudioManager>().Stop("Theme"); //выключаем музыку
+        FindObjectOfType<AudioManager>().StopShuffle();
         Application.Quit(); //закрываем приложение
     }
 }

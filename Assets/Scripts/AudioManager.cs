@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
 using System;
+using System.Linq;
 
 [System.Serializable]
 public class Sound //х-ки каждого звука
@@ -26,6 +27,10 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; } //определяем
     public Sound[] sounds; //все звуки в этом масиве
+    private Sound currentMusic;
+    public bool played;
+    private int indexMusicLevel;
+    private Sound[] shuffleMusic;
 
     private void Awake() //запускается до всех стартов
     {
@@ -53,9 +58,11 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    private void Start() //при старте сцены играет заглавную тему 
+    private void Start()
     {
-        Play("Theme"); //имя трека
+        Shuffle();
+        played = true;
+        indexMusicLevel = 0;
     }
 
     public void Play(string name) //функция для проигрывания нужного трека
@@ -66,8 +73,48 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Звук: " + name + " не найден!"); //если такого звука нет в списке всех звков
             return;
         }
+        //s.source.PlayDelayed(s.source.clip.length);
         s.source.Play();
 
+    }
+
+    private void Shuffle()
+    {
+        shuffleMusic = Array.FindAll(sounds, sound => sound.name.StartsWith("music_level_"));
+        var rnd = new System.Random();
+        shuffleMusic = shuffleMusic.OrderBy(s => rnd.Next()).ToArray();//перемешивем масив
+    }
+
+    public IEnumerator ShufflePlay()
+    {
+        if(played == true)
+        { 
+            if(indexMusicLevel < shuffleMusic.Length)
+            {
+                currentMusic = shuffleMusic[indexMusicLevel];
+                currentMusic.source.Play();
+                yield return new WaitForSeconds(currentMusic.clip.length);
+                indexMusicLevel++;
+                StartCoroutine(ShufflePlay());
+            }
+            else
+            {
+                Shuffle();
+                indexMusicLevel = 0;
+                StartCoroutine(ShufflePlay());
+            }
+        }
+        else
+        {
+            currentMusic.source.Stop();
+        }
+
+    }
+
+    public void StopShuffle()
+    {
+        played = false;
+        currentMusic.source.Stop();
     }
 
     public void Stop(string name) //также, но стопаем проигрывание трека вызывая метод с именем трека как аргументом

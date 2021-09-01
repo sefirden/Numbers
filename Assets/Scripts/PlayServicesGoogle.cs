@@ -58,7 +58,6 @@ public class PlayServicesGoogle : MonoBehaviour
 
     void SignIn() //логинимся
     {
-
         Social.localUser.Authenticate((bool success) =>
         {
             OnConnectionResponse(success);
@@ -300,6 +299,10 @@ public class PlayServicesGoogle : MonoBehaviour
              DataSource.ReadCacheOrNetwork,
              ConflictResolutionStrategy.UseLongestPlaytime, DataFromCloud);
         }
+        else
+        {
+            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("not authenticated");//failed
+        }
     }
 
     private void DataFromCloud(SavedGameRequestStatus status, ISavedGameMetadata meta) //загружаем данные из облака
@@ -309,14 +312,26 @@ public class PlayServicesGoogle : MonoBehaviour
         if (status == SavedGameRequestStatus.Success)
         {
             ((PlayGamesPlatform)Social.Active).SavedGame.ReadBinaryData(meta, ReadFromCloud);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + SavedGameRequestStatus.Success);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
 
         }
-        else
+        else if (status == SavedGameRequestStatus.TimeoutError)
         {
             //mainMenu.Loading.SetActive(false);
             //mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + SavedGameRequestStatus.Success);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
+        }
+        else if (status == SavedGameRequestStatus.AuthenticationError)
+        {
+            //mainMenu.Loading.SetActive(false);
+            //mainMenu.Loading_failed.SetActive(true);
+            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
+        }
+        else if (status == SavedGameRequestStatus.InternalError)
+        {
+            //mainMenu.Loading.SetActive(false);
+            //mainMenu.Loading_failed.SetActive(true);
+            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
         }
     }
     private void ReadFromCloud(SavedGameRequestStatus status, byte[] data) //читаем загруженные данные 
@@ -338,14 +353,14 @@ public class PlayServicesGoogle : MonoBehaviour
             Debug.LogWarning("saveData " + saveData);
 
             //mainMenu.Loading.SetActive(false);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("ReadFromCloud status:" + SavedGameRequestStatus.Success);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("ReadFromCloud status:" + status);//failed
             Debug.LogError("succes ReadFromCloud");//succes
         }
         else
         {
             // mainMenu.Loading.SetActive(false);
             //mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("ReadFromCloud status:" + SavedGameRequestStatus.Success);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("ReadFromCloud status:" + status) ;//failed
             Debug.LogError(SavedGameRequestStatus.Success);//failed
         }
     }

@@ -17,6 +17,7 @@ public class weaponControl : MonoBehaviour
         if (collision.gameObject.tag == "boss")
         {
             collide = true;
+            FindObjectOfType<AudioManager>().Play("attack");
             gameObject.GetComponent<Animator>().SetTrigger("destroy");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }

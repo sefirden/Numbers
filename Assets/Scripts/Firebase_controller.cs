@@ -42,8 +42,7 @@ public class Firebase_controller : MonoBehaviour
     }
 
     void InitializeFirebase()
-    {
-  
+    {  
         FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
          
         //Set default session duration values.

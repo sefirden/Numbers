@@ -182,6 +182,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         boss.ChangeBoss(level); //загружаем боссу нужный спрайт (по сути грузим нужного по порядку босса)
         ui.BossHealth(damage, level); //в зависимости от урона и уровня грузи лайфбар босса с нужными данными
 
+        FindObjectOfType<AudioManager>().Stop("music_menu");
+        FindObjectOfType<AudioManager>().played = true;
+        StartCoroutine(FindObjectOfType<AudioManager>().ShufflePlay());
+
         if (PlayerResource.Instance.isLoaded == true) //если игра была загружена
         {
             Level.LoadLevel(level); //грузим нужный уровень
@@ -540,7 +544,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             Firebase.Analytics.Parameter[] ChangeLevel =
 {
-            new Firebase.Analytics.Parameter("To_level", level),
+            new Firebase.Analytics.Parameter("To_level", Convert.ToString(level)),
             new Firebase.Analytics.Parameter("GameMode", PlayerResource.Instance.gameMode)
             };
             Firebase.Analytics.FirebaseAnalytics.LogEvent("ChangeLevel", ChangeLevel);
@@ -560,7 +564,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
             Firebase.Analytics.Parameter[] ChangeLevel =
 {
-            new Firebase.Analytics.Parameter("To_level", level),
+            new Firebase.Analytics.Parameter("To_level", Convert.ToString(level)),
             new Firebase.Analytics.Parameter("GameMode", PlayerResource.Instance.gameMode)
             };
             Firebase.Analytics.FirebaseAnalytics.LogEvent("ChangeLevel", ChangeLevel);
@@ -901,9 +905,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         Firebase.Analytics.Parameter[] EndGame =
 {
-            new Firebase.Analytics.Parameter("width", width),
-            new Firebase.Analytics.Parameter("Why?", "no match"),
-            new Firebase.Analytics.Parameter("level", level),
+            new Firebase.Analytics.Parameter("width", Convert.ToString(width)),
+            new Firebase.Analytics.Parameter("Why", "no match"),
+            new Firebase.Analytics.Parameter("level", Convert.ToString(level)),
             new Firebase.Analytics.Parameter("GameMode", PlayerResource.Instance.gameMode),
             new Firebase.Analytics.Parameter("score", Convert.ToInt32(SaveSystem.Decrypt(score))),
             };
@@ -1391,6 +1395,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.AdsHintLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
         ui.AdHintButton.interactable = true; //включаем интерактивность кнопки посмотреть рекламу за подсказки
+
+        pause.Resume();
     }
 
     public void AdHintClose() //если была закрыта реклама для получения доп подсказок
@@ -1399,6 +1405,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.AdsHint.gameObject.SetActive(true); //включаем картинку что реклама доступна
         ui.AdHintButton.GetComponentInChildren<Text>().text = "+3"; //меняем количество получаемых подсказок за просмотр рекламы на счетчике
         ui.AdsHintLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+
+        pause.Resume();
     }
 
     public void AdRefill() //если была нажата кнопка просмотреть виде рекламу для перемешивания поля
@@ -1457,6 +1465,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Shuffle(); //перемешиваем доску 
         SetUp(); //ставим новые цифры на поле
         CollectBoardToSave(); //сохраняем новые цифры с строку для сохранения
+
+        pause.Resume();
     }
 
     public void AdRefillClose() //если была закрыта реклама для перемешивания поля
@@ -1478,6 +1488,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.AdRefillButton.GetComponentInChildren<Text>().text = "1"; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике
             ui.AdRefillButtonLayer.GetComponentInChildren<Text>().text = "1"; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике на слое нет ходов
         }
+
+        pause.Resume();
     }
 
 }
