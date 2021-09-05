@@ -56,12 +56,17 @@ public class ui : MonoBehaviour
 
     void Awake()
     {
-        LifeBarBackground.transform.position = new Vector3(transform.position.x, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
-        LifeBar.transform.position = new Vector3(transform.position.x, 10.7f, transform.position.z);
+        //ебаные костыли из-за изменения камеры
+        Vector3 temp = LifeBarBackground.transform.position;
+        Vector3 temp2 = LifeBarBackground.transform.position;
+        LifeBarBackground.transform.position = Camera.main.WorldToScreenPoint(new Vector3(0, 10.7f, transform.position.z)); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
+        LifeBar.transform.position = Camera.main.WorldToScreenPoint(new Vector3(0, 10.7f, transform.position.z));
+        LifeBarBackground.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
+        LifeBar.transform.position =new Vector3(temp2.x, LifeBar.transform.position.y, transform.position.z);
     }
 
 
-#if UNITY_ANDROID || UNITY_EDITOR
+#if UNITY_ANDROID //|| UNITY_EDITOR
     void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
     {
 

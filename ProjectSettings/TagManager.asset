@@ -55,3 +55,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: new game
+    uniqueID: 3853634429
+    locked: 0
+  - name: player&Boss
+    uniqueID: 3361078499
+    locked: 0
+  - name: new_game_hi
+    uniqueID: 629504397
+    locked: 0
+  - name: super_hi
+    uniqueID: 162884489
+    locked: 0
