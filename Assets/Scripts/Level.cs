@@ -83,6 +83,7 @@ public class Level : MonoBehaviour
 
             boss.gameObject.SetActive(true); //включаем босса
             board.gameObject.SetActive(true); //когда вышел ноль включаем поле
+            StartCoroutine(ui.LightsOnOff(true)); //включаем свет
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
             StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке

@@ -192,6 +192,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             SetUpLoaded(); //заполняем поле из загруженных цифр
             PlayerResource.Instance.isLoaded = false; //говорим что уже не загружено
             gameObject.SetActive(true); //включаем видимость поля
+            StartCoroutine(ui.LightsOnOff(true)); //вклюяаем свет
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
             ui.Tutorial.interactable = true;
@@ -206,6 +207,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         {
             PlayerResource.Instance.zeroMove = true; //говорим что ноль двигается
             zero.GetComponent<Animator>().SetBool("run", true);
+            StartCoroutine(ui.LightsOnOff(false)); //выключаем свет
             gameObject.SetActive(false); //выключаем поле
             Level.LoadLevel(10); //загрузка уровня новой игры
             Shuffle(); //перемешиваем стандартный набор цифр при новой игре

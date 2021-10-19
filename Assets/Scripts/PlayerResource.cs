@@ -10,6 +10,7 @@ public class PlayerResource : MonoBehaviour
 
 
     public bool anim_board_destroy = false;
+    public int id; //для борьбы с чтением из оперативки времени и дамага
 
     public string gameMode; //режим игры
     public bool GameIsPaused; //если игра на паузе
@@ -67,6 +68,7 @@ public class PlayerResource : MonoBehaviour
         }
 
         Input.multiTouchEnabled = false;
+        id = UnityEngine.Random.Range(10000, 100000);
 
     }
 }

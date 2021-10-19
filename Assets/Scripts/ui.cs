@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class ui : MonoBehaviour
 {
@@ -54,6 +55,8 @@ public class ui : MonoBehaviour
 
     public Pause PauseLayer;
 
+    public Light2D[] Lights;
+
     void Awake()
     {
         //ебаные костыли из-за изменения камеры
@@ -79,8 +82,8 @@ public class ui : MonoBehaviour
 #endif
 
 
-        public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
-    {
+     public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
+     {
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
         {
             int scoreToNextLevel = 0;
@@ -112,7 +115,38 @@ public class ui : MonoBehaviour
         }
         else //если у нас последний уровень
         {
-            LifeBarBackground.SetActive(false); //выключаем лайфбар
+              LifeBarBackground.SetActive(false); //выключаем лайфбар
+        }
+     }
+
+    public IEnumerator LightsOnOff(bool On)
+    {
+        if(On)
+        {
+            yield return new WaitForSeconds(0.5f);
+            int i = 0;
+            Debug.Log("Lights On");
+            while(i < 4)
+            {
+                Lights[i].GetComponent<Light2D>().pointLightInnerRadius = 0.5f;
+                Lights[i].GetComponent<Light2D>().pointLightOuterRadius = 7.5f;
+                Lights[i+4].GetComponent<Light2D>().intensity = 1f;
+                i++;
+                yield return new WaitForSeconds(UnityEngine.Random.Range(0.1f, 0.5f));
+            }
+        }
+        else
+        {
+            Debug.Log("Lights Off");
+            for (int i = 0; i <= 3; i++)
+            {
+                Lights[i].GetComponent<Light2D>().pointLightInnerRadius = 0f;
+                Lights[i].GetComponent<Light2D>().pointLightOuterRadius = 0f;
+            }
+            for (int i = 4; i <= 7; i++)
+            {
+                Lights[i].GetComponent<Light2D>().intensity = 0.5f;
+            }
         }
     }
 }

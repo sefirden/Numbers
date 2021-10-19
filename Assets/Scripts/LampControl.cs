@@ -11,12 +11,13 @@ public class LampControl : MonoBehaviour
     public float blinkTimer;
     private float basicIntensity;
 
+
     void Start()
     {
         basicIntensity = gameObject.GetComponent<Light2D>().intensity;
-        Invoke("RandomBlinkStart", UnityEngine.Random.Range(minValue, maxValue));
+        if (gameObject.activeSelf)
+            Invoke("RandomBlinkStart", UnityEngine.Random.Range(minValue, maxValue));
     }
-
 
     private void RandomBlinkStart()
     {

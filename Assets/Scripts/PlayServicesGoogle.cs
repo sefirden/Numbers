@@ -153,10 +153,18 @@ public class PlayServicesGoogle : MonoBehaviour
             fullsave.EndGameT = PlayerResource.Instance.EndGameT;
             fullsave.loadedBoardT = PlayerResource.Instance.loadedBoardT;
             fullsave.AdRewardT = PlayerResource.Instance.AdRewardT;
-            fullsave.time = PlayerResource.Instance.time;
             fullsave.playedTime = PlayerResource.Instance.playedTime;
             fullsave.levelT = PlayerResource.Instance.levelT;
             fullsave.damageT = PlayerResource.Instance.damageT;
+
+            if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
+            {
+                fullsave.time = PlayerResource.Instance.time - PlayerResource.Instance.id;
+            }
+            else
+            {
+                fullsave.time = PlayerResource.Instance.time;
+            }
 
             fullsave.SaveTime = Convert.ToString(DateTime.UtcNow);
         }

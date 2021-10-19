@@ -142,6 +142,9 @@ MonoBehaviour:
   minValue: 20
   maxValue: 60
   blinkTimer: 0.2
+  basicIntensity: 1
+  boardStartGameOffOnTriger: 1
+  board: {fileID: 0}
 --- !u!1 &1280682867961415854
 GameObject:
   m_ObjectHideFlags: 0
