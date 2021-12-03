@@ -86,7 +86,7 @@ public class Pause : MonoBehaviour
 
             if (restartMenuUI.activeSelf == true && board != null)
             {
-                Debug.LogError("restart with firebase");
+                //Debug.LogError("restart with firebase");
                 Firebase.Analytics.Parameter[] EndGame =
     {
                     new Firebase.Analytics.Parameter("width", Convert.ToString(board.width)),

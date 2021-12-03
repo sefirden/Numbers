@@ -21,7 +21,8 @@ public class LampControl : MonoBehaviour
 
     private void RandomBlinkStart()
     {
-        StartCoroutine(BlinkRandomly());
+        if (gameObject.activeSelf)
+            StartCoroutine(BlinkRandomly());
     }
 
 
