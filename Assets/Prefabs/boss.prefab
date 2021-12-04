@@ -100,6 +100,7 @@ MonoBehaviour:
   boss: {fileID: 8044510159105726959}
   zero: {fileID: 0}
   board: {fileID: 0}
+  tutorial: {fileID: 0}
   weapon:
   - {fileID: 6260191088809541524, guid: 201b92afc940d434daacb5a94399334d, type: 3}
   - {fileID: 5982897019880653484, guid: a74a126a2ec17184dbbd60871937b25e, type: 3}

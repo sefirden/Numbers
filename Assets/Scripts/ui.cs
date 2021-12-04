@@ -56,6 +56,9 @@ public class ui : MonoBehaviour
     public Pause PauseLayer;
 
     public Light2D[] Lights;
+    public SpriteRenderer[] Lights_sprite;
+
+
 
     void Awake()
     {
@@ -72,17 +75,17 @@ public class ui : MonoBehaviour
 #if UNITY_ANDROID //|| UNITY_EDITOR
     void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
     {
-
         if (focusStatus == false)
         {
             //PauseLayer = FindObjectOfType<Pause>();
             PauseLayer.PauseClick();
         }
+        
     }
 #endif
 
 
-     public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
+    public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
      {
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
         {
@@ -126,11 +129,11 @@ public class ui : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             int i = 0;
             Debug.Log("Lights On");
-            while(i < 4)
+            while(i < Lights.Length)
             {
                 Lights[i].GetComponent<Light2D>().pointLightInnerRadius = 0.5f;
                 Lights[i].GetComponent<Light2D>().pointLightOuterRadius = 7.5f;
-                Lights[i+4].GetComponent<Light2D>().intensity = 1f;
+                Lights_sprite[i].GetComponent<SpriteRenderer>().color = new Color(0.9921569f, 0.9411765f, 0.8235294f, 1f);
                 i++;
                 yield return new WaitForSeconds(UnityEngine.Random.Range(0.1f, 0.5f));
             }
@@ -138,14 +141,11 @@ public class ui : MonoBehaviour
         else
         {
             Debug.Log("Lights Off");
-            for (int i = 0; i <= 3; i++)
+            for (int i = 0; i < Lights.Length; i++)
             {
                 Lights[i].GetComponent<Light2D>().pointLightInnerRadius = 0f;
                 Lights[i].GetComponent<Light2D>().pointLightOuterRadius = 0f;
-            }
-            for (int i = 4; i <= 7; i++)
-            {
-                Lights[i].GetComponent<Light2D>().intensity = 0.5f;
+                Lights_sprite[i].GetComponent<SpriteRenderer>().color = new Color(0.9921569f, 0.9411765f, 0.8235294f, 0.4705882f);
             }
         }
     }
