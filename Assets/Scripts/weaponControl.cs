@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.UI;
 
 public class weaponControl : MonoBehaviour
 {
 
     bool collide;
+    public int damageText;
+    private ui ui; //скрипт всего УИ
+
     private void Start()
     {
+        ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
         collide = false;
         StartCoroutine(MoveKnife()); //запускаем движения ноля к стартовой позиции
     }
@@ -20,7 +26,14 @@ public class weaponControl : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("attack");
             gameObject.GetComponent<Animator>().SetTrigger("destroy");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            ui.damageText.gameObject.SetActive(true);
+            ui.damageText.text = Convert.ToString(damageText);
         }
+    }
+
+    public void Damage_text(int damage) //показываем урон над боссом
+    {
+        damageText = damage;
     }
 
     private IEnumerator MoveKnife() 
@@ -40,8 +53,10 @@ public class weaponControl : MonoBehaviour
             gameObject.transform.position = Vector3.Lerp(startPosition, endPosition, moveTime);
             yield return new WaitForFixedUpdate();
         }
-
+        yield return new WaitForSeconds(0.5f);
+        ui.damageText.gameObject.SetActive(false);
         Destroy(gameObject, 2f);
+
     }
 
 }

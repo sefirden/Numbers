@@ -12,6 +12,8 @@ public class ui : MonoBehaviour
     //ниже все переменные интерфейса, какбы названия говорят сами за себя
     public GameObject timerimg;
 
+    public Text damageText;
+
     public Text scoreText;
     public Text HighscoreText;
     public Text time;
@@ -65,10 +67,15 @@ public class ui : MonoBehaviour
         //ебаные костыли из-за изменения камеры
         Vector3 temp = LifeBarBackground.transform.position;
         Vector3 temp2 = LifeBarBackground.transform.position;
+        Vector3 temp3 = damageText.transform.position;
+
         LifeBarBackground.transform.position = Camera.main.WorldToScreenPoint(new Vector3(0, 10.7f, transform.position.z)); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
         LifeBar.transform.position = Camera.main.WorldToScreenPoint(new Vector3(0, 10.7f, transform.position.z));
+        damageText.transform.position = Camera.main.WorldToScreenPoint(new Vector3(5.4f, 15f, transform.position.z));
+
         LifeBarBackground.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
         LifeBar.transform.position =new Vector3(temp2.x, LifeBar.transform.position.y, transform.position.z);
+        damageText.transform.position = new Vector3(temp3.x, damageText.transform.position.y, transform.position.z);
     }
 
 

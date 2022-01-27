@@ -59,12 +59,13 @@ public class zeroPlayer : MonoBehaviour
         Level.StartNewGameLevel(0); //меняем стартовую локацию на первый уровень при старте игры
     }
 
-    public void Attack(int level) //создание объекта с летящими ножами
+    public void Attack(int level, int damage) //создание объекта с летящими ножами
     {
         gameObject.GetComponent<Animator>().SetTrigger("attack"); //анимация атаки ноля
         GameObject weapon_temp = Instantiate(weapon[level], weapon[level].transform.position, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
         weapon_temp.transform.parent = this.transform; //присваиваем позицию
         weapon_temp.name = "weapon_temp"; //присваиваем имя
+        weapon_temp.SendMessage("Damage_text", damage);
     }
 
     public void ChangeZero(int level) //при смене уровня меняем аниматор и говорим что ноль идет
