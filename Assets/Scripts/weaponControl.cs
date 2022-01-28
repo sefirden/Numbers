@@ -8,12 +8,15 @@ public class weaponControl : MonoBehaviour
 {
 
     bool collide;
-    public int damageText;
+    private int damageText;
+    private int quantity;
     private ui ui; //скрипт всего УИ
+    public Board board; //объект поля
 
     private void Start()
     {
         ui = FindObjectOfType<ui>(); //присваиваем скрипт к переменным
+        board = FindObjectOfType<Board>();
         collide = false;
         StartCoroutine(MoveKnife()); //запускаем движения ноля к стартовой позиции
     }
@@ -26,14 +29,22 @@ public class weaponControl : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("attack");
             gameObject.GetComponent<Animator>().SetTrigger("destroy");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            ui.damageText.gameObject.SetActive(true);
+            ui.BossHealth(board.damage, board.level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
+            ui.damagePic.gameObject.SetActive(true);
             ui.damageText.text = Convert.ToString(damageText);
+
+            ui.damagePic.GetComponent<Image>().color = new Color(0.9921569f, 0.8470588f, 0.2941177f, 1f);
         }
     }
 
     public void Damage_text(int damage) //показываем урон над боссом
     {
         damageText = damage;
+    }
+
+    public void Quantity (int quantity_send) //показываем урон над боссом
+    {
+        quantity = quantity_send;
     }
 
     private IEnumerator MoveKnife() 
@@ -53,8 +64,8 @@ public class weaponControl : MonoBehaviour
             gameObject.transform.position = Vector3.Lerp(startPosition, endPosition, moveTime);
             yield return new WaitForFixedUpdate();
         }
-        yield return new WaitForSeconds(0.5f);
-        ui.damageText.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.25f);
+        ui.damagePic.gameObject.SetActive(false);
         Destroy(gameObject, 2f);
 
     }

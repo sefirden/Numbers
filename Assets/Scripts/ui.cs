@@ -13,6 +13,7 @@ public class ui : MonoBehaviour
     public GameObject timerimg;
 
     public Text damageText;
+    public GameObject damagePic;
 
     public Text scoreText;
     public Text HighscoreText;
