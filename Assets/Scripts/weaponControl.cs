@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 
+
 public class weaponControl : MonoBehaviour
 {
 
@@ -30,10 +31,41 @@ public class weaponControl : MonoBehaviour
             gameObject.GetComponent<Animator>().SetTrigger("destroy");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             ui.BossHealth(board.damage, board.level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
+
+            //ниже показ урона над боссом
+            Vector3 temp3 = ui.damagePic.transform.position;
+            ui.damagePic.transform.position = Camera.main.WorldToScreenPoint(new Vector3(transform.position.x + 1f, transform.position.y + 1f, transform.position.z));
             ui.damagePic.gameObject.SetActive(true);
             ui.damageText.text = Convert.ToString(damageText);
 
-            ui.damagePic.GetComponent<Image>().color = new Color(0.9921569f, 0.8470588f, 0.2941177f, 1f);
+            //изменение цвета фона в зависимости от размера поля и собранных цифр
+            if(board.width == 5)
+            {
+                if(quantity <=3)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9921569f, 0.8470588f, 0.2941177f, 1f);
+                else if(quantity == 4)
+                    ui.damagePic.GetComponent<Image>().color = new Color(1f, 0.4392157f, 0.2627451f, 1f);
+                else if (quantity == 5)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9372549f, 0.3254902f, 0.3137255f, 1f);
+            }
+            else if (board.width == 7)
+            {
+                if (quantity <= 3)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9921569f, 0.8470588f, 0.2941177f, 1f);
+                else if (quantity == 4 || quantity == 5)
+                    ui.damagePic.GetComponent<Image>().color = new Color(1f, 0.4392157f, 0.2627451f, 1f);
+                else if (quantity == 6 || quantity == 7)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9372549f, 0.3254902f, 0.3137255f, 1f);
+            }
+            else if (board.width == 9)
+            {
+                if (quantity <= 3)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9921569f, 0.8470588f, 0.2941177f, 1f);
+                else if (quantity >= 4 && quantity <= 6)
+                    ui.damagePic.GetComponent<Image>().color = new Color(1f, 0.4392157f, 0.2627451f, 1f);
+                else if (quantity >= 7 && quantity <= 9)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9372549f, 0.3254902f, 0.3137255f, 1f);
+            }
         }
     }
 
