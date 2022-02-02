@@ -68,12 +68,13 @@ public class ui : MonoBehaviour
         Vector3 temp = LifeBarBackground.transform.position;
         Vector3 temp2 = LifeBarBackground.transform.position;
 
-        LifeBarBackground.transform.position = Camera.main.WorldToScreenPoint(new Vector3(0, 10.7f, transform.position.z)); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
-        LifeBar.transform.position = Camera.main.WorldToScreenPoint(new Vector3(0, 10.7f, transform.position.z));
+        LifeBarBackground.transform.position =new Vector3(0, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
+        LifeBar.transform.position =new Vector3(0, 10.7f, transform.position.z);
         
         LifeBarBackground.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
         LifeBar.transform.position =new Vector3(temp2.x, LifeBar.transform.position.y, transform.position.z);
-        
+
+
     }
 
 
@@ -88,6 +89,7 @@ public class ui : MonoBehaviour
         
     }
 #endif
+    
 
 
     public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось

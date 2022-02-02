@@ -34,7 +34,7 @@ public class weaponControl : MonoBehaviour
 
             //ниже показ урона над боссом
             Vector3 temp3 = ui.damagePic.transform.position;
-            ui.damagePic.transform.position = Camera.main.WorldToScreenPoint(new Vector3(transform.position.x + 1f, transform.position.y + 1f, transform.position.z));
+            ui.damagePic.transform.position = new Vector3(transform.position.x + 1f, transform.position.y + 1f, transform.position.z);
             ui.damagePic.gameObject.SetActive(true);
             ui.damageText.text = Convert.ToString(damageText);
 
