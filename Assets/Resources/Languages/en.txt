@@ -3,7 +3,7 @@ resume:Resume
 settings:Settings
 quit:Quit
 test:Test
-game_label:Numbers_alpha
+game_label:Numbers_beta
 exit_label:Press again to exit the game
 music_off:off
 sfx_off:off
@@ -25,11 +25,11 @@ no_time:Time is up, game over!
 restart_menu:All progress will be lost, restart the game?
 tutorial:Tutorial
 rewrite_local_save:The local save file will be overwritten, continue?
-tip_0: Тут про сюжет
-tip_1: Тут про боссов
-tip_2: Тут про hint
-tip_3: Тут про refill
-tip_4: Тут про соединение цифр
-tip_5: Тут про длительность последовательности
-tip_6: Тут урон и смену уровня
-tip_7: Тут про время
+tip_0:All numbers except zero are gone, find them and save them! Let's check out the old electronics store.
+tip_1:Evil bosses seem to be involved in missing numbers, let's beat them all.
+tip_2:Gives you the longest sequence of numbers in the field.
+tip_3:Fills the entire field with new numbers.
+tip_4:Click on any number and connect with the neighbors in ascending order.
+tip_5:The more numbers you connect at once, the more points you get.
+tip_6:More numbers - more damage, kill the boss and move on to the next level.
+tip_7:If the time runs out, then the game will end, connect the numbers and get extra time.

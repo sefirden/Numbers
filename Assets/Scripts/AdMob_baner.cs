@@ -76,9 +76,9 @@ public class AdMob_baner : MonoBehaviour
     void Start()
     {
         //это тестовые ид, взять оригинальные перед софт лаунчем приложения и изменить
-        idApp = "ca-app-pub-3940256099942544~3347511713";
-        idBanner = "ca-app-pub-3940256099942544/6300978111";
-        idReward = "ca-app-pub-3940256099942544/5224354917";
+        idApp = "ca-app-pub-6603668453005485~7265657750";
+        idBanner = "ca-app-pub-6603668453005485/9269198086";
+        idReward = "ca-app-pub-6603668453005485/2512218040";
 
         //ниже по гайду от адмоб, не понимаю зачем все это и как
         MobileAds.Initialize(idApp);

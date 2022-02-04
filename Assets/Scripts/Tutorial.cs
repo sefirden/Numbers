@@ -64,6 +64,7 @@ public class Tutorial : MonoBehaviour
         {
             case 2: //про hint
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
+                boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
 
                 ui.HintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(11);
                 ui.AdHintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(10);
@@ -89,6 +90,7 @@ public class Tutorial : MonoBehaviour
                 foreach (SpriteRenderer k in NumbersAndLines)
                 {
                     k.sortingOrder = 201;
+                    k.sortingLayerName = "super_hi";
                 }
 
                 Tips[index - 1].SetActive(false);
@@ -99,6 +101,7 @@ public class Tutorial : MonoBehaviour
                 foreach (LineRenderer k in board.lines)
                 {
                     k.sortingOrder = 250;
+                    k.sortingLayerName = "super_hi";
                 }              
 
                 Tips[index - 1].SetActive(false);
@@ -109,12 +112,14 @@ public class Tutorial : MonoBehaviour
                 foreach (SpriteRenderer k in NumbersAndLines)
                 {
                     k.sortingOrder = 20;
+                    k.sortingLayerName = "Default";
                 }
                 Array.Clear(NumbersAndLines, 0, NumbersAndLines.Length);
 
                 foreach (LineRenderer k in board.lines)
                 {
                     k.sortingOrder = 25;
+                    k.sortingLayerName = "Default";
                 }
                 board.Draw(false);
 
@@ -189,6 +194,7 @@ public class Tutorial : MonoBehaviour
             board.Draw(false);
             ui.Tutorial.interactable = false;
             boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 201;
+            boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "super_hi";
             fingerBoss.transform.position = new Vector3(3f, 12f, transform.position.z);
             
             gameObject.SetActive(true);
