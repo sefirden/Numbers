@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class Tutorial : MonoBehaviour
@@ -193,11 +194,12 @@ public class Tutorial : MonoBehaviour
 
             board.Draw(false);
             ui.Tutorial.interactable = false;
+            gameObject.GetComponent<Image>().color = new Color(0.4823529f, 0.5529412f, 0.5882353f, 0.5882353f);
             boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 201;
             boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "super_hi";
             fingerBoss.transform.position = new Vector3(3f, 12f, transform.position.z);
             
-            gameObject.SetActive(true);
+            gameObject.SetActive(true);            
             Tips[1].SetActive(true);
             //Time.timeScale = 0f; //ставим паузу
             PlayerResource.Instance.GameIsPaused = true;

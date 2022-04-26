@@ -93,7 +93,7 @@ public class AudioManager : MonoBehaviour
             {
                 currentMusic = shuffleMusic[indexMusicLevel];
                 currentMusic.source.Play();
-                yield return new WaitForSeconds(currentMusic.clip.length);
+                yield return new WaitForSeconds(currentMusic.clip.length + 0.1f);
                 indexMusicLevel++;
                 StartCoroutine(ShufflePlay());
             }
@@ -115,6 +115,7 @@ public class AudioManager : MonoBehaviour
     {
         played = false;
         currentMusic.source.Stop();
+
     }
 
     public void Stop(string name) //также, но стопаем проигрывание трека вызывая метод с именем трека как аргументом
@@ -126,7 +127,6 @@ public class AudioManager : MonoBehaviour
             return;
         }
         s.source.Stop();
-
     }
 
     //играть в нужном месте определенный звук

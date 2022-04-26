@@ -78,7 +78,7 @@ public class ui : MonoBehaviour
     }
 
 
-#if UNITY_ANDROID //|| UNITY_EDITOR
+#if UNITY_ANDROID // || UNITY_EDITOR
     void OnApplicationFocus(bool focusStatus) //при сворачивании игры ставит ее на паузу, даже если этого нделал игрок и как раз сейвит игру, если так работает, то можно убрать сейв при выходе из игры
     {
         if (focusStatus == false)
