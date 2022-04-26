@@ -77,6 +77,7 @@ public class zeroPlayer : MonoBehaviour
     public IEnumerator KillTheBoss() //метод плавного движения ноля к старту
     {
             ui.Tutorial.interactable = false;
+            ui.DamageX2Button.interactable = false;
 
             PlayerResource.Instance.bossMove = true; //говорим что босс двигается, иначе он будет кидаться оружием когда его убивают
             yield return new WaitForSeconds(1.5f);

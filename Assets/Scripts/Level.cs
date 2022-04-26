@@ -86,7 +86,12 @@ public class Level : MonoBehaviour
             StartCoroutine(ui.LightsOnOff(true)); //включаем свет
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
+            ui.DamageX2Button.interactable = true;
             StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
+        }
+        else
+        {
+            PlayerResource.Instance.bossMove = false; //говорим что босс не двигается
         }
 
     }

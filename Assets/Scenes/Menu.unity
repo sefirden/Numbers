@@ -4048,11 +4048,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4340468951823591459, guid: bf868a5ebcb0e94479b4261ab3a8aeca,
-        type: 3}
-      propertyPath: scoreToNextLevel.Array.data[0]
-      value: 2000
-      objectReference: {fileID: 0}
     - target: {fileID: 6223891272900701016, guid: bf868a5ebcb0e94479b4261ab3a8aeca,
         type: 3}
       propertyPath: m_LocalPosition.x

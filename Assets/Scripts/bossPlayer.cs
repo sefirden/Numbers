@@ -102,6 +102,7 @@ public class bossPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
         ui.Tutorial.interactable = true;
+        ui.DamageX2Button.interactable = true;
 
 
         //запускаем тут подсказки

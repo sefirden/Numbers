@@ -31,6 +31,7 @@ public class ui : MonoBehaviour
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
 
+    public Button DamageX2Button;
     public Button HintButton;
     public Button AdHintButton;
     public Button Pause;
@@ -43,6 +44,9 @@ public class ui : MonoBehaviour
     public GameObject LifeBarBackground;
     public GameObject LifeBar;
     public Text lifeText;
+
+    public Image DamageX2;
+    public Image DamageX2Loading;
 
     public Image AdsHint;
     public Image AdsHintLoading;
@@ -73,6 +77,11 @@ public class ui : MonoBehaviour
         
         LifeBarBackground.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
         LifeBar.transform.position =new Vector3(temp2.x, LifeBar.transform.position.y, transform.position.z);
+
+        if (PlayerResource.Instance.gameMode == "timetrial")
+        {
+            //добавляем кнопки +1 минута за рекламу и двигаем все остальные
+        }
 
 
     }

@@ -43,10 +43,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 745b5a26de2100b409fc6fde310ba868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim_board_destroy: 0
+  id: 0
   gameMode: 
   GameIsPaused: 0
+  TurnIsOn: 0
   isLoaded: 0
   scoreToNextLevel: d0070000a00f000070170000401f000010270000a861000050c30000f8240100a0860100
+  bossMove: 0
+  zeroMove: 0
+  starttimer: 0
   scoreN: 0
   hiScoreN: 0
   hintN: 0
@@ -55,6 +61,7 @@ MonoBehaviour:
   widthN: 0
   AdRewardN: 0
   levelN: 0
+  damageN: 0
   EndGameN: 0
   loadedBoardN: 
   time: 0
@@ -67,5 +74,6 @@ MonoBehaviour:
   widthT: 0
   AdRewardT: 0
   levelT: 0
+  damageT: 0
   EndGameT: 0
   loadedBoardT: 
