@@ -22,6 +22,7 @@ public class ui : MonoBehaviour
     public Text refillcountLayer;
     public Text Adrefillcount;
     public Text AdrefillcountLayer;
+    public Text adsConfirmText;
 
     public Text NoTimeScore;
     public Text NoTimeHiScore;
@@ -30,8 +31,10 @@ public class ui : MonoBehaviour
 
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
+    public GameObject AdsConfirmLayer;
 
     public Button DamageX2Button;
+    public Button PlusTimeButton;
     public Button HintButton;
     public Button AdHintButton;
     public Button Pause;
@@ -64,23 +67,28 @@ public class ui : MonoBehaviour
     public Light2D[] Lights;
     public SpriteRenderer[] Lights_sprite;
 
+    public Board board; //объект поля
+
+    string buttonName;
+
 
 
     void Awake()
     {
+        board = FindObjectOfType<Board>();
         //ебаные костыли из-за изменения камеры
         Vector3 temp = LifeBarBackground.transform.position;
         Vector3 temp2 = LifeBarBackground.transform.position;
 
-        LifeBarBackground.transform.position =new Vector3(0, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
-        LifeBar.transform.position =new Vector3(0, 10.7f, transform.position.z);
+        LifeBarBackground.transform.position = new Vector3(0, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
+        LifeBar.transform.position = new Vector3(0, 10.7f, transform.position.z);
         
         LifeBarBackground.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
-        LifeBar.transform.position =new Vector3(temp2.x, LifeBar.transform.position.y, transform.position.z);
+        LifeBar.transform.position = new Vector3(temp2.x, LifeBar.transform.position.y, transform.position.z);
 
         if (PlayerResource.Instance.gameMode == "timetrial")
         {
-            //добавляем кнопки +1 минута за рекламу и двигаем все остальные
+                PlusTimeButton.gameObject.SetActive(true);
         }
 
 
@@ -99,6 +107,79 @@ public class ui : MonoBehaviour
     }
 #endif
     
+    public void AdsConfirmShow(string buttonNameTemp)
+    {
+        buttonName = buttonNameTemp;
+        switch (buttonName) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
+        {
+            case "damagex2":
+                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_damage");
+                break;
+
+            case "hint":
+                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_hint");
+                break;
+
+            case "refill":
+                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_refill");
+                break;
+
+            case "plustime":
+                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_plustime");
+                break;
+
+            case "scorex2":
+                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_score");
+                break;
+
+            default:
+                Debug.LogError("not found button");
+                break;
+        }
+
+        PlayerResource.Instance.GameIsPaused = true;
+        AdsConfirmLayer.SetActive(true);
+    }
+
+    public void AdsConfirmHide()
+    {
+        PlayerResource.Instance.GameIsPaused = false;
+        AdsConfirmLayer.SetActive(false);
+    }
+
+    public void AdsStart()
+    {
+        switch (buttonName) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
+        {
+            case "damagex2":
+                Debug.Log("Start damagex2 ads");
+                break;
+
+            case "hint":
+                board.AdHint();
+                break;
+
+            case "refill":
+                board.AdRefill();
+                break;
+
+            case "plustime":
+                Debug.Log("Start plustime ads");
+                break;
+
+            case "scorex2":
+                Debug.Log("Start scorex2 ads");
+                break;
+
+            default:
+                Debug.LogError("not found button");
+                break;
+        }
+        PlayerResource.Instance.GameIsPaused = false;
+        AdsConfirmLayer.SetActive(false);
+    }
+
+
 
 
     public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось

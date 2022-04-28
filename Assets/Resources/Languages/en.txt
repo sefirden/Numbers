@@ -25,6 +25,11 @@ no_time:Time is up, game over!
 restart_menu:All progress will be lost, restart the game?
 tutorial:Tutorial
 rewrite_local_save:The local save file will be overwritten, continue?
+ads_confirm_damage:Посмотреть рекламу и получить двойной урон на 30 ходов?
+ads_confirm_score:Посмотреть рекламу и получить двойные очки на 30 ходов?
+ads_confirm_hint:Посмотреть рекламу и получить 3 подсказки?
+ads_confirm_refill:Посмотреть рекламу и заполнить все поле новыми цифрами?
+ads_confirm_plustime:Посмотреть рекламу и получить дополнительную минуту?
 tip_0:All numbers except zero are gone, find them and save them! Let's check out the old electronics store.
 tip_1:Evil bosses seem to be involved in missing numbers, let's beat them all.
 tip_2:Gives you the longest sequence of numbers in the field.

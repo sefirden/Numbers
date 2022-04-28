@@ -346,9 +346,6 @@
  <Reference Include="UnityEditor.UWP.Extensions">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.0f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll</HintPath>
  </Reference>
- <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
- <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
- </Reference>
  <Reference Include="Google.IOSResolver_v1.2.166">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/Google.IOSResolver_v1.2.166.dll</HintPath>
  </Reference>

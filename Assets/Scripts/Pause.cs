@@ -14,7 +14,10 @@ public class Pause : MonoBehaviour
     public GameObject SettingsLayer;
     private Board board;
     public Tutorial tutorial;
+    public GameObject tutorialLayers;
     public Button turorial_button;
+    private ui ui;
+
 
     void Update()
     {
@@ -36,6 +39,7 @@ public class Pause : MonoBehaviour
         AdMob_baner.Instance.Show(); //показываем банер внизу экрана
 
         board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
+        ui = FindObjectOfType<ui>();   
 
         if (PlayerResource.Instance.isLoaded == true)
         {
@@ -64,10 +68,13 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1f; //выключаем паузу
         pauseMenuUI.SetActive(false); //выключаем слой паузы
         SettingsLayer.SetActive(false); //выключаем слой настроек
-
-        PlayerResource.Instance.GameIsPaused = false; //говорим что выключили паузу
         AdMob_baner.Instance.Hide(); //выключаем рекламный банер
 
+        if(ui.AdsConfirmLayer.activeSelf == false)
+        {
+            if(tutorialLayers.activeSelf == false)
+            PlayerResource.Instance.GameIsPaused = false; //говорим что выключили паузу
+        }
     }
 
     public void RestartLayer() //срабатывает по клику на кнопку рестарт

@@ -195,8 +195,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             StartCoroutine(ui.LightsOnOff(true)); //вклюяаем свет
             ui.HintButton.interactable = true; //делаем активной кнопку подсказок
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
-            ui.Tutorial.interactable = true;
-            ui.DamageX2Button.interactable = true;
+            ui.Tutorial.interactable = true; //делаем активной кнопку подсказка
+            ui.DamageX2Button.interactable = true; //делаем активной кнопку x2 урона
+            ui.PlusTimeButton.interactable = true; //делаем активной кнопку плюс время
+
             if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
             {
                 PlayerResource.Instance.starttimer = true;
