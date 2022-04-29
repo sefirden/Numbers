@@ -73,7 +73,7 @@ public class Level : MonoBehaviour
         zero.GetComponent<Animator>().SetBool("run", false);
 
 
-        if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если переход с последнего босса на уровень конца игры не делаем то что ниже
+        if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если переход не на последний уровень то
         {
             if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
             {

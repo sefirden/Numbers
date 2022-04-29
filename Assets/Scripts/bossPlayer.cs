@@ -27,12 +27,14 @@ public class bossPlayer : MonoBehaviour
         {
             PlayerResource.Instance.bossMove = true; //говорим что босс двигается
             ui.LifeBarBackground.SetActive(false); //выключаем лайфбар
+            ui.turnLeft.SetActive(false);
         }
         else if (PlayerResource.Instance.isLoaded == true) //если игру БЫЛА загружена, то
         {
             transform.position = new Vector3(4.92f, 13f, transform.position.z); //сразу ставим нужну позицию
             Invoke("RandomAttackTimer", UnityEngine.Random.Range(5f, 15f)); //запускаем атаку
             ui.LifeBarBackground.SetActive(true); //включаем лайфбар
+            ui.turnLeft.SetActive(true);
             PlayerResource.Instance.bossMove = false; //говорим что босс не двигается
         }
     }
@@ -102,7 +104,7 @@ public class bossPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
         ui.Tutorial.interactable = true;
-        ui.DamageX2Button.interactable = true;
+        ui.turnLeft.SetActive(true);
 
 
         //запускаем тут подсказки

@@ -34,6 +34,7 @@ public class ui : MonoBehaviour
     public GameObject AdsConfirmLayer;
 
     public Button DamageX2Button;
+    public Button ScoreX2Button;
     public Button PlusTimeButton;
     public Button HintButton;
     public Button AdHintButton;
@@ -44,12 +45,21 @@ public class ui : MonoBehaviour
     public Button RefillButtonLayer;
     public Button Tutorial;
 
+
+    public GameObject lifeTurnLayer;
     public GameObject LifeBarBackground;
     public GameObject LifeBar;
     public Text lifeText;
 
+    public GameObject turnLeft;
+    public Text turnLeftText;
+
     public Image DamageX2;
     public Image DamageX2Loading;
+
+    public Image ScoreX2;
+    public Image ScoreX2Loading;
+    
 
     public Image AdsHint;
     public Image AdsHintLoading;
@@ -77,14 +87,10 @@ public class ui : MonoBehaviour
     {
         board = FindObjectOfType<Board>();
         //ебаные костыли из-за изменения камеры
-        Vector3 temp = LifeBarBackground.transform.position;
-        Vector3 temp2 = LifeBarBackground.transform.position;
+        Vector3 temp = lifeTurnLayer.transform.position;
 
-        LifeBarBackground.transform.position = new Vector3(0, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
-        LifeBar.transform.position = new Vector3(0, 10.7f, transform.position.z);
-        
-        LifeBarBackground.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
-        LifeBar.transform.position = new Vector3(temp2.x, LifeBar.transform.position.y, transform.position.z);
+        lifeTurnLayer.transform.position = new Vector3(0, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
+        lifeTurnLayer.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
 
         if (PlayerResource.Instance.gameMode == "timetrial")
         {
@@ -110,6 +116,7 @@ public class ui : MonoBehaviour
     public void AdsConfirmShow(string buttonNameTemp)
     {
         buttonName = buttonNameTemp;
+        AdsConfirmLayer.SetActive(true);
         switch (buttonName) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
         {
             case "damagex2":
@@ -138,7 +145,7 @@ public class ui : MonoBehaviour
         }
 
         PlayerResource.Instance.GameIsPaused = true;
-        AdsConfirmLayer.SetActive(true);
+        
     }
 
     public void AdsConfirmHide()

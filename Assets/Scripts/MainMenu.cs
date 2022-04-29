@@ -205,6 +205,7 @@ public class MainMenu : MonoBehaviour
         PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.hiScoreN))); //отправляем лучшее время прошлой игры в Google Play
         PlayerResource.Instance.hintN = SaveSystem.Encrypt(Convert.ToString(3)); //количество подсказок
         PlayerResource.Instance.refillN = SaveSystem.Encrypt(Convert.ToString(1)); //количество перемешиваний поля
+        PlayerResource.Instance.turnx2N = SaveSystem.Encrypt(Convert.ToString(0)); //количество ходов с двойным уроном
         PlayerResource.Instance.gameMode = "normal"; //говорим что это норм режим
         PlayerResource.Instance.scoreN = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
         PlayerResource.Instance.levelN = zeroInt; //стартуем с 0 левела
@@ -282,6 +283,8 @@ public class MainMenu : MonoBehaviour
         PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(PlayerResource.Instance.hiScoreT))); //отправляем лучшие очки в Google Play
         PlayerResource.Instance.hintT = SaveSystem.Encrypt(Convert.ToString(3));
         PlayerResource.Instance.refillT = SaveSystem.Encrypt(Convert.ToString(1));
+        PlayerResource.Instance.turnx2T = SaveSystem.Encrypt(Convert.ToString(0)); //количество ходов с двойным уроном
+        PlayerResource.Instance.turnTime = SaveSystem.Encrypt(Convert.ToString(0)); //количество ходов до отката +1 минута
         PlayerResource.Instance.gameMode = "timetrial";
         PlayerResource.Instance.time = 120f;
         PlayerResource.Instance.playedTime = 0f;

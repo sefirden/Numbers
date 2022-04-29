@@ -117,6 +117,10 @@ public class Pause : MonoBehaviour
                 board.ToPlayerResources("hints");
                 board.refill = SaveSystem.Encrypt(Convert.ToString(1)); //даем 1 перемешивание
                 board.ToPlayerResources("refill");
+
+                board.turnx2 = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //даем 0
+                board.ToPlayerResources("turnx2");
+
                 board.score = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
                 board.ToPlayerResources("score");
                 board.AdReward = false; //говорим что рекламу не смотрел
@@ -138,6 +142,10 @@ public class Pause : MonoBehaviour
                 board.ToPlayerResources("hints");
                 board.refill = SaveSystem.Encrypt(Convert.ToString(1)); //даем 1 перемешивание
                 board.ToPlayerResources("refill");
+                board.turnx2 = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //даем 0
+                board.ToPlayerResources("turnx2");
+                board.turnTime = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //даем 0
+                board.ToPlayerResources("turnTime");
                 board.score = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
                 board.ToPlayerResources("score");
                 board.AdReward = false; //говорим что рекламу не смотрел

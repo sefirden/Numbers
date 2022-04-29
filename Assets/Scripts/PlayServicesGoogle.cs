@@ -98,6 +98,7 @@ public class PlayServicesGoogle : MonoBehaviour
         //переменные для Normal режима
         public string scoreN; 
         public string hiScoreN;
+        public string turnx2N;
         public string hintN;
         public string refillN;
         public int heightN;
@@ -112,6 +113,8 @@ public class PlayServicesGoogle : MonoBehaviour
         //переменные для Time Limit режима
         public float time;
         public float playedTime;
+        public string turnTime; 
+        public string turnx2T;
         public string scoreT;
         public string hiScoreT;
         public string hintT;
@@ -135,6 +138,7 @@ public class PlayServicesGoogle : MonoBehaviour
             fullsave.scoreN = PlayerResource.Instance.scoreN;
             fullsave.hiScoreN = PlayerResource.Instance.hiScoreN;
             fullsave.hintN = PlayerResource.Instance.hintN;
+            fullsave.turnx2N = PlayerResource.Instance.turnx2N;            
             fullsave.refillN = PlayerResource.Instance.refillN;
             fullsave.heightN = PlayerResource.Instance.heightN;
             fullsave.widthN = PlayerResource.Instance.widthN;
@@ -146,7 +150,9 @@ public class PlayServicesGoogle : MonoBehaviour
 
             fullsave.scoreT = PlayerResource.Instance.scoreT;
             fullsave.hiScoreT = PlayerResource.Instance.hiScoreT;
+            fullsave.turnTime = PlayerResource.Instance.turnTime;
             fullsave.hintT = PlayerResource.Instance.hintT;
+            fullsave.turnx2T = PlayerResource.Instance.turnx2T;
             fullsave.refillT = PlayerResource.Instance.refillT;
             fullsave.heightT = PlayerResource.Instance.heightT;
             fullsave.widthT = PlayerResource.Instance.widthT;
@@ -157,7 +163,7 @@ public class PlayServicesGoogle : MonoBehaviour
             fullsave.levelT = PlayerResource.Instance.levelT;
             fullsave.damageT = PlayerResource.Instance.damageT;
 
-            if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
+            if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время
             {
                 fullsave.time = PlayerResource.Instance.time - PlayerResource.Instance.id;
             }
@@ -211,6 +217,7 @@ public class PlayServicesGoogle : MonoBehaviour
             PlayerResource.Instance.scoreN = fullsave.scoreN;
             PlayerResource.Instance.hiScoreN = fullsave.hiScoreN;
             PlayerResource.Instance.hintN = fullsave.hintN;
+            PlayerResource.Instance.turnx2N = fullsave.turnx2N;
             PlayerResource.Instance.refillN = fullsave.refillN;
             PlayerResource.Instance.heightN = fullsave.heightN;
             PlayerResource.Instance.widthN = fullsave.widthN;
@@ -223,6 +230,8 @@ public class PlayServicesGoogle : MonoBehaviour
             PlayerResource.Instance.scoreT = fullsave.scoreT;
             PlayerResource.Instance.hiScoreT = fullsave.hiScoreT;
             PlayerResource.Instance.hintT = fullsave.hintT;
+            PlayerResource.Instance.turnTime = fullsave.turnTime;
+            PlayerResource.Instance.turnx2T = fullsave.turnx2T;
             PlayerResource.Instance.refillT = fullsave.refillT;
             PlayerResource.Instance.heightT = fullsave.heightT;
             PlayerResource.Instance.widthT = fullsave.widthT;

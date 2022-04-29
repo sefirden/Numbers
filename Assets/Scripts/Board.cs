@@ -16,6 +16,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     public string refill; //количество перемешиваний, закодировать
     public string score; //очки, закодировать
     public string hiScore; //рекорд, закодировать
+    public string turnx2; //ходов с х2 урона или очков, закодировать
+    public string turnTime; //ходов до отката +1 минута
     public string loadedBoard; //загружаемое поле в виде строки из всех цифр
     public bool endGame; //конец игры или нет
     public int difficult; //сложность, зависит от размера поля, используется в рандоме при заполнении поля новыми цифрами
@@ -78,6 +80,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             AdReward = PlayerResource.Instance.AdRewardN;
             level = PlayerResource.Instance.levelN;
             damage = PlayerResource.Instance.damageN;
+            turnx2 = PlayerResource.Instance.turnx2N;
 
         }
         else if(PlayerResource.Instance.gameMode == "timetrial") //для режима на время
@@ -93,6 +96,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             AdReward = PlayerResource.Instance.AdRewardT;
             level = PlayerResource.Instance.levelT;
             damage = PlayerResource.Instance.damageT;
+            turnx2 = PlayerResource.Instance.turnx2T;
+            turnTime = PlayerResource.Instance.turnTime;
         }
     }
 
@@ -109,6 +114,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
         ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
         ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
+        ui.turnLeftText.text = SaveSystem.GetText("ads_confirm_hint") + SaveSystem.Decrypt(turnx2);
 
         HintNumbers = new List<GameObject>(); //размер масива зависит от выбранного размера поля
         collectHint = new List<GameObject[]>(); //минимальный размер масива для сравнения подсказок
@@ -203,6 +209,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             {
                 PlayerResource.Instance.starttimer = true;
                 ui.timerimg.SetActive(true);
+            }
+
+            if (level == PlayerResource.Instance.scoreToNextLevel.Length)
+            {
+                ui.DamageX2Button.gameObject.SetActive(false);
+                ui.ScoreX2Button.gameObject.SetActive(true);
             }
 
         }
@@ -540,6 +552,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             changelvl = true; //говорим что смена уровня
             level++; //увеличиваем уровень 
             ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
+            ui.turnLeft.SetActive(false);
 
             StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
 
@@ -560,6 +573,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             changelvl = true; //говорим что смена уровня
             level++; //увеличиваем уровень 
             ui.LifeBarBackground.SetActive(false); //прячем лайфбар босса
+            ui.DamageX2Button.gameObject.SetActive(false);
+            ui.ScoreX2Button.gameObject.SetActive(true);
+            ui.turnLeft.SetActive(false);
+
 
             StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
             Firebase.Analytics.Parameter[] ChangeLevel =
@@ -1268,6 +1285,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             switch (data) //вешаем на элементы ui текст
             {
+                case "turnx2":
+                    ui.turnLeftText.text = SaveSystem.Decrypt(turnx2); //количество подсказок
+                    PlayerResource.Instance.turnx2N = turnx2;
+                    break;
+
                 case "hints":
                     ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
                     PlayerResource.Instance.hintN = hints;
@@ -1321,6 +1343,15 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         {
             switch (data) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
             {
+                case "turnx2":
+                    ui.turnLeftText.text = SaveSystem.Decrypt(turnx2); //количество подсказок
+                    PlayerResource.Instance.turnx2T = turnx2;
+                    break;
+
+                case "turnTime":
+                    PlayerResource.Instance.turnTime = turnTime;
+                    break;
+
                 case "hints":
                     ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
                     PlayerResource.Instance.hintT = hints;

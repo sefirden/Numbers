@@ -27,6 +27,7 @@ public class PlayerResource : MonoBehaviour
     //переменные для Normal режима
     public string scoreN; //количество очков
     public string hiScoreN; //количество макс очков
+    public string turnx2N; //количество ходов с двойным бонусом к урону или очкам
     public string hintN; //количество подсказок
     public string refillN; //количество перезаполнений поля
     public int heightN; //высота поля
@@ -42,6 +43,8 @@ public class PlayerResource : MonoBehaviour
     //переменные для Time Limit режима, половина та же что и выше
     public float time; //оставшееся время
     public float playedTime; //общее время игры
+    public string turnTime; //количество ходов до восстановления активной кнопки +1 минута
+    public string turnx2T; //количество ходов с двойным бонусом к урону или очкам
     public string scoreT; 
     public string hiScoreT;
     public string hintT;
