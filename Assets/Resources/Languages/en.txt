@@ -25,6 +25,8 @@ no_time:Time is up, game over!
 restart_menu:All progress will be lost, restart the game?
 tutorial:Tutorial
 rewrite_local_save:The local save file will be overwritten, continue?
+turn_left_damage:Двойной урон, осталось ходов:
+turn_left_score:Двойные очки, осталось ходов:
 ads_confirm_damage:Посмотреть рекламу и получить двойной урон на 30 ходов?
 ads_confirm_score:Посмотреть рекламу и получить двойные очки на 30 ходов?
 ads_confirm_hint:Посмотреть рекламу и получить 3 подсказки?

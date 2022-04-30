@@ -114,7 +114,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
         ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
         ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
-        ui.turnLeftText.text = SaveSystem.GetText("ads_confirm_hint") + SaveSystem.Decrypt(turnx2);
+        ui.turnLeftText.text = SaveSystem.GetText("turn_left_damage") + " " + SaveSystem.Decrypt(turnx2);
 
         HintNumbers = new List<GameObject>(); //размер масива зависит от выбранного размера поля
         collectHint = new List<GameObject[]>(); //минимальный размер масива для сравнения подсказок
@@ -1401,6 +1401,48 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
         }
     }
+
+    public void AdTurnX2()
+    {
+        ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        ui.ScoreX2Button.interactable = false;
+        ui.DamageX2.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
+        ui.ScoreX2.gameObject.SetActive(false);
+        ui.DamageX2Loading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
+        ui.ScoreX2Loading.gameObject.SetActive(true);
+
+        AdMob_baner.Instance.OnGetMoreTurnX2Clicked(); //запускаем просмотр видео рекламы для подсказок в скрипте адмоб
+    }
+
+
+    public void AdTurnX2Recieve() //если видео реклама была просмотрена, получение доп подсказок
+    {
+        int turnX2I = 30;
+        turnx2 = SaveSystem.Encrypt(Convert.ToString(turnX2I)); ; //ставим количество подсказок равным 3
+                ui.turnLeft.gameObject.SetActive(true);
+        ToPlayerResources("turnx2");
+
+        ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.DamageX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.ScoreX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+
+
+        pause.Resume();
+    }
+
+    public void AdTurnX2Close() //если была закрыта реклама для получения доп подсказок
+    {
+        ui.DamageX2Button.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+        ui.ScoreX2Button.interactable = true;
+        ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.ScoreX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.DamageX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+
+        pause.Resume();
+    }
+
 
     public void AdHint() //если была нажата кнопка просмотреть виде рекламу для получения доп подсказок
     {

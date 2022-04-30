@@ -14,14 +14,22 @@ public class AdMob_baner : MonoBehaviour
     private RewardBasedVideoAd adRewardHint; //видео за подсказки
     private RewardBasedVideoAd adRewardRefill; //видео за перемешивание поля
 
+    private RewardBasedVideoAd adRewardTurnX2; //видео за перемешивание поля
+    private RewardBasedVideoAd adRewardPlusTime; //видео за перемешивание поля
+
     private Board board; //поле
 
     //переменные для отслеживания была реклама просмотрена или закрыта, работает только так, по гайду адмоб не работает
     public bool rewardHint;
     public bool rewardRefill;
+    public bool rewardTurnX2;
+    public bool rewardPlusTime;
 
     public bool closeHint;
     public bool closeRefill;
+    public bool closeTurnX2;
+    public bool closePlusTime;
+
 
     private string idApp, idBanner, idReward; //стринговые ид приложения, банера и видео
 
@@ -71,6 +79,20 @@ public class AdMob_baner : MonoBehaviour
             closeRefill = false;
         }
 
+        if (rewardTurnX2) //см выше, но для перемешивания поля
+        {
+            board = FindObjectOfType<Board>();
+            board.AdTurnX2Recieve();
+            rewardTurnX2 = false;
+        }
+
+        if (closeTurnX2)
+        {
+            board = FindObjectOfType<Board>();
+            board.AdTurnX2Close();
+            closeTurnX2 = false;
+        }
+
     }
 
     void Start()
@@ -87,6 +109,8 @@ public class AdMob_baner : MonoBehaviour
 
         adRewardHint = RewardBasedVideoAd.Instance;
         adRewardRefill = RewardBasedVideoAd.Instance;
+        adRewardTurnX2 = RewardBasedVideoAd.Instance;
+        adRewardPlusTime = RewardBasedVideoAd.Instance;
     }
 
 
@@ -161,6 +185,73 @@ public class AdMob_baner : MonoBehaviour
     }
 
     #endregion
+
+    #region REWARDED ADS Turnx2
+
+    public void RequestRewardAdTurnX2() //запрашиваем видео рекламу
+    {
+        AdRequest request = AdRequestBuild();
+        adRewardTurnX2.LoadAd(request, idReward);
+
+        //переопределяем базовые методы на свои
+        adRewardTurnX2.OnAdLoaded += this.HandleOnRewardedAdLoadedTurnX2;
+        adRewardTurnX2.OnAdRewarded += this.HandleOnAdRewardedTurnX2;
+        adRewardTurnX2.OnAdClosed += this.HandleOnRewardedAdClosedTurnX2;
+        adRewardTurnX2.OnAdFailedToLoad += this.HandleRewardBasedVideoFailedToLoadTurnX2;
+    }
+
+    public IEnumerator ShowRewardAdTurnX2() //показываем видео
+    {
+        if (adRewardTurnX2.IsLoaded())
+        {
+            while (PlayerResource.Instance.TurnIsOn == true)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            adRewardTurnX2.Show(); //показывает сразу как загрузится
+        }
+    }
+
+    public void HandleOnRewardedAdLoadedTurnX2(object sender, EventArgs args) //когда реклама загружена
+    {
+        StartCoroutine(ShowRewardAdTurnX2()); //показывает видео
+    }
+
+    public void HandleOnAdRewardedTurnX2(object sender, EventArgs args) //когда видео досмотрели до конца
+    {
+        rewardTurnX2 = true; //тут говорим что просмотрели, дальше см в апдейте
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Ads", "Show", "TurnX2");
+    }
+
+    public void HandleRewardBasedVideoFailedToLoadTurnX2(object sender, AdFailedToLoadEventArgs args) //если реклама не загрузилась, например нажали кнопку а интернета нет, это этот случай
+    {
+        MonoBehaviour.print(
+            "HandleRewardBasedVideoFailedToLoad event received with message: "
+                             + args.Message);
+        closeTurnX2 = true; //говорим что реклама была закрыта, см в апдейте, иначе кнопка загрузки не отлипнет с нажатого состояния когде нет инета
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Ads", "FailToLoad", "TurnX2");
+
+        adRewardTurnX2.OnAdLoaded -= this.HandleOnRewardedAdLoadedTurnX2;
+        adRewardTurnX2.OnAdRewarded -= this.HandleOnAdRewardedTurnX2;
+        adRewardTurnX2.OnAdClosed -= this.HandleOnRewardedAdClosedTurnX2;
+        adRewardTurnX2.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadTurnX2;
+    }
+
+    public void HandleOnRewardedAdClosedTurnX2(object sender, EventArgs args) //когда рекламу закрыл пользователь сам
+    {
+        closeTurnX2 = true; //говорим что реклама закрыта, см в апдейте
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Ads", "Close", "TurnX2");
+
+        adRewardTurnX2.OnAdLoaded -= this.HandleOnRewardedAdLoadedTurnX2;
+        adRewardTurnX2.OnAdRewarded -= this.HandleOnAdRewardedTurnX2;
+        adRewardTurnX2.OnAdClosed -= this.HandleOnRewardedAdClosedTurnX2;
+        adRewardTurnX2.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadTurnX2;
+    }
+
+    #endregion
+
+
 
 
     #region REWARDED ADS Hint
@@ -307,6 +398,11 @@ public class AdMob_baner : MonoBehaviour
         RequestRewardAdRefill();
     }
 
+    public void OnGetMoreTurnX2Clicked()
+    {
+        RequestRewardAdTurnX2();
+    }
+
     //ствндартная фигня по гайду от адмоб
     AdRequest AdRequestBuild()
     {
@@ -316,16 +412,5 @@ public class AdMob_baner : MonoBehaviour
     void OnDestroy()
     {
         DestroyBannerAd();
-
-        //возможно закомментированное нужно, но это не точно
-        /*adRewardHint.OnAdLoaded -= this.HandleOnRewardedAdLoadedHint;
-        adRewardHint.OnAdRewarded -= this.HandleOnAdRewardedHint;
-        adRewardHint.OnAdClosed -= this.HandleOnRewardedAdClosedHint;
-        adRewardHint.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadHint;
-
-        adRewardRefill.OnAdLoaded -= this.HandleOnRewardedAdLoadedRefill;
-        adRewardRefill.OnAdRewarded -= this.HandleOnAdRewardedRefill;
-        adRewardRefill.OnAdClosed -= this.HandleOnRewardedAdClosedRefill;
-        adRewardRefill.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadRefill;*/
     }
 }

@@ -159,7 +159,7 @@ public class ui : MonoBehaviour
         switch (buttonName) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
         {
             case "damagex2":
-                Debug.Log("Start damagex2 ads");
+                board.AdTurnX2();
                 break;
 
             case "hint":
@@ -175,7 +175,7 @@ public class ui : MonoBehaviour
                 break;
 
             case "scorex2":
-                Debug.Log("Start scorex2 ads");
+                board.AdTurnX2();
                 break;
 
             default:
