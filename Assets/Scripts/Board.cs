@@ -114,7 +114,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
         ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
         ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
-        ui.turnLeftText.text = SaveSystem.GetText("turn_left_damage") + " " + SaveSystem.Decrypt(turnx2);
+        
 
         HintNumbers = new List<GameObject>(); //размер масива зависит от выбранного размера поля
         collectHint = new List<GameObject[]>(); //минимальный размер масива для сравнения подсказок
@@ -205,16 +205,34 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.DamageX2Button.interactable = true; //делаем активной кнопку x2 урона
             ui.PlusTimeButton.interactable = true; //делаем активной кнопку плюс время
 
+            if (Convert.ToInt32(SaveSystem.Decrypt(turnx2)) > 0)
+            {                
+                ui.turnLeft.SetActive(true);
+                ui.DamageX2Button.interactable = false;
+                ui.ScoreX2Button.interactable = false;
+            }
+
             if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время, то показываем таймер
             {
                 PlayerResource.Instance.starttimer = true;
                 ui.timerimg.SetActive(true);
+                if (Convert.ToInt32(SaveSystem.Decrypt(turnTime)) > 0)
+                {
+                    ui.PlusTimeButton.interactable = false;
+                    ui.TurnLeftFillImage.gameObject.SetActive(true);
+                    ToPlayerResources("turnTime");
+                }
             }
 
             if (level == PlayerResource.Instance.scoreToNextLevel.Length)
             {
                 ui.DamageX2Button.gameObject.SetActive(false);
                 ui.ScoreX2Button.gameObject.SetActive(true);
+                ui.turnLeftText.text = SaveSystem.GetText("turn_left_score") + " " + SaveSystem.Decrypt(turnx2);
+            }
+            else
+            {
+                ui.turnLeftText.text = SaveSystem.GetText("turn_left_damage") + " " + SaveSystem.Decrypt(turnx2);
             }
 
         }
@@ -227,6 +245,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             Level.LoadLevel(10); //загрузка уровня новой игры
             Shuffle(); //перемешиваем стандартный набор цифр при новой игре
             SetUp(); //заполняем поле перемешенными цифрами
+            ui.DamageX2Button.gameObject.SetActive(true);
+            ui.ScoreX2Button.gameObject.SetActive(false);
         }
 
         for (int i = 0; i < width-1; i++) //создаем обьекты линий для соединения цифр, количество линий размер поля -1
@@ -470,11 +490,23 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 quantity++; //увеличиваем количество
             }
         }
+        int turnx2I = Convert.ToInt32(SaveSystem.Decrypt(turnx2));
+        
         if (quantity > 1) //если собрана больше чем 1 цифра
         {
-            scoreI += tempScore * quantity; //увеличиваем очки по формуле временные очки множим на количество
+
+            if (turnx2I > 0 && level == PlayerResource.Instance.scoreToNextLevel.Length)
+            {
+                scoreI += tempScore * quantity * 2;
+                turnx2I--;
+            }
+            else
+            {
+                scoreI += tempScore * quantity; //увеличиваем очки по формуле временные очки множим на количество
+            }               
 
             ScoreToAchieve(scoreI);
+            
 
             if (scoreI > hiScoreI) //если количество очков больше чем максимальное
             {
@@ -487,13 +519,36 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             if (PlayerResource.Instance.zeroMove == false && PlayerResource.Instance.bossMove == false) //если ноль не двигается и босс не двигается, наносим урон
             {
                 //тут добавить проверку на конец уровня, на последнем уровне играть другую анимацию или вместо боса кидать ножи в мишень
-                damage += tempScore * quantity; //считаем урон по формуле как и очки см выше
-                zero.Attack(level, tempScore * quantity, quantity); //передает уровень и урон, урон для цифр над головой босса                
+
+
+                if (turnx2I > 0 && level != PlayerResource.Instance.scoreToNextLevel.Length)
+                {
+                    damage += tempScore * quantity * 2;
+                    turnx2I--;
+                    zero.Attack(level, tempScore * quantity * 2, quantity); //передает уровень и урон, урон для цифр над головой босса 
+                }
+                else
+                {
+                    damage += tempScore * quantity; //считаем урон по формуле как и очки см выше
+                    zero.Attack(level, tempScore * quantity, quantity); //передает уровень и урон, урон для цифр над головой босса 
+                }
+                
+                               
             }
 
             if (PlayerResource.Instance.gameMode == "timetrial") //если у нас режим игры на время
             {
+                int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));
                 PlayerResource.Instance.time += quantity * (difficultTime + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 0.5 + 0,5 до 0.5 + 0,9 сек 
+                turnTimeI--;
+                if(turnTimeI <= 0)
+                {
+                    ui.PlusTimeButton.interactable = true;
+                }
+
+                turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
+                ToPlayerResources("turnTime");
+                
             }
 
             StartCoroutine(ChangeLevel()); //проверяем надо ли менять уровень
@@ -513,10 +568,20 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             PlayerResource.Instance.TurnIsOn = false;
             Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
         }
+        
+        if (turnx2I <=0)
+        {
+            ui.turnLeft.SetActive(false);
+            ui.DamageX2Button.interactable = true;
+            ui.ScoreX2Button.interactable = true;
+        }
 
+
+
+        turnx2 = SaveSystem.Encrypt(Convert.ToString(turnx2I));
         score = SaveSystem.Encrypt(Convert.ToString(scoreI));
         ToPlayerResources("score");
-
+        ToPlayerResources("turnx2");
         ToPlayerResources("damage");
         ToPlayerResources("level");
     }
@@ -576,6 +641,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.DamageX2Button.gameObject.SetActive(false);
             ui.ScoreX2Button.gameObject.SetActive(true);
             ui.turnLeft.SetActive(false);
+            int turnx2I = 0;
+            turnx2 = SaveSystem.Encrypt(Convert.ToString(turnx2I));
+            ToPlayerResources("turnx2");
 
 
             StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
@@ -1286,7 +1354,14 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             switch (data) //вешаем на элементы ui текст
             {
                 case "turnx2":
-                    ui.turnLeftText.text = SaveSystem.Decrypt(turnx2); //количество подсказок
+                    if (level == PlayerResource.Instance.scoreToNextLevel.Length)
+                    {
+                        ui.turnLeftText.text = SaveSystem.GetText("turn_left_score") + " " + SaveSystem.Decrypt(turnx2);
+                    }
+                    else
+                    {
+                        ui.turnLeftText.text = SaveSystem.GetText("turn_left_damage") + " " + SaveSystem.Decrypt(turnx2); ; //количество подсказок
+                    }
                     PlayerResource.Instance.turnx2N = turnx2;
                     break;
 
@@ -1344,12 +1419,22 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             switch (data) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
             {
                 case "turnx2":
-                    ui.turnLeftText.text = SaveSystem.Decrypt(turnx2); //количество подсказок
+
+                    if (level == PlayerResource.Instance.scoreToNextLevel.Length)
+                    {
+                        ui.turnLeftText.text = SaveSystem.GetText("turn_left_score") + " " + SaveSystem.Decrypt(turnx2);
+                    }
+                    else
+                    {
+                        ui.turnLeftText.text = SaveSystem.GetText("turn_left_damage") + " " + SaveSystem.Decrypt(turnx2); ; //количество подсказок
+                    }                    
                     PlayerResource.Instance.turnx2T = turnx2;
                     break;
 
                 case "turnTime":
                     PlayerResource.Instance.turnTime = turnTime;
+                    int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));                                     
+                    ui.TurnLeftFillImage.GetComponent<Image>().fillAmount = 1f - (float)turnTimeI / 60f;
                     break;
 
                 case "hints":
@@ -1419,9 +1504,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     {
         int turnX2I = 30;
         turnx2 = SaveSystem.Encrypt(Convert.ToString(turnX2I)); ; //ставим количество подсказок равным 3
-                ui.turnLeft.gameObject.SetActive(true);
+        ui.turnLeft.gameObject.SetActive(true);
         ToPlayerResources("turnx2");
 
+        ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        ui.ScoreX2Button.interactable = false;
         ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
         ui.DamageX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
         ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
@@ -1442,6 +1529,46 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
     }
+
+
+
+    public void AdPlusTime()
+    {
+        ui.PlusTimeButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        ui.PlusTime.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
+        ui.PlusTimeLoading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
+
+        AdMob_baner.Instance.OnGetMorePlusTimeClicked(); //запускаем просмотр видео рекламы для подсказок в скрипте адмоб
+    }
+
+
+    public void AdPlusTimeRecieve() //если видео реклама была просмотрена, получение доп подсказок
+    {
+        int turnTimeI = 60; //количество ходов до отката кнопки
+        turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
+        PlayerResource.Instance.time += 60f;
+        ui.PlusTimeButton.interactable = false;
+        ui.TurnLeftFillImage.gameObject.SetActive(true);
+        ToPlayerResources("turnTime");
+
+
+        ui.PlusTime.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.PlusTimeLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+
+        pause.Resume();
+    }
+
+    public void AdPlusTimeClose() //если была закрыта реклама для получения доп подсказок
+    {
+        ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+        ui.PlusTime.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.PlusTimeLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+
+        pause.Resume();
+    }
+
+
+
 
 
     public void AdHint() //если была нажата кнопка просмотреть виде рекламу для получения доп подсказок

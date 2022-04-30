@@ -57,10 +57,13 @@ public class ui : MonoBehaviour
     public Image DamageX2;
     public Image DamageX2Loading;
 
+    public Image PlusTime;
+    public Image PlusTimeLoading;
+    public Image TurnLeftFillImage;
+
     public Image ScoreX2;
     public Image ScoreX2Loading;
     
-
     public Image AdsHint;
     public Image AdsHintLoading;
 
@@ -171,7 +174,7 @@ public class ui : MonoBehaviour
                 break;
 
             case "plustime":
-                Debug.Log("Start plustime ads");
+                board.AdPlusTime();
                 break;
 
             case "scorex2":

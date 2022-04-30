@@ -34,7 +34,7 @@ public class bossPlayer : MonoBehaviour
             transform.position = new Vector3(4.92f, 13f, transform.position.z); //сразу ставим нужну позицию
             Invoke("RandomAttackTimer", UnityEngine.Random.Range(5f, 15f)); //запускаем атаку
             ui.LifeBarBackground.SetActive(true); //включаем лайфбар
-            ui.turnLeft.SetActive(true);
+            
             PlayerResource.Instance.bossMove = false; //говорим что босс не двигается
         }
     }
@@ -104,7 +104,12 @@ public class bossPlayer : MonoBehaviour
         gameObject.GetComponent<Animator>().SetBool("run", false); //анимацмя бега
         ui.LifeBarBackground.SetActive(true); //включаем лайфбар
         ui.Tutorial.interactable = true;
-        ui.turnLeft.SetActive(true);
+        if (Convert.ToInt32(SaveSystem.Decrypt(board.turnx2)) > 0)
+        {
+            ui.turnLeft.SetActive(true);
+            ui.DamageX2Button.interactable = false;
+            ui.ScoreX2Button.interactable = false;
+        }
 
 
         //запускаем тут подсказки

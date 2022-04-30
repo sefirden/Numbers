@@ -93,6 +93,20 @@ public class AdMob_baner : MonoBehaviour
             closeTurnX2 = false;
         }
 
+        if (rewardPlusTime) //см выше, но для перемешивания поля
+        {
+            board = FindObjectOfType<Board>();
+            board.AdPlusTimeRecieve();
+            rewardPlusTime = false;
+        }
+
+        if (closePlusTime)
+        {
+            board = FindObjectOfType<Board>();
+            board.AdPlusTimeClose();
+            closePlusTime = false;
+        }
+
     }
 
     void Start()
@@ -251,7 +265,70 @@ public class AdMob_baner : MonoBehaviour
 
     #endregion
 
+    #region REWARDED ADS PlusTime
 
+    public void RequestRewardAdPlusTime() //запрашиваем видео рекламу
+    {
+        AdRequest request = AdRequestBuild();
+        adRewardPlusTime.LoadAd(request, idReward);
+
+        //переопределяем базовые методы на свои
+        adRewardPlusTime.OnAdLoaded += this.HandleOnRewardedAdLoadedPlusTime;
+        adRewardPlusTime.OnAdRewarded += this.HandleOnAdRewardedPlusTime;
+        adRewardPlusTime.OnAdClosed += this.HandleOnRewardedAdClosedPlusTime;
+        adRewardPlusTime.OnAdFailedToLoad += this.HandleRewardBasedVideoFailedToLoadPlusTime;
+    }
+
+    public IEnumerator ShowRewardAdPlusTime() //показываем видео
+    {
+        if (adRewardPlusTime.IsLoaded())
+        {
+            while (PlayerResource.Instance.TurnIsOn == true)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            adRewardPlusTime.Show(); //показывает сразу как загрузится
+        }
+    }
+
+    public void HandleOnRewardedAdLoadedPlusTime(object sender, EventArgs args) //когда реклама загружена
+    {
+        StartCoroutine(ShowRewardAdPlusTime()); //показывает видео
+    }
+
+    public void HandleOnAdRewardedPlusTime(object sender, EventArgs args) //когда видео досмотрели до конца
+    {
+        rewardPlusTime = true; //тут говорим что просмотрели, дальше см в апдейте
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Ads", "Show", "PlusTime");
+    }
+
+    public void HandleRewardBasedVideoFailedToLoadPlusTime(object sender, AdFailedToLoadEventArgs args) //если реклама не загрузилась, например нажали кнопку а интернета нет, это этот случай
+    {
+        MonoBehaviour.print(
+            "HandleRewardBasedVideoFailedToLoad event received with message: "
+                             + args.Message);
+        closePlusTime = true; //говорим что реклама была закрыта, см в апдейте, иначе кнопка загрузки не отлипнет с нажатого состояния когде нет инета
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Ads", "FailToLoad", "PlusTime");
+
+        adRewardPlusTime.OnAdLoaded -= this.HandleOnRewardedAdLoadedPlusTime;
+        adRewardPlusTime.OnAdRewarded -= this.HandleOnAdRewardedPlusTime;
+        adRewardPlusTime.OnAdClosed -= this.HandleOnRewardedAdClosedPlusTime;
+        adRewardPlusTime.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadPlusTime;
+    }
+
+    public void HandleOnRewardedAdClosedPlusTime(object sender, EventArgs args) //когда рекламу закрыл пользователь сам
+    {
+        closePlusTime = true; //говорим что реклама закрыта, см в апдейте
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("Ads", "Close", "PlusTime");
+
+        adRewardPlusTime.OnAdLoaded -= this.HandleOnRewardedAdLoadedPlusTime;
+        adRewardPlusTime.OnAdRewarded -= this.HandleOnAdRewardedPlusTime;
+        adRewardPlusTime.OnAdClosed -= this.HandleOnRewardedAdClosedPlusTime;
+        adRewardPlusTime.OnAdFailedToLoad -= this.HandleRewardBasedVideoFailedToLoadPlusTime;
+    }
+
+    #endregion
 
 
     #region REWARDED ADS Hint
@@ -402,6 +479,12 @@ public class AdMob_baner : MonoBehaviour
     {
         RequestRewardAdTurnX2();
     }
+
+    public void OnGetMorePlusTimeClicked()
+    {
+        RequestRewardAdPlusTime();
+    }
+    
 
     //ствндартная фигня по гайду от адмоб
     AdRequest AdRequestBuild()
