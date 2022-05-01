@@ -544,6 +544,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 if(turnTimeI <= 0)
                 {
                     ui.PlusTimeButton.interactable = true;
+                    ui.TurnLeftFillImage.gameObject.SetActive(false);
                 }
 
                 turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
