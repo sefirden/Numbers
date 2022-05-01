@@ -79,6 +79,10 @@ public class Level : MonoBehaviour
             {
                 PlayerResource.Instance.starttimer = true;
                 ui.timerimg.SetActive(true);
+                if (Convert.ToInt32(SaveSystem.Decrypt(board.turnTime)) <= 0)
+                {
+                    ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+                }
             }
 
             boss.gameObject.SetActive(true); //включаем босса
@@ -91,10 +95,7 @@ public class Level : MonoBehaviour
             {
                 ui.DamageX2Button.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
             }
-            if (Convert.ToInt32(SaveSystem.Decrypt(board.turnTime)) <= 0)
-            {
-                ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
-            }
+
 
             StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
         }
