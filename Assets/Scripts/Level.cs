@@ -79,15 +79,24 @@ public class Level : MonoBehaviour
             {
                 PlayerResource.Instance.starttimer = true;
                 ui.timerimg.SetActive(true);
+                if (Convert.ToInt32(SaveSystem.Decrypt(board.turnTime)) <= 0)
+                {
+                    ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+                }
             }
 
             boss.gameObject.SetActive(true); //включаем босса
             board.gameObject.SetActive(true); //когда вышел ноль включаем поле
             StartCoroutine(ui.LightsOnOff(true)); //включаем свет
-            ui.HintButton.interactable = true; //делаем активной кнопку подсказок
-            ui.PlusTimeButton.interactable = true; //делаем активной кнопку плюс время
+            ui.HintButton.interactable = true; //делаем активной кнопку подсказок            
             ui.RefillButton.interactable = true; //делаем активной кнопку перемешать
-            ui.DamageX2Button.interactable = true;
+
+            if (Convert.ToInt32(SaveSystem.Decrypt(board.turnx2)) <= 0)
+            {
+                ui.DamageX2Button.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+            }
+
+
             StartCoroutine(boss.MoveToStart()); //двигаем босса к стартовой точке
         }
         else

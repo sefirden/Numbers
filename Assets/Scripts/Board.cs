@@ -50,7 +50,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     private int index; //индекс записанной в масив собраных цифр
 
     private bool hint; //переменная учавствует в поиске цифр при подсказке
-       
+
     public float scaleBoard; //переменная для увеличения размера цифр в полях 5 и 7
 
     public int damage; //урон высчитан из очков, когда босс на уровне, от урона меняется босс и уровень
@@ -83,7 +83,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             turnx2 = PlayerResource.Instance.turnx2N;
 
         }
-        else if(PlayerResource.Instance.gameMode == "timetrial") //для режима на время
+        else if (PlayerResource.Instance.gameMode == "timetrial") //для режима на время
         {
             width = PlayerResource.Instance.widthT;
             height = PlayerResource.Instance.heightT;
@@ -107,14 +107,14 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         numbers = new int[width, height]; //размер масива зависит от выбранного размера поля
         CollectedNumbers = new GameObject[width]; //размер масива зависит от выбранного размера поля, максимальная длина цепочки - 9
         lines = new LineRenderer[width - 1]; //размер масива зависит от выбранного размера поля -1 , так как соединить 5 цифр нужно 4 линии и тд
-        TagForRandomRefill = new int[width*height]; //размер масива зависит от размера поля, для 5 это 5*5=25, 49 и 81 для других режимов
+        TagForRandomRefill = new int[width * height]; //размер масива зависит от размера поля, для 5 это 5*5=25, 49 и 81 для других режимов
 
         ui.scoreText.text = SaveSystem.Decrypt(score); //очки
         ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
         ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
         ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
         ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
-        
+
 
         HintNumbers = new List<GameObject>(); //размер масива зависит от выбранного размера поля
         collectHint = new List<GameObject[]>(); //минимальный размер масива для сравнения подсказок
@@ -206,7 +206,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.PlusTimeButton.interactable = true; //делаем активной кнопку плюс время
 
             if (Convert.ToInt32(SaveSystem.Decrypt(turnx2)) > 0)
-            {                
+            {
                 ui.turnLeft.SetActive(true);
                 ui.DamageX2Button.interactable = false;
                 ui.ScoreX2Button.interactable = false;
@@ -249,13 +249,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.ScoreX2Button.gameObject.SetActive(false);
         }
 
-        for (int i = 0; i < width-1; i++) //создаем обьекты линий для соединения цифр, количество линий размер поля -1
+        for (int i = 0; i < width - 1; i++) //создаем обьекты линий для соединения цифр, количество линий размер поля -1
         {
             LineRenderer line = Instantiate(sampleLine, sampleLine.transform.position, Quaternion.identity);
             line.name = "line " + i;
             lines[i] = line;
             lines[i].gameObject.SetActive(false); //скрываем созданные линии
-        }               
+        }
     }
 
     void Update()
@@ -268,7 +268,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         endPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y); //при каждом кадре считает последнюю позицию мышки
 
-        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused !=true)//клик кнопки мышки вниз если не на паузе
+        if (Input.GetMouseButtonDown(0) && PlayerResource.Instance.GameIsPaused != true)//клик кнопки мышки вниз если не на паузе
         {
             ClickSelect(); //ищем стартовую точку методом
         }
@@ -298,12 +298,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                         CollectedNumbers[index].transform.localScale *= 1.25f; //увеличиваем объект пойманной цифры на 25%
                         CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //уменьшаем колайдер цифры до размеров до увеличения, иначе райкаст цепляет не те цифры иногда
                         CollectedNumbers[index].transform.name = "owned"; //меняем имя, надо для отмены выбора цифры, см дальше
-                        
+
                         lines[index - 1].SetPosition(0, CollectedNumbers[index - 1].transform.position); //берем линию из масива с линиями по индексу, устанавливаем первую точку линии по предыдущей цифре
                         lines[index - 1].SetPosition(1, CollectedNumbers[index].transform.position); //берем линию из масива с линиями по индексу, устанавливаем вторую точку линии по пойманной райкастом цифре
                         lines[index - 1].gameObject.SetActive(true); //включаем эту линию
 
-                        FindObjectOfType<AudioManager>().Play("number_select_"+ Convert.ToString(index - 1)); 
+                        FindObjectOfType<AudioManager>().Play("number_select_" + Convert.ToString(index - 1));
 
                         index++; //увеличиваем индекс, для след цифр
                     }
@@ -316,7 +316,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
                         endPosition = hit2.transform.position; //последнюю позицию ставим по центру тайла
                         startPosition = endPosition; //начинаем новые лайнкасты с последнего положения мышки
-                        
+
                         index--; //уменьшаем индекс
 
                         CollectedNumbers[index].transform.localScale = Vector3.one * scaleBoard; //для этой цифры ставим стандартный размер
@@ -324,7 +324,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                         CollectedNumbers[index].transform.name = "ok"; //меняем имя с овнед на ок
                         CollectedNumbers[index] = null; //удаляем эту цифру из списка пойманных цифр
 
-                        lines[index-1].gameObject.SetActive(false); //выключаем линию, которая соединяла эти цифры
+                        lines[index - 1].gameObject.SetActive(false); //выключаем линию, которая соединяла эти цифры
                     }
                     else
                     {
@@ -373,7 +373,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
 
                 int dotToUse = Convert.ToInt32(a[indx]) - 1; //цифра из масива сохраненных цифр
-                
+
                 GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
                 dot.transform.parent = this.transform; //присваиваем позицию
                 dot.name = "t ( " + i + ", " + j + " )"; //присваиваем имя
@@ -456,12 +456,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             //ебань чтобы во время анимации удаления не напихать в метод еще цифр кликая на все попало
 
-                CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив собрыннх цифр
+            CollectedNumbers[index] = tempObject.transform.gameObject; //записываем первое значение в массив собрыннх цифр
 
-                CollectedNumbers[index].transform.localScale *= 1.25f; //увеличиваем размер цифры
-                CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //делаем размер колайдера стандартного размера
+            CollectedNumbers[index].transform.localScale *= 1.25f; //увеличиваем размер цифры
+            CollectedNumbers[index].GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f); //делаем размер колайдера стандартного размера
 
-                index++; //увеличиваем индекс, для заполнения масива по порядку
+            index++; //увеличиваем индекс, для заполнения масива по порядку
         }
         else //если райкастом ничего не поймали
         {
@@ -491,7 +491,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
         }
         int turnx2I = Convert.ToInt32(SaveSystem.Decrypt(turnx2));
-        
+
         if (quantity > 1) //если собрана больше чем 1 цифра
         {
 
@@ -503,10 +503,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             else
             {
                 scoreI += tempScore * quantity; //увеличиваем очки по формуле временные очки множим на количество
-            }               
+            }
 
             ScoreToAchieve(scoreI);
-            
+
 
             if (scoreI > hiScoreI) //если количество очков больше чем максимальное
             {
@@ -532,8 +532,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                     damage += tempScore * quantity; //считаем урон по формуле как и очки см выше
                     zero.Attack(level, tempScore * quantity, quantity); //передает уровень и урон, урон для цифр над головой босса 
                 }
-                
-                               
+
+
             }
 
             if (PlayerResource.Instance.gameMode == "timetrial") //если у нас режим игры на время
@@ -541,7 +541,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));
                 PlayerResource.Instance.time += quantity * (difficultTime + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 0.5 + 0,5 до 0.5 + 0,9 сек 
                 turnTimeI--;
-                if(turnTimeI <= 0)
+                if (turnTimeI <= 0)
                 {
                     ui.PlusTimeButton.interactable = true;
                     ui.TurnLeftFillImage.gameObject.SetActive(false);
@@ -549,7 +549,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
                 turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
                 ToPlayerResources("turnTime");
-                
+
             }
 
             StartCoroutine(ChangeLevel()); //проверяем надо ли менять уровень
@@ -558,7 +558,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         else //если собрана всего одна цифра и мы отпустили клик
         {
             if (CollectedNumbers[0] != null) //если первый элемент не нуль
-            { 
+            {
                 CollectedNumbers[0].transform.localScale = Vector3.one * scaleBoard; //ставим первой цифре стандартный размер
                 CollectedNumbers[0].GetComponent<BoxCollider2D>().size = new Vector2(0.76f, 0.76f); //делаем размер колайдера тоже стандартным
                 CollectedNumbers[0].transform.name = "ok"; //меняем имя, надо для возможности отмены хода движением в обратном порядке по цифрам
@@ -569,8 +569,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             PlayerResource.Instance.TurnIsOn = false;
             Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
         }
-        
-        if (turnx2I <=0)
+
+        if (turnx2I <= 0)
         {
             ui.turnLeft.SetActive(false);
             ui.DamageX2Button.interactable = true;
@@ -662,24 +662,24 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     {
         //собираем текущее поле в строку
 
-            int[] board = new int[width * width]; //обнуляем предыдущую строку из цифр
-            int ind = 0;
-            for (int i = 0; i < width; i++) //столбцы
+        int[] board = new int[width * width]; //обнуляем предыдущую строку из цифр
+        int ind = 0;
+        for (int i = 0; i < width; i++) //столбцы
+        {
+            for (int j = 0; j < width; j++) //рядки
             {
-                for (int j = 0; j < width; j++) //рядки
-                {
-                    board [ind] = Convert.ToInt32(allDots[i, j].transform.tag); //сохраняем теги всех объектов в строку через *
-                    ind++;
-                }
+                board[ind] = Convert.ToInt32(allDots[i, j].transform.tag); //сохраняем теги всех объектов в строку через *
+                ind++;
             }
+        }
         //перемешать собранное поле, метод из интернета
-            for (int t = 0; t < width * width; t++)
-            {
-                int tmp = board[t];
-                int r = UnityEngine.Random.Range(t, width*width);
-                board[t] = board[r];
-                board[r] = tmp;
-            }
+        for (int t = 0; t < width * width; t++)
+        {
+            int tmp = board[t];
+            int r = UnityEngine.Random.Range(t, width * width);
+            board[t] = board[r];
+            board[r] = tmp;
+        }
 
         //заполняем поле собранными цифрами, перемешаными
         int ind2 = 0;
@@ -693,7 +693,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
 
                 int dotToUse = board[ind2]; //заполняем поле из масива, который предварительно был перемешан и заполнен, см выше метод шафл
-                GameObject dot = Instantiate(dots[dotToUse-1], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
+                GameObject dot = Instantiate(dots[dotToUse - 1], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
                 dot.transform.parent = this.transform; //присваиваем позицию
                 dot.name = "t ( " + i + ", " + j + " )"; //присваиваем имя
                 dot.transform.localScale *= scaleBoard; //увиличиваем по размеру поля
@@ -729,13 +729,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             dot.GetComponent<BoxCollider2D>().enabled = false; //выключаем коллайдер иначе пока идет анимация можно выбрать еще цифру
             dot.GetComponent<Animator>().SetTrigger("destroy");
         }
-        
+
         Destroy(CollectedNumbers, index);
     }
-       
+
     private void Destroy(GameObject[] CollectedNumbers, int index) //удаляем собранные элементы
     {
-       //Debug.LogError("Destroy");
+        //Debug.LogError("Destroy");
         //удаляем собранные
         for (int i = 0; i < index; i++)
         {
@@ -747,10 +747,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         Array.Clear(CollectedNumbers, 0, CollectedNumbers.Length); //обнуляем массив с собранными цифрами
         index = 0; //ставим индекс 0, иначе масив собранных цифр будет заполнятся неверно
 
-       //двигаем ряды вниз
-       StartCoroutine(DecreaseRow());
+        //двигаем ряды вниз
+        StartCoroutine(DecreaseRow());
     }
-    
+
     private IEnumerator DecreaseRow()//короутина, которая двигает цифры вниз, на место собранных ранее
     {
         PlayerResource.Instance.anim_board_destroy = true;
@@ -779,7 +779,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
             nullCount = 0; //обнуляем количество пустх ячеек и переходим к проверке следующего столбца
         }
-       // yield return new WaitForSeconds(0.1f); //ожидание 0,4с, хрен пойми на что влияет, потестить, теоретически скорость сдвига ячеек вниз
+        // yield return new WaitForSeconds(0.1f); //ожидание 0,4с, хрен пойми на что влияет, потестить, теоретически скорость сдвига ячеек вниз
 
         //запускаем заполнение пустых ячеек на поле
 
@@ -800,10 +800,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     {
         //смысл метода, что в итоге мы получим массив цифр которых не хватает на поле по правилам, и из этого массива будет выбрана случайная цифра
         //собираем все цифры, вместо пустых ячеек ставим 0, потом сортируем и создаем словарь с количеством каждой цифры, во временный метод вписываем цифры, которых мало на поле и также вписываем те, которых на поле не осталось вообще
-       
-        int[] temp = new int [width]; //временный масив размером в ширину поля
+
+        int[] temp = new int[width]; //временный масив размером в ширину поля
         int count = 0; //счетчик цифр
-        int indx  = 0; //индекс масива
+        int indx = 0; //индекс масива
 
         for (int i = 0; i < width; i++) //столбцы
         {
@@ -833,29 +833,29 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             {
                 temp[indx] = k.Key; //то пишем ее во временный массив 
                 indx++; //увеличиваем индекс, для заполенния массива
-            }                
+            }
         }
 
 
-            int[] Board = new int[width]; //создаем массив, который содержит все цифры по порядку, зависит от размера поля 
+        int[] Board = new int[width]; //создаем массив, который содержит все цифры по порядку, зависит от размера поля 
 
-            for (int i = 0; i < width; i++)
-            {
-                Board[i] = i + 1;  //для поля размером 5, массив будет 1,2,3,4,5              
-            }
+        for (int i = 0; i < width; i++)
+        {
+            Board[i] = i + 1;  //для поля размером 5, массив будет 1,2,3,4,5              
+        }
 
-            var tag = TagForRandomRefill.Distinct(); //массив, который из всех собранных цифр оставляет только по одному варианту (типа было 1,1,2,3,3, станет 1,2,3)
+        var tag = TagForRandomRefill.Distinct(); //массив, который из всех собранных цифр оставляет только по одному варианту (типа было 1,1,2,3,3, станет 1,2,3)
 
-            var result = Board.Except(tag); //массив который оставляет из массива боард, только те цифры, которых нет в массиве тег (без этого куска возможен вариант, когда ты собрал все цифры и они больше не смогут появится при заполнении)
+        var result = Board.Except(tag); //массив который оставляет из массива боард, только те цифры, которых нет в массиве тег (без этого куска возможен вариант, когда ты собрал все цифры и они больше не смогут появится при заполнении)
 
-            foreach (var k in result) //для каждой цифры в масиве результ
-            {
-                temp[indx] = k; //записываем в временный масив
-                indx++; //увиличиваем индекс
+        foreach (var k in result) //для каждой цифры в масиве результ
+        {
+            temp[indx] = k; //записываем в временный масив
+            indx++; //увиличиваем индекс
 
-            }
+        }
 
-            Array.Resize(ref temp, indx); //меняем размер масива в зависимости от количества цифр в нем, по умолчанию размер как ширина поля
+        Array.Resize(ref temp, indx); //меняем размер масива в зависимости от количества цифр в нем, по умолчанию размер как ширина поля
 
         return temp; //возвращаем временный массив
     }
@@ -871,7 +871,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             {
                 if (allDots[i, j] == null) //если находим пустуя ячейку на поле
                 {
-           
+
                     var temp = Scan(); //получаем массив с цифрами для заполнения, которые соответствуют правилам, см метод скан выше
 
                     float x = (float)i * scaleBoard; //координаты множим на переменную по размеру поля см выше
@@ -879,7 +879,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
                     Vector3 tempPosition = new Vector3(x, y, 1f); //позиция цифры
 
-                    dotToUse = temp[UnityEngine.Random.Range(0, temp.Length)]-1; //выбираем цифру из массива случайным способом и отнимаем 1, иначе вместо 2 будем заполнять 3 и тд.
+                    dotToUse = temp[UnityEngine.Random.Range(0, temp.Length)] - 1; //выбираем цифру из массива случайным способом и отнимаем 1, иначе вместо 2 будем заполнять 3 и тд.
 
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity); //создаем объект цифры, которая берет префаб из списка дотс и нужными координатами
                     dot.transform.parent = this.transform; //присваиваем позицию
@@ -893,7 +893,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         }
         Array.Clear(TagForRandomRefill, 0, TagForRandomRefill.Length); //обнуляем собранные цифры, не помню почему именно тут а не в методе скан, лучше не трогать
 
-        if(changelvl == true) //если смена уровня, то мешаем поле
+        if (changelvl == true) //если смена уровня, то мешаем поле
         {
             ShuffleBoardChangeLevel(); //мешаем поле
             changelvl = false; //говорим что смена уровня уже не тру
@@ -956,7 +956,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             else
                 break; //выходим из цикла
         }
-        if(countStep == false) //если после всех проверок нет возможных ходов
+        if (countStep == false) //если после всех проверок нет возможных ходов
         {
             int refillI = Convert.ToInt32(SaveSystem.Decrypt(refill));
             if (refillI == 0 && AdReward == true) //если количество перемешиваний поля равно 0 и реклама просмотрена была
@@ -1013,7 +1013,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         if (PlayerResource.Instance.gameMode == "normal") //если режим игры нормальный
         {
             PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, Convert.ToInt32(hiScoreS)); //отправляем лучшие очки в Google Play
-            PlayerResource.Instance.EndGameN = true; 
+            PlayerResource.Instance.EndGameN = true;
 
         }
         else if (PlayerResource.Instance.gameMode == "timetrial") //если режим игры на время
@@ -1048,8 +1048,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.HintButton.gameObject.SetActive(false); //выключаем кнопку подсказок
             ui.AdHintButton.gameObject.SetActive(true); //включаем кнопку +3 подсказки за видео рекламу
         }
-            hints = SaveSystem.Encrypt(Convert.ToString(hintsI));
-            ToPlayerResources("hints");
+        hints = SaveSystem.Encrypt(Convert.ToString(hintsI));
+        ToPlayerResources("hints");
     }
 
     public void Hint(int a, int b) //стартовый метод подсказок, ищет последовательность цифр для соединения от случайной цифры на поле
@@ -1057,29 +1057,29 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         hint = false;
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(allDots[a, b].transform.position, 1.2f * scaleBoard); //создаем массив с коллайдерами, записываем все колайдеры в радиусе 1,2*скейл от последней цифры в подсказке
 
-            for (int k = 0; k < hitColliders.Length; k++) //для всех элементов массива с колайдерами
+        for (int k = 0; k < hitColliders.Length; k++) //для всех элементов массива с колайдерами
+        {
+            if (Convert.ToInt32(allDots[a, b].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1) //если последняя цифра в подсказке - текущий тег колайдера равно 1 (образно если последняя цифра равно 2 и рядом мы нашли цифру 1)
             {
-                if (Convert.ToInt32(allDots[a, b].transform.tag) - Convert.ToInt32(hitColliders[k].transform.tag) == 1) //если последняя цифра в подсказке - текущий тег колайдера равно 1 (образно если последняя цифра равно 2 и рядом мы нашли цифру 1)
-                {
-                    hint = true; //говорим что есть возможный ход, чтобы остановить цикл
-                    HintNumbers.Add(allDots[a, b].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
-                    HintNumbers.Add(hitColliders[k].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
+                hint = true; //говорим что есть возможный ход, чтобы остановить цикл
+                HintNumbers.Add(allDots[a, b].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
+                HintNumbers.Add(hitColliders[k].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
 
-                    HintSearchMinus(HintNumbers[HintNumbers.Count() - 1], hint, a, b); //запускаем метод, который будет искать возможные цифры, которые меньше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
-                    Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки 
-                    return; //выходим из цикла
-                }
-                else if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[a, b].transform.tag) == 1)
-                {                
-                    hint = true; //говорим что есть возможный ход, чтобы остановить цикл
-                    HintNumbers.Add(allDots[a, b].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
-                    HintNumbers.Add(hitColliders[k].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
-
-                    HintSearchPlus(HintNumbers[HintNumbers.Count() - 1], hint, a, b); //запускаем метод, который будет искать возможные цифры, которые меньше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
-                    Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки 
-                    return;
-                }
+                HintSearchMinus(HintNumbers[HintNumbers.Count() - 1], hint, a, b); //запускаем метод, который будет искать возможные цифры, которые меньше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+                Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки 
+                return; //выходим из цикла
             }
+            else if (Convert.ToInt32(hitColliders[k].transform.tag) - Convert.ToInt32(allDots[a, b].transform.tag) == 1)
+            {
+                hint = true; //говорим что есть возможный ход, чтобы остановить цикл
+                HintNumbers.Add(allDots[a, b].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
+                HintNumbers.Add(hitColliders[k].transform.gameObject); //записываем найденную колайдером цифру как следующий элемент массива
+
+                HintSearchPlus(HintNumbers[HintNumbers.Count() - 1], hint, a, b); //запускаем метод, который будет искать возможные цифры, которые меньше чем точка старта проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+                Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки 
+                return;
+            }
+        }
 
         Array.Clear(hitColliders, 0, hitColliders.Length); //очищаем массив с колайдерами в радиусе от точки проверки 
 
@@ -1125,7 +1125,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         {
             HintNumbers.Reverse(); //реверсим масив с собранными цифрами для подсказки (типа было 3,2,1 стало 1,2,3)
             hint = true; //говорим что есть возможный ход
-            HintSearchPlus(HintNumbers[HintNumbers.Count()-1], hint, a, b); //запускаем метод, который будет искать возможные цифры, которые больше чем последняя точка проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
+            HintSearchPlus(HintNumbers[HintNumbers.Count() - 1], hint, a, b); //запускаем метод, который будет искать возможные цифры, которые больше чем последняя точка проверки (передаем счетчик, найденная колайдером цифра, ну и была подсказка или нет)
         }
     }
 
@@ -1170,7 +1170,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 Hint(a, b);
 
             }
-            else if (b < width-1 && a <= width - 1)
+            else if (b < width - 1 && a <= width - 1)
             {
                 b++;
                 Hint(a, b);
@@ -1219,7 +1219,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         collectHint.Clear();
         Draw(true); //рисуем линии между цифрами подсказок и увеличиваем их размеры
     }
-       
+
     public void Draw(bool draw) //метод по рисованию линий между цифрами при подсказках
     {
         int count = -1; //счетчик равно -1, иначе будет рисовать не верно
@@ -1238,7 +1238,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             for (int j = 0; j < count; j++) //для всех линий в рамках счетчика цифр
             {
                 lines[j].SetPosition(0, HintNumbers[j].transform.position); //ставим стартовую точку линии
-                lines[j].SetPosition(1, HintNumbers[j+1].transform.position); //ставим конечную точку линии
+                lines[j].SetPosition(1, HintNumbers[j + 1].transform.position); //ставим конечную точку линии
                 lines[j].gameObject.SetActive(true); //показываем линию
             }
 
@@ -1255,8 +1255,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
 
             HintNumbers.Clear(); //очищаем масив с собранными цифрами в подсказке
-            
-            for(int j = 0; j < lines.Length; j++) //для всех линий
+
+            for (int j = 0; j < lines.Length; j++) //для всех линий
             {
                 lines[j].gameObject.SetActive(false); //выключаем линию
             }
@@ -1428,13 +1428,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                     else
                     {
                         ui.turnLeftText.text = SaveSystem.GetText("turn_left_damage") + " " + SaveSystem.Decrypt(turnx2); ; //количество подсказок
-                    }                    
+                    }
                     PlayerResource.Instance.turnx2T = turnx2;
                     break;
 
                 case "turnTime":
                     PlayerResource.Instance.turnTime = turnTime;
-                    int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));                                     
+                    int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));
                     ui.TurnLeftFillImage.GetComponent<Image>().fillAmount = 1f - (float)turnTimeI / 60f;
                     break;
 
@@ -1521,8 +1521,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdTurnX2Close() //если была закрыта реклама для получения доп подсказок
     {
-        ui.DamageX2Button.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
-        ui.ScoreX2Button.interactable = true;
+        if (Convert.ToInt32(SaveSystem.Decrypt(turnx2)) <= 0)
+        {
+            ui.DamageX2Button.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+            ui.ScoreX2Button.interactable = true;
+        }
+
         ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
         ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
         ui.ScoreX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
@@ -1561,7 +1565,12 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdPlusTimeClose() //если была закрыта реклама для получения доп подсказок
     {
-        ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+
+        if (Convert.ToInt32(SaveSystem.Decrypt(turnTime)) <= 0)
+        {
+            ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+        }
+
         ui.PlusTime.gameObject.SetActive(true); //включаем картинку что реклама доступна
         ui.PlusTimeLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
