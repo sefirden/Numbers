@@ -14,6 +14,10 @@ public class Tutorial : MonoBehaviour
     private ui ui; //скрипт всего УИ
     public GameObject fingerBoss;
     public GameObject fingerLineLife;
+    public GameObject fingerHint;
+    public GameObject fingerDamageX2;
+    public GameObject fingerPlusTime;
+    public GameObject fingerRefill;
     public GameObject tip6Close;
     public GameObject tip6Next;
     public SpriteRenderer[] NumbersAndLines; //список уровней
@@ -55,7 +59,7 @@ public class Tutorial : MonoBehaviour
         Debug.Log("Close Tip");
         Tips[0].SetActive(false);
         gameObject.SetActive(false);
-        Time.timeScale = 1f; //ставим паузу
+        Time.timeScale = 1f; //убираем паузу
         PlayerResource.Instance.GameIsPaused = false;
     }
 
@@ -63,7 +67,10 @@ public class Tutorial : MonoBehaviour
     {
         switch (index)
         {
-            case 2: //про hint
+
+            case 2: //2 про дамаг
+                break;
+            case 3: //про hint
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
 
@@ -72,7 +79,9 @@ public class Tutorial : MonoBehaviour
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
                 break;
-            case 3: //про refill
+            case 4://4 про таймплюс в режиме на время
+                break;
+            case 5: //про refill
                 ui.HintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(5);
                 ui.AdHintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(6);
 
@@ -81,7 +90,7 @@ public class Tutorial : MonoBehaviour
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
                 break;
-            case 4: //про соединение цифр
+            case 6: //про соединение цифр
                 ui.RefillButton.gameObject.GetComponent<Transform>().SetSiblingIndex(7);
                 ui.AdRefillButton.gameObject.GetComponent<Transform>().SetSiblingIndex(6);
 
@@ -97,7 +106,7 @@ public class Tutorial : MonoBehaviour
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
                 break;
-            case 5: //тут про длительность последовательности                
+            case 7: //тут про длительность последовательности                
                 board.Hint(0, 0);
                 foreach (LineRenderer k in board.lines)
                 {
@@ -108,7 +117,7 @@ public class Tutorial : MonoBehaviour
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
                 break;
-            case 6: //тут урон и про смену уровня
+            case 8: //тут урон и про смену уровня
 
                 foreach (SpriteRenderer k in NumbersAndLines)
                 {
@@ -142,7 +151,7 @@ public class Tutorial : MonoBehaviour
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
                 break;
-            case 7: //тут про время если режим на время или закрываем 5 подсказку
+            case 9: //тут про время если режим на время или закрываем 5 подсказку
 
                 ui.LifeBarBackground.gameObject.GetComponent<Transform>().SetSiblingIndex(2);
 
@@ -168,7 +177,7 @@ public class Tutorial : MonoBehaviour
                 }
 
                 break;
-            case 8: //тут закрываем про время подсказку
+            case 10: //тут закрываем про время подсказку
                 ui.timerimg.gameObject.GetComponent<Transform>().SetSiblingIndex(3);
                 Tips[index - 1].SetActive(false);
                 gameObject.SetActive(false);
