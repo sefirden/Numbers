@@ -32,6 +32,7 @@ public class ui : MonoBehaviour
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
     public GameObject AdsConfirmLayer;
+    public GameObject ButtonHolder;
 
     public Button DamageX2Button;
     public Button ScoreX2Button;

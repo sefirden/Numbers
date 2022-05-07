@@ -18,6 +18,8 @@ public class Tutorial : MonoBehaviour
     public GameObject fingerDamageX2;
     public GameObject fingerPlusTime;
     public GameObject fingerRefill;
+    public GameObject tip3NextTime;
+    public GameObject tip3Next;
     public GameObject tip6Close;
     public GameObject tip6Next;
     public SpriteRenderer[] NumbersAndLines; //список уровней
@@ -67,32 +69,85 @@ public class Tutorial : MonoBehaviour
     {
         switch (index)
         {
-
             case 2: //2 про дамаг
-                break;
-            case 3: //про hint
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
 
-                ui.HintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(11);
-                ui.AdHintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(10);
+                fingerDamageX2.SetActive(true);
+
+                ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(11); //7
+                ui.AdHintButton.interactable = false;
+                ui.HintButton.interactable = false;
+                ui.RefillButton.interactable = false;
+                ui.AdRefillButton.interactable = false;
+                ui.PlusTimeButton.interactable = false;
+
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
+                break;
+            case 3: //про hint         
+                fingerHint.SetActive(true);
+                ui.AdHintButton.interactable = true;
+                ui.HintButton.interactable = true;
+
+                fingerDamageX2.SetActive(false);
+                ui.DamageX2Button.interactable = false;
+
+                Tips[index - 1].SetActive(false);
+                Tips[index].SetActive(true);
+
+                if (PlayerResource.Instance.gameMode == "timetrial")
+                {
+                    tip3NextTime.SetActive(true);
+                }
+                else
+                {
+                    tip3Next.SetActive(true);
+                }
+
                 break;
             case 4://4 про таймплюс в режиме на время
-                break;
-            case 5: //про refill
-                ui.HintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(5);
-                ui.AdHintButton.gameObject.GetComponent<Transform>().SetSiblingIndex(6);
+                fingerPlusTime.SetActive(true);
+                ui.PlusTimeButton.interactable = true;
 
-                ui.RefillButton.gameObject.GetComponent<Transform>().SetSiblingIndex(11);
-                ui.AdRefillButton.gameObject.GetComponent<Transform>().SetSiblingIndex(10);
+                fingerHint.SetActive(false);
+                ui.HintButton.interactable = false;
+                ui.AdHintButton.interactable = false;
+
+
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
                 break;
+            case 5: //про refill
+                if (PlayerResource.Instance.gameMode == "timetrial")
+                {
+                    fingerPlusTime.SetActive(false);
+                    ui.PlusTimeButton.interactable = false;
+                    Tips[index - 1].SetActive(false);
+                    Tips[index].SetActive(true);
+                }
+                else
+                {
+                    fingerHint.SetActive(false);
+                    ui.AdHintButton.interactable = false;
+                    ui.HintButton.interactable = false;
+                    Tips[index - 2].SetActive(false);
+                    Tips[index].SetActive(true);
+                }
+
+                fingerRefill.SetActive(true);
+                ui.RefillButton.interactable = true;
+                ui.AdRefillButton.interactable = true;
+                break;
             case 6: //про соединение цифр
-                ui.RefillButton.gameObject.GetComponent<Transform>().SetSiblingIndex(7);
-                ui.AdRefillButton.gameObject.GetComponent<Transform>().SetSiblingIndex(6);
+                fingerRefill.SetActive(false);
+                ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(6); //11
+                ui.AdHintButton.interactable = true;
+                ui.HintButton.interactable = true;
+                ui.RefillButton.interactable = true;
+                ui.AdRefillButton.interactable = true;
+                ui.PlusTimeButton.interactable = true;
+                ui.DamageX2Button.interactable = true;
 
                 NumbersAndLines = new SpriteRenderer[board.transform.childCount];
                 NumbersAndLines = board.gameObject.GetComponentsInChildren<SpriteRenderer>();
@@ -144,7 +199,7 @@ public class Tutorial : MonoBehaviour
                     tip6Next.SetActive(false);
                 }
 
-                ui.LifeBarBackground.gameObject.GetComponent<Transform>().SetSiblingIndex(10);
+                ui.lifeTurnLayer.gameObject.GetComponent<Transform>().SetSiblingIndex(10);
                 fingerLineLife.transform.position = new Vector3(3f, 12f, transform.position.z);
 
 
@@ -153,7 +208,7 @@ public class Tutorial : MonoBehaviour
                 break;
             case 9: //тут про время если режим на время или закрываем 5 подсказку
 
-                ui.LifeBarBackground.gameObject.GetComponent<Transform>().SetSiblingIndex(2);
+                ui.lifeTurnLayer.gameObject.GetComponent<Transform>().SetSiblingIndex(3);
 
                 if (PlayerResource.Instance.gameMode == "timetrial")
                 {

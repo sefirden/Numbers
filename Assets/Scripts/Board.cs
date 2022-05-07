@@ -166,14 +166,26 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 scaleBoard = 2f;
                 break;
 
+            case 6:
+                difficult = 6;
+                difficultTime = 0.15f;
+                scaleBoard = 1.6f;
+                break;
+
             case 7:
-                difficult = 8;
+                difficult = 10;
                 difficultTime = 0.1f;
-                scaleBoard = 1.34f;
+                scaleBoard = 1.334f;
+                break;
+
+            case 8:
+                difficult = 9;
+                difficultTime = 0.05f;
+                scaleBoard = 1.143f;
                 break;
 
             case 9:
-                difficult = 10;
+                difficult = 12;
                 difficultTime = 0.0f;
                 scaleBoard = 1f;
                 break;
