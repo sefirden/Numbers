@@ -23,8 +23,8 @@ public class MainMenu : MonoBehaviour
     public GameObject NormalLayer; //слой нормального режима
     public GameObject NormalLayerNewGame; //слой вопроса запускать ли новую игру
     public GameObject TimeLayerNewGame; //слой вопроса запускать ли новую игру на время
-    public Dropdown size_dropN; //выбор размера уровня норм режима
-    public Dropdown size_dropT; //выбор размера режима на время
+    public Slider size_dropN; //выбор размера уровня норм режима
+    public Slider size_dropT; //выбор размера режима на время
     public GameObject ExitLabel; //всплывающее окно про выход из игры
     public GameObject QuestionCloudGame; //слой вопроса переписать ли сохранение
     public Text DebugCloudLog;
@@ -95,32 +95,10 @@ public class MainMenu : MonoBehaviour
 
         width = 5; //размер поля по умолчанию
         height = 5;
-
-        //при изменении размера поля в выпадающем меню
-        size_dropT.onValueChanged.AddListener(delegate {
-                DropdownValueChangedT(size_dropT);
-        });
-
-        //см выше, но другой режим
-        size_dropN.onValueChanged.AddListener(delegate {
-            DropdownValueChangedN(size_dropN);
-        });
+        size_dropN.value = width;        
+        size_dropT.value = width;
 
         FindObjectOfType<AudioManager>().Play("music_menu");
-    }
-
-    //от выбранного пункта выпадающего меня меняем ширину и высоту
-    void DropdownValueChangedT(Dropdown change)
-    {
-        width = BoardSize[change.value];
-        height = BoardSize[change.value];
-    }
-
-    //см выше
-    void DropdownValueChangedN(Dropdown change)
-    {
-        width = BoardSize[change.value];
-        height = BoardSize[change.value];
     }
 
     //ниже для каждого языка свой метод, больше языков, больше методов
@@ -195,7 +173,8 @@ public class MainMenu : MonoBehaviour
 
     public void NormalModeStart() //кнопка старт обычного ержима новой игры
     {
-
+        width = Convert.ToInt32(size_dropN.value);
+        height = Convert.ToInt32(size_dropN.value);
 
         int zeroInt = 0;
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
@@ -274,6 +253,9 @@ public class MainMenu : MonoBehaviour
 
     public void TimeTrialModeStart() //см выше нормал мод
     {
+        width = Convert.ToInt32(size_dropT.value);
+        height = Convert.ToInt32(size_dropT.value);
+
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         PlayerResource.Instance.starttimer = false;
         Time.timeScale = 1f;        //убираем паузу

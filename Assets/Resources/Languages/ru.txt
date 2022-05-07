@@ -1,6 +1,7 @@
 new_game:Новая игра
 resume:Продолжить
 settings:Настройки
+board_size:Размер поля:
 quit:Выход
 test:Тест
 game_label:Numbers_beta

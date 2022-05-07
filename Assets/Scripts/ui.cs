@@ -93,7 +93,7 @@ public class ui : MonoBehaviour
         //ебаные костыли из-за изменения камеры
         Vector3 temp = lifeTurnLayer.transform.position;
 
-        lifeTurnLayer.transform.position = new Vector3(0, 10.7f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
+        lifeTurnLayer.transform.position = new Vector3(0, 10.25f, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
         lifeTurnLayer.transform.position = new Vector3(temp.x, LifeBarBackground.transform.position.y, transform.position.z); //двигаем лайфбар и его бекграунд на стартовую позицию, сделано из-за разницы в размерах экранов
 
         if (PlayerResource.Instance.gameMode == "timetrial")
@@ -111,7 +111,7 @@ public class ui : MonoBehaviour
         if (focusStatus == false)
         {
             //PauseLayer = FindObjectOfType<Pause>();
-            PauseLayer.PauseClick();
+            //PauseLayer.PauseClick();
         }
         
     }

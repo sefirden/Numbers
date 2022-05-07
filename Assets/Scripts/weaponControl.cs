@@ -48,6 +48,15 @@ public class weaponControl : MonoBehaviour
                 else if (quantity == 5)
                     ui.damagePic.GetComponent<Image>().color = new Color(0.9372549f, 0.3254902f, 0.3137255f, 1f);
             }
+            else if (board.width == 6)
+            {
+                if (quantity <= 3)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9921569f, 0.8470588f, 0.2941177f, 1f);
+                else if (quantity == 4 || quantity == 5)
+                    ui.damagePic.GetComponent<Image>().color = new Color(1f, 0.4392157f, 0.2627451f, 1f);
+                else if (quantity == 6)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9372549f, 0.3254902f, 0.3137255f, 1f);
+            }
             else if (board.width == 7)
             {
                 if (quantity <= 3)
@@ -55,6 +64,15 @@ public class weaponControl : MonoBehaviour
                 else if (quantity == 4 || quantity == 5)
                     ui.damagePic.GetComponent<Image>().color = new Color(1f, 0.4392157f, 0.2627451f, 1f);
                 else if (quantity == 6 || quantity == 7)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9372549f, 0.3254902f, 0.3137255f, 1f);
+            }
+            else if (board.width == 8)
+            {
+                if (quantity <= 3)
+                    ui.damagePic.GetComponent<Image>().color = new Color(0.9921569f, 0.8470588f, 0.2941177f, 1f);
+                else if (quantity >= 4 && quantity <= 6)
+                    ui.damagePic.GetComponent<Image>().color = new Color(1f, 0.4392157f, 0.2627451f, 1f);
+                else if (quantity >= 7 && quantity <= 8)
                     ui.damagePic.GetComponent<Image>().color = new Color(0.9372549f, 0.3254902f, 0.3137255f, 1f);
             }
             else if (board.width == 9)

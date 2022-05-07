@@ -1,6 +1,7 @@
 new_game:New game
 resume:Resume
 settings:Settings
+board_size:Board size:
 quit:Quit
 test:Test
 game_label:Numbers_beta
@@ -25,18 +26,20 @@ no_time:Time is up, game over!
 restart_menu:All progress will be lost, restart the game?
 tutorial:Tutorial
 rewrite_local_save:The local save file will be overwritten, continue?
-turn_left_damage:Двойной урон, осталось ходов:
-turn_left_score:Двойные очки, осталось ходов:
-ads_confirm_damage:Посмотреть рекламу и получить двойной урон на 30 ходов?
-ads_confirm_score:Посмотреть рекламу и получить двойные очки на 30 ходов?
-ads_confirm_hint:Посмотреть рекламу и получить 3 подсказки?
-ads_confirm_refill:Посмотреть рекламу и заполнить все поле новыми цифрами?
-ads_confirm_plustime:Посмотреть рекламу и получить дополнительную минуту?
+turn_left_damage:Double damage, turns remaining:
+turn_left_score:Double points, turns remaining
+ads_confirm_damage:Watch ads and get double damage for 30 turns?
+ads_confirm_score:Watch ads and get double points for 30 moves?
+ads_confirm_hint:Watch ads and get 3 hints?
+ads_confirm_refill:Watch ads and fill the entire field with new numbers?
+ads_confirm_plustime:Watch ads and get an extra minute?
 tip_0:All numbers except zero are gone, find them and save them! Let's check out the old electronics store.
 tip_1:Evil bosses seem to be involved in missing numbers, let's beat them all.
-tip_2:Gives you the longest sequence of numbers in the field.
-tip_3:Fills the entire field with new numbers.
-tip_4:Click on any number and connect with the neighbors in ascending order.
-tip_5:The more numbers you connect at once, the more points you get.
-tip_6:More numbers - more damage, kill the boss and move on to the next level.
-tip_7:If the time runs out, then the game will end, connect the numbers and get extra time.
+tip_2:Gives double damage for 30 turns for watching ads.
+tip_3:Gives you the longest sequence of numbers in the field.
+tip_4:Gives an extra minute for watching ads. Recovery 60 turns.
+tip_5:Fills the entire field with new numbers.
+tip_6:Click on any number and connect with the neighbors in ascending order.
+tip_7:The more numbers you connect at once, the more points you get.
+tip_8:More numbers - more damage, kill the boss and move on to the next level.
+tip_9:If the time runs out, then the game will end, connect the numbers and get extra time.
