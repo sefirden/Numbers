@@ -63,10 +63,12 @@
      <Compile Include="Assets\GooglePlayGames\Editor\GPGSPostBuild.cs" />
      <Compile Include="Assets\GooglePlayGames\Editor\GPGSAndroidSetupUI.cs" />
      <Compile Include="Assets\GooglePlayGames\Editor\GPGSUtil.cs" />
-     <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.166_manifest.txt" />
      <None Include="Assets\GooglePlayGames\Editor\GooglePlayGamesPluginDependencies.xml" />
-     <None Include="Assets\Firebase\Editor\FirebaseAnalytics_version-8.1.0_manifest.txt" />
+     <None Include="Assets\Firebase\Editor\FirebaseMessaging_version-8.9.0_manifest.txt" />
      <None Include="Assets\GooglePlayGames\Editor\template-GameInfo.txt" />
+     <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.170_manifest.txt" />
+     <None Include="Assets\Firebase\Editor\FirebaseAnalytics_version-8.9.0_manifest.txt" />
+     <None Include="Assets\Firebase\Editor\MessagingDependencies.xml" />
      <None Include="Assets\GooglePlayGames\Editor\m2repository\com\google\games\gpgs-plugin-support\maven-metadata.xml" />
      <None Include="Assets\Firebase\Editor\AppDependencies.xml" />
      <None Include="Assets\GooglePlayGames\Editor\GooglePlayGamesPlugin_v0.10.09.txt" />
@@ -346,26 +348,32 @@
  <Reference Include="UnityEditor.UWP.Extensions">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.0f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll</HintPath>
  </Reference>
- <Reference Include="Google.IOSResolver_v1.2.166">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/Google.IOSResolver_v1.2.166.dll</HintPath>
+ <Reference Include="Google.IOSResolver">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.IOSResolver.dll</HintPath>
  </Reference>
- <Reference Include="Google.JarResolver_v1.2.166">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/Google.JarResolver_v1.2.166.dll</HintPath>
+ <Reference Include="Google.JarResolver">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.JarResolver.dll</HintPath>
  </Reference>
- <Reference Include="Google.PackageManagerResolver_v1.2.166">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/Google.PackageManagerResolver_v1.2.166.dll</HintPath>
+ <Reference Include="Google.PackageManagerResolver">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.PackageManagerResolver.dll</HintPath>
  </Reference>
- <Reference Include="Google.VersionHandlerImpl_v1.2.166">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/Google.VersionHandlerImpl_v1.2.166.dll</HintPath>
+ <Reference Include="Google.VersionHandlerImpl">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.VersionHandlerImpl.dll</HintPath>
  </Reference>
  <Reference Include="Firebase.Editor">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Editor/Firebase.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Firebase.Messaging.Editor">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Editor/Firebase.Messaging.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Firebase.Analytics">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Firebase.App">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
+ </Reference>
+ <Reference Include="Firebase.Messaging">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.Messaging.dll</HintPath>
  </Reference>
  <Reference Include="Firebase.Platform">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.Platform.dll</HintPath>

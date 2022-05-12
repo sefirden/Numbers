@@ -69,8 +69,8 @@ public class Pause : MonoBehaviour
         pauseMenuUI.SetActive(false); //выключаем слой паузы
         SettingsLayer.SetActive(false); //выключаем слой настроек
         AdMob_baner.Instance.Hide(); //выключаем рекламный банер
-
-        if(ui.AdsConfirmLayer.activeSelf == false)
+        ui = FindObjectOfType<ui>();
+        if (ui.AdsConfirmLayer.activeSelf == false)
         {
             if(tutorialLayers.activeSelf == false)
             PlayerResource.Instance.GameIsPaused = false; //говорим что выключили паузу

@@ -1515,20 +1515,25 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdTurnX2Recieve() //если видео реклама была просмотрена, получение доп подсказок
     {
-        int turnX2I = 30;
-        turnx2 = SaveSystem.Encrypt(Convert.ToString(turnX2I)); ; //ставим количество подсказок равным 3
-        ui.turnLeft.gameObject.SetActive(true);
-        ToPlayerResources("turnx2");
+        if (Convert.ToInt32(SaveSystem.Decrypt(turnx2)) <= 0)
+        {
+            int turnX2I = 30;
+            turnx2 = SaveSystem.Encrypt(Convert.ToString(turnX2I)); ; //ставим количество подсказок равным 3
+            ui.turnLeft.gameObject.SetActive(true);
+            ToPlayerResources("turnx2");
 
-        ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
-        ui.ScoreX2Button.interactable = false;
-        ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
-        ui.DamageX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
-        ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
-        ui.ScoreX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
-
-
-        pause.Resume();
+            ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+            ui.ScoreX2Button.interactable = false;
+            ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.DamageX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+            ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.ScoreX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+            pause.Resume();
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void AdTurnX2Close() //если была закрыта реклама для получения доп подсказок
@@ -1561,18 +1566,25 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdPlusTimeRecieve() //если видео реклама была просмотрена, получение доп подсказок
     {
-        int turnTimeI = 60; //количество ходов до отката кнопки
-        turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
-        PlayerResource.Instance.time += 60f;
-        ui.PlusTimeButton.interactable = false;
-        ui.TurnLeftFillImage.gameObject.SetActive(true);
-        ToPlayerResources("turnTime");
+        if (Convert.ToInt32(SaveSystem.Decrypt(turnTime)) <= 0)
+        {
+            int turnTimeI = 60; //количество ходов до отката кнопки
+            turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
+            PlayerResource.Instance.time += 60f;
+            ToPlayerResources("turnTime");
+            ui.PlusTimeButton.interactable = false;
+            ui.TurnLeftFillImage.gameObject.SetActive(true);
 
 
-        ui.PlusTime.gameObject.SetActive(true); //включаем картинку что реклама доступна
-        ui.PlusTimeLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+            ui.PlusTime.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.PlusTimeLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
-        pause.Resume();
+            pause.Resume();
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void AdPlusTimeClose() //если была закрыта реклама для получения доп подсказок

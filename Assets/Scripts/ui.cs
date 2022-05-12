@@ -111,7 +111,7 @@ public class ui : MonoBehaviour
         if (focusStatus == false)
         {
             //PauseLayer = FindObjectOfType<Pause>();
-            //PauseLayer.PauseClick();
+            PauseLayer.PauseClick();
         }
         
     }
@@ -175,7 +175,7 @@ public class ui : MonoBehaviour
                 break;
 
             case "plustime":
-                board.AdPlusTime();
+                board.AdPlusTime();                
                 break;
 
             case "scorex2":
