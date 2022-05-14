@@ -30,7 +30,7 @@ public class weaponControl : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("attack");
             gameObject.GetComponent<Animator>().SetTrigger("destroy");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            ui.BossHealth(board.damage, board.level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
+            ui.BossHealth(Convert.ToInt32(SaveSystem.Decrypt(board.damage)), board.level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
 
             //ниже показ урона над боссом
             Vector3 temp3 = ui.damagePic.transform.position;

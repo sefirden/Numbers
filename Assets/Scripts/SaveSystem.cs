@@ -91,7 +91,17 @@ public class SaveSystem : MonoBehaviour
     //декодируем
     public static string Decrypt(string input)
     {
-        byte[] data = Convert.FromBase64String(input);
+        byte[] data;
+
+        try
+        {
+            data = Convert.FromBase64String(input);
+        }
+        catch (FormatException)
+        {
+            data = Convert.FromBase64String("VfOEPqnFZnw =");            
+        }
+        
         using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
         {
             byte[] key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(hash));

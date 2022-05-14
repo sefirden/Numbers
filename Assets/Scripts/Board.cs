@@ -17,7 +17,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     public string score; //очки, закодировать
     public string hiScore; //рекорд, закодировать
     public string turnx2; //ходов с х2 урона или очков, закодировать
-    public string turnTime; //ходов до отката +1 минута
+    public string damage; //урон высчитан из очков, когда босс на уровне, от урона меняется босс и уровень, закодировано
+    public string turnTime; //ходов до отката +1 минута, закодировано
     public string loadedBoard; //загружаемое поле в виде строки из всех цифр
     public bool endGame; //конец игры или нет
     public int difficult; //сложность, зависит от размера поля, используется в рандоме при заполнении поля новыми цифрами
@@ -53,7 +54,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public float scaleBoard; //переменная для увеличения размера цифр в полях 5 и 7
 
-    public int damage; //урон высчитан из очков, когда босс на уровне, от урона меняется босс и уровень
+    
 
     public bool changelvl; //будем передавать при смене уровня и перемешивания поля
 
@@ -198,7 +199,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         zero.ChangeZero(level); //загружаем нолю нужный аниматор (по сути грузим с новыми анимациями и оружием)
         boss.ChangeBoss(level); //загружаем боссу нужный спрайт (по сути грузим нужного по порядку босса)
-        ui.BossHealth(damage, level); //в зависимости от урона и уровня грузи лайфбар босса с нужными данными
+        ui.BossHealth(Convert.ToInt32(SaveSystem.Decrypt(damage)), level); //в зависимости от урона и уровня грузи лайфбар босса с нужными данными
 
         FindObjectOfType<AudioManager>().Stop("music_menu");
         FindObjectOfType<AudioManager>().played = true;
@@ -240,6 +241,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             {
                 ui.DamageX2Button.gameObject.SetActive(false);
                 ui.ScoreX2Button.gameObject.SetActive(true);
+                pause.turorial_button.interactable = false;
                 ui.turnLeftText.text = SaveSystem.GetText("turn_left_score") + " " + SaveSystem.Decrypt(turnx2);
             }
             else
@@ -531,20 +533,22 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             if (PlayerResource.Instance.zeroMove == false && PlayerResource.Instance.bossMove == false) //если ноль не двигается и босс не двигается, наносим урон
             {
                 //тут добавить проверку на конец уровня, на последнем уровне играть другую анимацию или вместо боса кидать ножи в мишень
-
+                int damageI = Convert.ToInt32(SaveSystem.Decrypt(damage));
 
                 if (turnx2I > 0 && level != PlayerResource.Instance.scoreToNextLevel.Length)
                 {
-                    damage += tempScore * quantity * 2;
+                    damageI += tempScore * quantity * 2;
                     turnx2I--;
                     zero.Attack(level, tempScore * quantity * 2, quantity); //передает уровень и урон, урон для цифр над головой босса 
                 }
                 else
                 {
-                    damage += tempScore * quantity; //считаем урон по формуле как и очки см выше
+                    damageI += tempScore * quantity; //считаем урон по формуле как и очки см выше
                     zero.Attack(level, tempScore * quantity, quantity); //передает уровень и урон, урон для цифр над головой босса 
                 }
 
+                damage = SaveSystem.Encrypt(Convert.ToString(damageI));
+                ToPlayerResources("damage");
 
             }
 
@@ -553,7 +557,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));
                 PlayerResource.Instance.time += quantity * (difficultTime + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 0.5 + 0,5 до 0.5 + 0,9 сек 
                 turnTimeI--;
-                if (turnTimeI <= 0)
+                if (turnTimeI <= 0 && ui.PlusTimeLoading.gameObject.activeSelf == false)
                 {
                     ui.PlusTimeButton.interactable = true;
                     ui.TurnLeftFillImage.gameObject.SetActive(false);
@@ -582,7 +586,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
         }
 
-        if (turnx2I <= 0)
+        if (turnx2I <= 0 && (ui.DamageX2Loading.gameObject.activeSelf == false || ui.ScoreX2Loading.gameObject.activeSelf == false))
         {
             ui.turnLeft.SetActive(false);
             ui.DamageX2Button.interactable = true;
@@ -595,7 +599,6 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         score = SaveSystem.Encrypt(Convert.ToString(scoreI));
         ToPlayerResources("score");
         ToPlayerResources("turnx2");
-        ToPlayerResources("damage");
         ToPlayerResources("level");
     }
 
@@ -616,6 +619,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     private IEnumerator ChangeLevel()
     {
         int scoreToNextLevel = 0; //количество очков для перехода на след уровень
+        int damageI = Convert.ToInt32(SaveSystem.Decrypt(damage));
 
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
         {
@@ -625,7 +629,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             }
         }
 
-        if (damage >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length - 1) //если сумарного урона больше чем количество урона нужное для смены уровня и уровень меньше максимального количества
+        if (damageI >= scoreToNextLevel && level < PlayerResource.Instance.scoreToNextLevel.Length - 1) //если сумарного урона больше чем количество урона нужное для смены уровня и уровень меньше максимального количества
         {
             changelvl = true; //говорим что смена уровня
             level++; //увеличиваем уровень 
@@ -634,8 +638,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             StartCoroutine(zero.KillTheBoss()); //анимация убийства босса, там будут все анимации ноля и босса
 
-            damage = scoreToNextLevel; //уравниваем нанесенный урон до уровня нужного для смены, что бы босс появлялся с ровным количеством хп, а не без нескольких пунктов
-            ui.BossHealth(damage, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
+            damageI = scoreToNextLevel; //уравниваем нанесенный урон до уровня нужного для смены, что бы босс появлялся с ровным количеством хп, а не без нескольких пунктов
+            damage = SaveSystem.Encrypt(Convert.ToString(damageI));
+            ToPlayerResources("damage");
+            ui.BossHealth(damageI, level); //передаем в ую метод информацию про урон, для изменения шкалы хп босса
+
 
             Firebase.Analytics.Parameter[] ChangeLevel =
 {
@@ -645,7 +652,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             Firebase.Analytics.FirebaseAnalytics.LogEvent("ChangeLevel", ChangeLevel);
 
         }
-        else if (damage >= scoreToNextLevel && level == PlayerResource.Instance.scoreToNextLevel.Length - 1) //переход с последнего уровня с боссом на урвоень конца игры, если не писать -1 то не сработает
+        else if (damageI >= scoreToNextLevel && level == PlayerResource.Instance.scoreToNextLevel.Length - 1) //переход с последнего уровня с боссом на урвоень конца игры, если не писать -1 то не сработает
         {
 
             changelvl = true; //говорим что смена уровня
@@ -1725,5 +1732,4 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
     }
-
 }

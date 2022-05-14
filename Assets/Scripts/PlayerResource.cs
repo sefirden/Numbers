@@ -34,7 +34,7 @@ public class PlayerResource : MonoBehaviour
     public int widthN; //ширина поля
     public bool AdRewardN; //была ли просмотрена реклама для перезаполнения поля
     public int levelN; //текущий уровень
-    public int damageN; //количество нанесенного урона
+    public string damageN; //количество нанесенного урона
 
     public bool EndGameN; //true если конец игры
     public string loadedBoardN; //загружаемый уровень в формате текстовой строки
@@ -53,7 +53,7 @@ public class PlayerResource : MonoBehaviour
     public int widthT;
     public bool AdRewardT;
     public int levelT;
-    public int damageT;
+    public string damageT;
 
     public bool EndGameT;
     public string loadedBoardT;

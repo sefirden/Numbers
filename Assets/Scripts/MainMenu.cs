@@ -188,7 +188,7 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.gameMode = "normal"; //говорим что это норм режим
         PlayerResource.Instance.scoreN = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
         PlayerResource.Instance.levelN = zeroInt; //стартуем с 0 левела
-        PlayerResource.Instance.damageN = zeroInt; //обнуляем урон
+        PlayerResource.Instance.damageN = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем урон
         PlayerResource.Instance.heightN = height; //высота поля
         PlayerResource.Instance.widthN = width; //ширина поля
 
@@ -255,6 +255,7 @@ public class MainMenu : MonoBehaviour
     {
         width = Convert.ToInt32(size_dropT.value);
         height = Convert.ToInt32(size_dropT.value);
+        int zeroInt = 0;
 
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
         PlayerResource.Instance.starttimer = false;
@@ -270,9 +271,9 @@ public class MainMenu : MonoBehaviour
         PlayerResource.Instance.gameMode = "timetrial";
         PlayerResource.Instance.time = 120f;
         PlayerResource.Instance.playedTime = 0f;
-        PlayerResource.Instance.scoreT = SaveSystem.Encrypt(Convert.ToString(0)); //обнуляем очки
-        PlayerResource.Instance.levelT = 0;
-        PlayerResource.Instance.damageT = 0;
+        PlayerResource.Instance.scoreT = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем очки
+        PlayerResource.Instance.levelT = zeroInt;
+        PlayerResource.Instance.damageT = SaveSystem.Encrypt(Convert.ToString(zeroInt)); ;
         PlayerResource.Instance.heightT = height;
         PlayerResource.Instance.widthT = width;
 

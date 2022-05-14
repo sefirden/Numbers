@@ -194,7 +194,7 @@ public class ui : MonoBehaviour
 
 
     public void BossHealth(int damage, int level) //этим скриптом обновляем значение хп боса, которое осталось
-     {
+    {
         if (level != PlayerResource.Instance.scoreToNextLevel.Length) //если у нас не последний уровень
         {
             int scoreToNextLevel = 0;
@@ -228,7 +228,15 @@ public class ui : MonoBehaviour
         {
               LifeBarBackground.SetActive(false); //выключаем лайфбар
         }
-     }
+    }
+
+    public void CheatLvlDamage()
+    {
+        board.level = 8;
+        board.damage = SaveSystem.Encrypt(Convert.ToString(279900));
+        board.ToPlayerResources("level");
+        board.ToPlayerResources("damage");
+    }
 
     public IEnumerator LightsOnOff(bool On)
     {

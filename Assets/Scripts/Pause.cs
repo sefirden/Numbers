@@ -41,11 +41,11 @@ public class Pause : MonoBehaviour
         board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
         ui = FindObjectOfType<ui>();   
 
-        if (PlayerResource.Instance.isLoaded == true)
+       /* if (PlayerResource.Instance.isLoaded == true)
         {
             if(board.level > 8)
             turorial_button.interactable = false;
-        }
+        }*/
 
         StartCoroutine(SaveGame());
     }
@@ -127,7 +127,7 @@ public class Pause : MonoBehaviour
                 board.ToPlayerResources("AdReward");
                 board.level = zeroInt; //уровень ставим 0
                 board.ToPlayerResources("level");
-                board.damage = zeroInt; //обнуляем урон
+                board.damage = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем урон
                 board.ToPlayerResources("damage");
 
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__normal_mode, Convert.ToInt32(SaveSystem.Decrypt(board.hiScore))); //отправляем лучшее время в Google Play
@@ -152,7 +152,7 @@ public class Pause : MonoBehaviour
                 board.ToPlayerResources("AdReward");
                 board.level = zeroInt; //уровень ставим 0
                 board.ToPlayerResources("level");
-                board.damage = zeroInt; //обнуляем урон
+                board.damage = SaveSystem.Encrypt(Convert.ToString(zeroInt)); //обнуляем урон
                 board.ToPlayerResources("damage");
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_play_time_time_limit_mode, Convert.ToInt64(PlayerResource.Instance.playedTime * 1000)); //отправляем лучшее время в Google Play
                 PlayServicesGoogle.AddScoreToLeaderboard(GPGSIds.leaderboard_top_score__time_limit_mode, Convert.ToInt32(SaveSystem.Decrypt(board.hiScore))); //отправляем лучшие очки в Google Play

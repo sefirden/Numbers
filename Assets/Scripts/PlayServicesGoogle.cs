@@ -49,6 +49,7 @@ public class PlayServicesGoogle : MonoBehaviour
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
             .EnableSavedGames().Build();
         PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
 
         OnConnectionResponse(PlayGamesPlatform.Instance.localUser.authenticated);
@@ -108,7 +109,7 @@ public class PlayServicesGoogle : MonoBehaviour
         public string loadedBoardN;
         public bool AdRewardN;
         public int levelN;
-        public int damageN;
+        public string damageN;
 
         //переменные для Time Limit режима
         public float time;
@@ -126,7 +127,7 @@ public class PlayServicesGoogle : MonoBehaviour
         public bool EndGameT;
         public string loadedBoardT;
         public bool AdRewardT;
-        public int damageT;
+        public string damageT;
 
         public string SaveTime;
     }
@@ -315,10 +316,11 @@ public class PlayServicesGoogle : MonoBehaviour
              "Numbers",
              DataSource.ReadCacheOrNetwork,
              ConflictResolutionStrategy.UseLongestPlaytime, DataFromCloud);
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("authenticated");
         }
         else
         {
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("not authenticated");//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nnot authenticated");//failed
         }
     }
 
@@ -329,26 +331,26 @@ public class PlayServicesGoogle : MonoBehaviour
         if (status == SavedGameRequestStatus.Success)
         {
             ((PlayGamesPlatform)Social.Active).SavedGame.ReadBinaryData(meta, ReadFromCloud);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nDataFromCloud status:" + status);//failed
 
         }
         else if (status == SavedGameRequestStatus.TimeoutError)
         {
             //mainMenu.Loading.SetActive(false);
             //mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nDataFromCloud TimeoutError status:" + status);//failed
         }
         else if (status == SavedGameRequestStatus.AuthenticationError)
         {
             //mainMenu.Loading.SetActive(false);
             //mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nDataFromCloud AuthenticationError status:" + status);//failed
         }
         else if (status == SavedGameRequestStatus.InternalError)
         {
             //mainMenu.Loading.SetActive(false);
             //mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("DataFromCloud status:" + status);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nDataFromCloud InternalError status:" + status);//failed
         }
     }
     private void ReadFromCloud(SavedGameRequestStatus status, byte[] data) //читаем загруженные данные 
@@ -370,14 +372,14 @@ public class PlayServicesGoogle : MonoBehaviour
             Debug.LogWarning("saveData " + saveData);
 
             //mainMenu.Loading.SetActive(false);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("ReadFromCloud status:" + status);//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nReadFromCloud status:" + status);//failed
             Debug.LogError("succes ReadFromCloud");//succes
         }
         else
         {
             // mainMenu.Loading.SetActive(false);
             //mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text = ("ReadFromCloud status:" + status) ;//failed
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nReadFromCloud status:" + status) ;//failed
             Debug.LogError(SavedGameRequestStatus.Success);//failed
         }
     }
