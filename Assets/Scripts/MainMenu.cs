@@ -92,7 +92,7 @@ public class MainMenu : MonoBehaviour
             LanguageLayer.SetActive(true);
 
         }
-
+        Time.timeScale = 1f; //ставим паузу
         width = 5; //размер поля по умолчанию
         height = 5;
         size_dropN.value = width;        
