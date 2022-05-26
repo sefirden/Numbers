@@ -130,4 +130,7 @@ public class Level : MonoBehaviour
         Levels[level].transform.position = endPositionNewLevel;
         Levels[level].SetActive(false);
     }
+
+
+   
 }
