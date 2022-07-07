@@ -14,10 +14,6 @@ public class Tutorial : MonoBehaviour
     private ui ui; //скрипт всего УИ
     public GameObject fingerBoss;
     public GameObject fingerLineLife;
-    public GameObject fingerHint;
-    public GameObject fingerDamageX2;
-    public GameObject fingerPlusTime;
-    public GameObject fingerRefill;
     public GameObject tip3NextTime;
     public GameObject tip3Next;
     public GameObject tip6Close;
@@ -73,7 +69,7 @@ public class Tutorial : MonoBehaviour
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
 
-                fingerDamageX2.SetActive(true);
+                ui.DamageX2Button.GetComponent<ButtonController>().Finger.SetActive(true);
 
                 ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(11); //7
                 ui.AdHintButton.interactable = false;
@@ -86,11 +82,12 @@ public class Tutorial : MonoBehaviour
                 Tips[index].SetActive(true);
                 break;
             case 3: //про hint         
-                fingerHint.SetActive(true);
+                ui.HintButton.GetComponent<ButtonController>().Finger.SetActive(true);
+                ui.AdHintButton.GetComponent<ButtonController>().Finger.SetActive(true);
                 ui.AdHintButton.interactable = true;
                 ui.HintButton.interactable = true;
 
-                fingerDamageX2.SetActive(false);
+                ui.DamageX2Button.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.DamageX2Button.interactable = false;
 
                 Tips[index - 1].SetActive(false);
@@ -107,10 +104,11 @@ public class Tutorial : MonoBehaviour
 
                 break;
             case 4://4 про таймплюс в режиме на время
-                fingerPlusTime.SetActive(true);
+                ui.PlusTimeButton.GetComponent<ButtonController>().Finger.SetActive(true);
                 ui.PlusTimeButton.interactable = true;
 
-                fingerHint.SetActive(false);
+                ui.HintButton.GetComponent<ButtonController>().Finger.SetActive(false);
+                ui.AdHintButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.HintButton.interactable = false;
                 ui.AdHintButton.interactable = false;
 
@@ -121,26 +119,29 @@ public class Tutorial : MonoBehaviour
             case 5: //про refill
                 if (PlayerResource.Instance.gameMode == "timetrial")
                 {
-                    fingerPlusTime.SetActive(false);
+                    ui.PlusTimeButton.GetComponent<ButtonController>().Finger.SetActive(false);
                     ui.PlusTimeButton.interactable = false;
                     Tips[index - 1].SetActive(false);
                     Tips[index].SetActive(true);
                 }
                 else
                 {
-                    fingerHint.SetActive(false);
+                    ui.HintButton.GetComponent<ButtonController>().Finger.SetActive(false);
+                    ui.AdHintButton.GetComponent<ButtonController>().Finger.SetActive(false);
                     ui.AdHintButton.interactable = false;
                     ui.HintButton.interactable = false;
                     Tips[index - 2].SetActive(false);
                     Tips[index].SetActive(true);
                 }
 
-                fingerRefill.SetActive(true);
+                ui.RefillButton.GetComponent<ButtonController>().Finger.SetActive(true);
+                ui.AdRefillButton.GetComponent<ButtonController>().Finger.SetActive(true);
                 ui.RefillButton.interactable = true;
                 ui.AdRefillButton.interactable = true;
                 break;
             case 6: //про соединение цифр
-                fingerRefill.SetActive(false);
+                ui.RefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
+                ui.AdRefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(6); //11
                 ui.AdHintButton.interactable = true;
                 ui.HintButton.interactable = true;

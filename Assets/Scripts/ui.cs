@@ -17,35 +17,58 @@ public class ui : MonoBehaviour
     public Text scoreText;
     public Text HighscoreText;
     public Text time;
-    public Text hintcount;
-    public Text refillcount;
-    public Text refillcountLayer;
-    public Text Adrefillcount;
-    public Text AdrefillcountLayer;
-    public Text adsConfirmText;
 
+    public Text adsConfirmText;
     public Text NoTimeScore;
     public Text NoTimeHiScore;
     public Text EndGameScore;
     public Text EndGameHiScore;
+
+    /* public Text hintcount;
+     public Text refillcount;
+     public Text refillcountLayer;
+     public Text Adrefillcount;
+     public Text AdrefillcountLayer;
+
+     public Image DamageX2;
+     public Image DamageX2Loading;
+
+     public Image PlusTime;
+     public Image PlusTimeLoading;
+     public Image TurnLeftFillImage;
+
+     public Image ScoreX2;
+     public Image ScoreX2Loading;
+
+     public Image AdsHint;
+     public Image AdsHintLoading;
+
+     public Image AdsRefillOn;
+     public Image AdsRefillOff;
+     public Image AdsRefillLoading;
+
+     public Image AdsRefillOnLayer;
+     public Image AdsRefillOffLayer;
+     public Image AdsRefillLoadingLayer;*/
 
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
     public GameObject AdsConfirmLayer;
     public GameObject ButtonHolder;
 
+    public Button Pause;
+    public Button Tutorial;
+
     public Button DamageX2Button;
     public Button ScoreX2Button;
     public Button PlusTimeButton;
     public Button HintButton;
-    public Button AdHintButton;
-    public Button Pause;
+    public Button AdHintButton;    
     public Button AdRefillButton;
     public Button AdRefillButtonLayer;
     public Button RefillButton;
     public Button RefillButtonLayer;
-    public Button Tutorial;
-
+    
 
     public GameObject lifeTurnLayer;
     public GameObject LifeBarBackground;
@@ -55,31 +78,11 @@ public class ui : MonoBehaviour
     public GameObject turnLeft;
     public Text turnLeftText;
 
-    public Image DamageX2;
-    public Image DamageX2Loading;
-
-    public Image PlusTime;
-    public Image PlusTimeLoading;
-    public Image TurnLeftFillImage;
-
-    public Image ScoreX2;
-    public Image ScoreX2Loading;
-    
-    public Image AdsHint;
-    public Image AdsHintLoading;
-
-    public Image AdsRefillOn;
-    public Image AdsRefillOff;
-    public Image AdsRefillLoading;
-
-    public Image AdsRefillOnLayer;
-    public Image AdsRefillOffLayer;
-    public Image AdsRefillLoadingLayer;
-
     public Pause PauseLayer;
 
     public Light2D[] Lights;
     public SpriteRenderer[] Lights_sprite;
+    public Button[] ButtonHolderButtons;
 
     public Board board; //объект поля
 

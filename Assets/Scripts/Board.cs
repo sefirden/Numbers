@@ -111,9 +111,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         TagForRandomRefill = new int[width * height]; //размер масива зависит от размера поля, для 5 это 5*5=25, 49 и 81 для других режимов
 
         ui.scoreText.text = SaveSystem.Decrypt(score); //очки
-        ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
-        ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
-        ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
+        ui.HintButton.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(hints); //количество подсказок
+        // count.text = SaveSystem.Decrypt(hints); //количество подсказок
+        ui.RefillButton.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(refill); //количество перемешиваний
+        ui.RefillButtonLayer.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
         ui.HighscoreText.text = SaveSystem.Decrypt(hiScore); //макс очки
 
 
@@ -145,14 +146,14 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.AdRefillButtonLayer.interactable = false;
 
             //меняем картинки на кнопках
-            ui.AdsRefillOn.gameObject.SetActive(false); //выключаем картинку доступна реклама
-            ui.AdsRefillOff.gameObject.SetActive(true); //включаем картинку реклама НЕ доступна
-            ui.AdsRefillLoading.gameObject.SetActive(false); //выключаем картинку загрузки рекламы
+            ui.AdRefillButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку доступна реклама
+            ui.AdRefillButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true); //включаем картинку реклама НЕ доступна
+            ui.AdRefillButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем картинку загрузки рекламы
 
             //см выше, но для кнопки в слоее конца игры
-            ui.AdsRefillOnLayer.gameObject.SetActive(false);
-            ui.AdsRefillOffLayer.gameObject.SetActive(true);
-            ui.AdsRefillLoadingLayer.gameObject.SetActive(false);
+            ui.AdRefillButtonLayer.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false);
+            ui.AdRefillButtonLayer.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true);
+            ui.AdRefillButtonLayer.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false);
 
             //счетчик доступных просмотров рекламы на кнопках ставим без текста, можно ставить 0, но не красиво
             ui.AdRefillButton.GetComponentInChildren<Text>().text = "";
@@ -232,7 +233,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 if (Convert.ToInt32(SaveSystem.Decrypt(turnTime)) > 0)
                 {
                     ui.PlusTimeButton.interactable = false;
-                    ui.TurnLeftFillImage.gameObject.SetActive(true);
+                    ui.PlusTimeButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true);
                     ToPlayerResources("turnTime");
                 }
             }
@@ -557,10 +558,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));
                 PlayerResource.Instance.time += quantity * (difficultTime + width / 10f); //в зависимости от сложности уровня добавляет за каждую собранную цифру время от 0.5 + 0,5 до 0.5 + 0,9 сек 
                 turnTimeI--;
-                if (turnTimeI <= 0 && ui.PlusTimeLoading.gameObject.activeSelf == false)
+                if (turnTimeI <= 0 && ui.PlusTimeButton.GetComponent<ButtonController>().LoadingImage.gameObject.activeSelf == false)
                 {
                     ui.PlusTimeButton.interactable = true;
-                    ui.TurnLeftFillImage.gameObject.SetActive(false);
+                    ui.PlusTimeButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(false);
                 }
 
                 turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
@@ -586,7 +587,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             Debug.Log("TurnIsOn = " + PlayerResource.Instance.TurnIsOn);
         }
 
-        if (turnx2I <= 0 && (ui.DamageX2Loading.gameObject.activeSelf == false || ui.ScoreX2Loading.gameObject.activeSelf == false))
+        if (turnx2I <= 0 && (ui.DamageX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.activeSelf == false || ui.ScoreX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.activeSelf == false))
         {
             ui.turnLeft.SetActive(false);
             ui.DamageX2Button.interactable = true;
@@ -1386,13 +1387,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                     break;
 
                 case "hints":
-                    ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
+                    ui.HintButton.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(hints); //количество подсказок
                     PlayerResource.Instance.hintN = hints;
                     break;
 
                 case "refill":
-                    ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
-                    ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
+                    ui.RefillButton.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(refill); //количество перемешиваний
+                    ui.RefillButtonLayer.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
                     PlayerResource.Instance.refillN = refill;
 
                     break;
@@ -1454,17 +1455,17 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
                 case "turnTime":
                     PlayerResource.Instance.turnTime = turnTime;
                     int turnTimeI = Convert.ToInt32(SaveSystem.Decrypt(turnTime));
-                    ui.TurnLeftFillImage.GetComponent<Image>().fillAmount = 1f - (float)turnTimeI / 60f;
+                    ui.PlusTimeButton.GetComponent<ButtonController>().SecondImage.GetComponent<Image>().fillAmount = 1f - (float)turnTimeI / 60f;
                     break;
 
                 case "hints":
-                    ui.hintcount.text = SaveSystem.Decrypt(hints); //количество подсказок
+                    ui.HintButton.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(hints); //количество подсказок
                     PlayerResource.Instance.hintT = hints;
                     break;
 
                 case "refill":
-                    ui.refillcount.text = SaveSystem.Decrypt(refill); //количество перемешиваний
-                    ui.refillcountLayer.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
+                    ui.RefillButton.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(refill); //количество перемешиваний
+                    ui.RefillButtonLayer.GetComponent<ButtonController>().CountText.text = SaveSystem.Decrypt(refill); //количество перемешиваний в слое конца игры
                     PlayerResource.Instance.refillT = refill;
 
                     break;
@@ -1511,10 +1512,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     {
         ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
         ui.ScoreX2Button.interactable = false;
-        ui.DamageX2.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
-        ui.ScoreX2.gameObject.SetActive(false);
-        ui.DamageX2Loading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
-        ui.ScoreX2Loading.gameObject.SetActive(true);
+        ui.DamageX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
+        ui.ScoreX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false);
+        ui.DamageX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
+        ui.ScoreX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true);
 
         AdMob_baner.Instance.OnGetMoreTurnX2Clicked(); //запускаем просмотр видео рекламы для подсказок в скрипте адмоб
     }
@@ -1531,10 +1532,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
             ui.ScoreX2Button.interactable = false;
-            ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
-            ui.DamageX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
-            ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
-            ui.ScoreX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+            ui.DamageX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.DamageX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+            ui.ScoreX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.ScoreX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
             pause.Resume();
         }
         else
@@ -1551,10 +1552,10 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.ScoreX2Button.interactable = true;
         }
 
-        ui.DamageX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
-        ui.ScoreX2.gameObject.SetActive(true); //включаем картинку что реклама доступна
-        ui.ScoreX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
-        ui.DamageX2Loading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.DamageX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.ScoreX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.ScoreX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.DamageX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
         pause.Resume();
     }
@@ -1564,8 +1565,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     public void AdPlusTime()
     {
         ui.PlusTimeButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
-        ui.PlusTime.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
-        ui.PlusTimeLoading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
+        ui.PlusTimeButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
+        ui.PlusTimeButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
 
         AdMob_baner.Instance.OnGetMorePlusTimeClicked(); //запускаем просмотр видео рекламы для подсказок в скрипте адмоб
     }
@@ -1580,11 +1581,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             PlayerResource.Instance.time += 60f;
             ToPlayerResources("turnTime");
             ui.PlusTimeButton.interactable = false;
-            ui.TurnLeftFillImage.gameObject.SetActive(true);
+            ui.PlusTimeButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true);
 
 
-            ui.PlusTime.gameObject.SetActive(true); //включаем картинку что реклама доступна
-            ui.PlusTimeLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+            ui.PlusTimeButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.PlusTimeButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
             pause.Resume();
         }
@@ -1602,8 +1603,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
         }
 
-        ui.PlusTime.gameObject.SetActive(true); //включаем картинку что реклама доступна
-        ui.PlusTimeLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.PlusTimeButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.PlusTimeButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
         pause.Resume();
     }
@@ -1615,8 +1616,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     public void AdHint() //если была нажата кнопка просмотреть виде рекламу для получения доп подсказок
     {
         ui.AdHintButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
-        ui.AdsHint.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
-        ui.AdsHintLoading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
+        ui.AdHintButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
+        ui.AdHintButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
         //ui.AdHintButton.GetComponentInChildren<Text>().text = ""; //меняем количество доступных доп подсказок за просмотр рекламы на счетчике
 
         AdMob_baner.Instance.OnGetMoreHintClicked(); //запускаем просмотр видео рекламы для подсказок в скрипте адмоб
@@ -1631,9 +1632,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.HintButton.gameObject.SetActive(true); //включаем кнопку посмотреть подсказку
         ui.AdHintButton.gameObject.SetActive(false); //выключаем кнопку просмотреть видео рекламу за +3 подсказки
 
-        ui.AdsHint.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.AdHintButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
         //ui.AdHintButton.GetComponentInChildren<Text>().text = "+3"; //меняем количество получаемых подсказок за просмотр рекламы на счетчике
-        ui.AdsHintLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.AdHintButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
         ui.AdHintButton.interactable = true; //включаем интерактивность кнопки посмотреть рекламу за подсказки
 
@@ -1643,9 +1644,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     public void AdHintClose() //если была закрыта реклама для получения доп подсказок
     {
         ui.AdHintButton.interactable = true; //включаем интерактивность кнопки посмотреть рекламу за подсказки
-        ui.AdsHint.gameObject.SetActive(true); //включаем картинку что реклама доступна
+        ui.AdHintButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
         //ui.AdHintButton.GetComponentInChildren<Text>().text = "+3"; //меняем количество получаемых подсказок за просмотр рекламы на счетчике
-        ui.AdsHintLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.AdHintButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
         pause.Resume();
     }
@@ -1655,13 +1656,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.AdRefillButton.interactable = false; //выключаем интерактивность кнопки
         ui.AdRefillButtonLayer.interactable = false; //выключаем интерактивность кнопки на слое нет ходов
 
-        ui.AdsRefillOn.gameObject.SetActive(false); //выключаем картинку что реклама доступна
-        ui.AdsRefillOff.gameObject.SetActive(false); //выключаем картинку что реклама не доступна
-        ui.AdsRefillLoading.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
+        ui.AdRefillButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку что реклама доступна
+        ui.AdRefillButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(false); //выключаем картинку что реклама не доступна
+        ui.AdRefillButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
 
-        ui.AdsRefillOnLayer.gameObject.SetActive(false); //выключаем картинку что реклама доступна на слое нет ходов
-        ui.AdsRefillOffLayer.gameObject.SetActive(false); //выключаем картинку что реклама не доступна на слое нет ходов
-        ui.AdsRefillLoadingLayer.gameObject.SetActive(true); //включаем анимацию загрузки рекламы на слое нет ходов
+        ui.AdRefillButtonLayer.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку что реклама доступна на слое нет ходов
+        ui.AdRefillButtonLayer.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(false); //выключаем картинку что реклама не доступна на слое нет ходов
+        ui.AdRefillButtonLayer.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы на слое нет ходов
 
 
         ui.AdRefillButton.GetComponentInChildren<Text>().text = ""; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике
@@ -1675,13 +1676,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         AdReward = true; //говорим, что реклама просмотрена, чтобы нельзя было смотреть рекламу несколько раз и перемешивать поле больше чем 1 раз
         ToPlayerResources("AdReward");
 
-        ui.AdsRefillOn.gameObject.SetActive(false); //выключаем картинку что реклама доступна
-        ui.AdsRefillOff.gameObject.SetActive(true); //включаем картинку что реклама не доступна
-        ui.AdsRefillLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+        ui.AdRefillButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку что реклама доступна
+        ui.AdRefillButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true); //включаем картинку что реклама не доступна
+        ui.AdRefillButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
-        ui.AdsRefillOnLayer.gameObject.SetActive(false); //выключаем картинку что реклама доступна на слое нет ходов
-        ui.AdsRefillOffLayer.gameObject.SetActive(true); //включаем картинку что реклама не доступна на слое нет ходов
-        ui.AdsRefillLoadingLayer.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы на слое нет ходов
+        ui.AdRefillButtonLayer.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку что реклама доступна на слое нет ходов
+        ui.AdRefillButtonLayer.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true); //включаем картинку что реклама не доступна на слое нет ходов
+        ui.AdRefillButtonLayer.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы на слое нет ходов
 
         //4 строки ниже нужны для случая когда рекламу стали смотреть со слоя нет ходов, а не из основного интерфейса игры
         Time.timeScale = 1f; //выключаем паузу
@@ -1717,13 +1718,13 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.AdRefillButton.interactable = true; //включаем интерактивность кнопки
             ui.AdRefillButtonLayer.interactable = true; //включаем интерактивность кнопки на слое нет ходов
 
-            ui.AdsRefillOn.gameObject.SetActive(true); //включаем картинку что реклама доступна
-            ui.AdsRefillOff.gameObject.SetActive(false); //выключаем картинку что реклама не доступна
-            ui.AdsRefillLoading.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
+            ui.AdRefillButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
+            ui.AdRefillButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(false); //выключаем картинку что реклама не доступна
+            ui.AdRefillButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
 
-            ui.AdsRefillOnLayer.gameObject.SetActive(true); //включаем картинку что реклама доступна на слое нет ходов
-            ui.AdsRefillOffLayer.gameObject.SetActive(false); //выключаем картинку что реклама не доступна на слое нет ходов
-            ui.AdsRefillLoadingLayer.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы на слое нет ходов
+            ui.AdRefillButtonLayer.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна на слое нет ходов
+            ui.AdRefillButtonLayer.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(false); //выключаем картинку что реклама не доступна на слое нет ходов
+            ui.AdRefillButtonLayer.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы на слое нет ходов
 
 
             ui.AdRefillButton.GetComponentInChildren<Text>().text = "1"; //меняем количество доступных перемешиваний за просмотр рекламы на счетчике
