@@ -1510,8 +1510,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdTurnX2()
     {
-        ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
-        ui.ScoreX2Button.interactable = false;
+       // ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+       // ui.ScoreX2Button.interactable = false;
+        ui.SaveButtonInteractableStatus(false);
         ui.DamageX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
         ui.ScoreX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false);
         ui.DamageX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
@@ -1529,7 +1530,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             turnx2 = SaveSystem.Encrypt(Convert.ToString(turnX2I)); ; //ставим количество подсказок равным 3
             ui.turnLeft.gameObject.SetActive(true);
             ToPlayerResources("turnx2");
-
+            ui.SaveButtonInteractableStatus(true);
             ui.DamageX2Button.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
             ui.ScoreX2Button.interactable = false;
             ui.DamageX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
@@ -1548,8 +1549,9 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     {
         if (Convert.ToInt32(SaveSystem.Decrypt(turnx2)) <= 0)
         {
-            ui.DamageX2Button.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
-            ui.ScoreX2Button.interactable = true;
+            //ui.DamageX2Button.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+            //ui.ScoreX2Button.interactable = true;
+            ui.SaveButtonInteractableStatus(true);
         }
 
         ui.DamageX2Button.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
@@ -1564,7 +1566,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdPlusTime()
     {
-        ui.PlusTimeButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        //ui.PlusTimeButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        ui.SaveButtonInteractableStatus(false);
         ui.PlusTimeButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
         ui.PlusTimeButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
 
@@ -1580,6 +1583,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             turnTime = SaveSystem.Encrypt(Convert.ToString(turnTimeI));
             PlayerResource.Instance.time += 60f;
             ToPlayerResources("turnTime");
+            ui.SaveButtonInteractableStatus(true);
             ui.PlusTimeButton.interactable = false;
             ui.PlusTimeButton.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true);
 
@@ -1600,7 +1604,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         if (Convert.ToInt32(SaveSystem.Decrypt(turnTime)) <= 0)
         {
-            ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+            //ui.PlusTimeButton.interactable = true; //выключаем интерактивность кнопки получение доп подсказок
+            ui.SaveButtonInteractableStatus(true);
         }
 
         ui.PlusTimeButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
@@ -1615,7 +1620,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdHint() //если была нажата кнопка просмотреть виде рекламу для получения доп подсказок
     {
-        ui.AdHintButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        //ui.AdHintButton.interactable = false; //выключаем интерактивность кнопки получение доп подсказок
+        ui.SaveButtonInteractableStatus(false);
         ui.AdHintButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку просмотреть видео рекламу за +3 подсказки
         ui.AdHintButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(true); //включаем анимацию загрузки рекламы
         //ui.AdHintButton.GetComponentInChildren<Text>().text = ""; //меняем количество доступных доп подсказок за просмотр рекламы на счетчике
@@ -1629,6 +1635,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         hints = SaveSystem.Encrypt(Convert.ToString(hintsI)); ; //ставим количество подсказок равным 3
         ToPlayerResources("hints");
 
+        ui.SaveButtonInteractableStatus(true);
         ui.HintButton.gameObject.SetActive(true); //включаем кнопку посмотреть подсказку
         ui.AdHintButton.gameObject.SetActive(false); //выключаем кнопку просмотреть видео рекламу за +3 подсказки
 
@@ -1643,7 +1650,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdHintClose() //если была закрыта реклама для получения доп подсказок
     {
-        ui.AdHintButton.interactable = true; //включаем интерактивность кнопки посмотреть рекламу за подсказки
+        //ui.AdHintButton.interactable = true; //включаем интерактивность кнопки посмотреть рекламу за подсказки
+        ui.SaveButtonInteractableStatus(true);
         ui.AdHintButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна
         //ui.AdHintButton.GetComponentInChildren<Text>().text = "+3"; //меняем количество получаемых подсказок за просмотр рекламы на счетчике
         ui.AdHintButton.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
@@ -1653,7 +1661,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
     public void AdRefill() //если была нажата кнопка просмотреть виде рекламу для перемешивания поля
     {
-        ui.AdRefillButton.interactable = false; //выключаем интерактивность кнопки
+        //ui.AdRefillButton.interactable = false; //выключаем интерактивность кнопки
+        ui.SaveButtonInteractableStatus(false);
         ui.AdRefillButtonLayer.interactable = false; //выключаем интерактивность кнопки на слое нет ходов
 
         ui.AdRefillButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(false); //выключаем картинку что реклама доступна
@@ -1715,7 +1724,8 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
     {
         if (AdReward == false) //если награда не была получена
         {
-            ui.AdRefillButton.interactable = true; //включаем интерактивность кнопки
+            //ui.AdRefillButton.interactable = true; //включаем интерактивность кнопки
+            ui.SaveButtonInteractableStatus(true);
             ui.AdRefillButtonLayer.interactable = true; //включаем интерактивность кнопки на слое нет ходов
 
             ui.AdRefillButton.GetComponent<ButtonController>().MainImage.gameObject.SetActive(true); //включаем картинку что реклама доступна

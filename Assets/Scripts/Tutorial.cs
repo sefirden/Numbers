@@ -66,17 +66,17 @@ public class Tutorial : MonoBehaviour
         switch (index)
         {
             case 2: //2 про дамаг
+                ui.SaveButtonInteractableStatus(false);
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
 
                 ui.DamageX2Button.GetComponent<ButtonController>().Finger.SetActive(true);
 
                 ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(11); //7
-                ui.AdHintButton.interactable = false;
+                ui.DamageX2Button.interactable = true;
                 ui.HintButton.interactable = false;
                 ui.RefillButton.interactable = false;
-                ui.AdRefillButton.interactable = false;
-                ui.PlusTimeButton.interactable = false;
+
 
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
@@ -143,12 +143,8 @@ public class Tutorial : MonoBehaviour
                 ui.RefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.AdRefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(6); //11
-                ui.AdHintButton.interactable = true;
-                ui.HintButton.interactable = true;
-                ui.RefillButton.interactable = true;
-                ui.AdRefillButton.interactable = true;
-                ui.PlusTimeButton.interactable = true;
-                ui.DamageX2Button.interactable = true;
+                ui.SaveButtonInteractableStatus(true);
+
 
                 NumbersAndLines = new SpriteRenderer[board.transform.childCount];
                 NumbersAndLines = board.gameObject.GetComponentsInChildren<SpriteRenderer>();
@@ -229,7 +225,7 @@ public class Tutorial : MonoBehaviour
                     Settings.Instance.showtutorial = true;
                     SaveSystem.Instance.SettingsSave();
                     Time.timeScale = 1f; //убираем паузу
-                    PlayerResource.Instance.GameIsPaused = false;
+                    PlayerResource.Instance.GameIsPaused = false;                 
                 }
 
                 break;
@@ -242,6 +238,7 @@ public class Tutorial : MonoBehaviour
                 SaveSystem.Instance.SettingsSave();
                 Time.timeScale = 1f; //ставим паузу
                 PlayerResource.Instance.GameIsPaused = false;
+                
                 break;
 
         }
@@ -267,7 +264,7 @@ public class Tutorial : MonoBehaviour
             gameObject.SetActive(true);            
             Tips[1].SetActive(true);
             //Time.timeScale = 0f; //ставим паузу
-            PlayerResource.Instance.GameIsPaused = true;
-        
+            PlayerResource.Instance.GameIsPaused = true;           
+
     }
 }

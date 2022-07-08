@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.Experimental.Rendering.Universal;
 
+
 public class ui : MonoBehaviour
 {
 
@@ -23,33 +24,6 @@ public class ui : MonoBehaviour
     public Text NoTimeHiScore;
     public Text EndGameScore;
     public Text EndGameHiScore;
-
-    /* public Text hintcount;
-     public Text refillcount;
-     public Text refillcountLayer;
-     public Text Adrefillcount;
-     public Text AdrefillcountLayer;
-
-     public Image DamageX2;
-     public Image DamageX2Loading;
-
-     public Image PlusTime;
-     public Image PlusTimeLoading;
-     public Image TurnLeftFillImage;
-
-     public Image ScoreX2;
-     public Image ScoreX2Loading;
-
-     public Image AdsHint;
-     public Image AdsHintLoading;
-
-     public Image AdsRefillOn;
-     public Image AdsRefillOff;
-     public Image AdsRefillLoading;
-
-     public Image AdsRefillOnLayer;
-     public Image AdsRefillOffLayer;
-     public Image AdsRefillLoadingLayer;*/
 
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
@@ -83,9 +57,10 @@ public class ui : MonoBehaviour
     public Light2D[] Lights;
     public SpriteRenderer[] Lights_sprite;
     public Button[] ButtonHolderButtons;
-
+    public bool[] ButtonInteractable;
+    public bool TutorialButtonStatus;
     public Board board; //объект поля
-
+    
     string buttonName;
 
 
@@ -103,8 +78,6 @@ public class ui : MonoBehaviour
         {
                 PlusTimeButton.gameObject.SetActive(true);
         }
-
-
     }
 
 
@@ -115,8 +88,7 @@ public class ui : MonoBehaviour
         {
             //PauseLayer = FindObjectOfType<Pause>();
             PauseLayer.PauseClick();
-        }
-        
+        }        
     }
 #endif
     
@@ -191,6 +163,30 @@ public class ui : MonoBehaviour
         }
         PlayerResource.Instance.GameIsPaused = false;
         AdsConfirmLayer.SetActive(false);
+        Tutorial.interactable = false;
+
+    }
+
+    public void SaveButtonInteractableStatus(bool status)
+    {
+        if (status == false) //сохраняем текущее состояние кнопок и выключаем интерактивность
+{
+            for(int i = 0; i < ButtonHolderButtons.Length; i++)
+            {
+                ButtonInteractable[i] = ButtonHolderButtons[i].interactable;
+                ButtonHolderButtons[i].interactable = false;               
+            }
+            TutorialButtonStatus = Tutorial.interactable;
+            Tutorial.interactable = false;
+        }
+        else if (status == true) //восстанавливаем интерактивность согласно сохраненному
+        {
+            for (int i = 0; i < ButtonHolderButtons.Length; i++)
+            {
+                ButtonHolderButtons[i].interactable = ButtonInteractable[i];
+            }
+            Tutorial.interactable = TutorialButtonStatus;
+        }
     }
 
 
