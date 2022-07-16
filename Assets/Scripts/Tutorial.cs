@@ -143,6 +143,7 @@ public class Tutorial : MonoBehaviour
                 ui.RefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.AdRefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(6); //11
+                ui.HintButton.interactable = true;
                 ui.SaveButtonInteractableStatus(true);
 
 

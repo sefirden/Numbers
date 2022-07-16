@@ -1693,6 +1693,11 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         ui.AdRefillButtonLayer.GetComponent<ButtonController>().SecondImage.gameObject.SetActive(true); //включаем картинку что реклама не доступна на слое нет ходов
         ui.AdRefillButtonLayer.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы на слое нет ходов
 
+        ui.SaveButtonInteractableStatus(true); //включаем интерактисность кнопок
+        ui.AdRefillButtonLayer.interactable = false;
+        ui.AdRefillButton.interactable = false;
+
+
         //4 строки ниже нужны для случая когда рекламу стали смотреть со слоя нет ходов, а не из основного интерфейса игры
         Time.timeScale = 1f; //выключаем паузу
         ui.NoMatchLayer.SetActive(false); //выключаем слой что нет ходов

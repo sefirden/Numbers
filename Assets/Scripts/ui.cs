@@ -58,7 +58,6 @@ public class ui : MonoBehaviour
     public SpriteRenderer[] Lights_sprite;
     public Button[] ButtonHolderButtons;
     public bool[] ButtonInteractable;
-    public bool TutorialButtonStatus;
     public Board board; //объект поля
     
     string buttonName;
@@ -163,7 +162,6 @@ public class ui : MonoBehaviour
         }
         PlayerResource.Instance.GameIsPaused = false;
         AdsConfirmLayer.SetActive(false);
-        Tutorial.interactable = false;
 
     }
 
@@ -176,7 +174,6 @@ public class ui : MonoBehaviour
                 ButtonInteractable[i] = ButtonHolderButtons[i].interactable;
                 ButtonHolderButtons[i].interactable = false;               
             }
-            TutorialButtonStatus = Tutorial.interactable;
             Tutorial.interactable = false;
         }
         else if (status == true) //восстанавливаем интерактивность согласно сохраненному
@@ -185,7 +182,8 @@ public class ui : MonoBehaviour
             {
                 ButtonHolderButtons[i].interactable = ButtonInteractable[i];
             }
-            Tutorial.interactable = TutorialButtonStatus;
+            if(board.level < PlayerResource.Instance.scoreToNextLevel.Length && PlayerResource.Instance.bossMove == false)
+            Tutorial.interactable = true;
         }
     }
 
