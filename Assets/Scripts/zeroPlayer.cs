@@ -43,7 +43,7 @@ public class zeroPlayer : MonoBehaviour
     {
         float step; //количество шагов, зависит от растояния
         float moveTime = 0; //не помню зачем, но нужно
-        float speed = 1;  //скорость движения
+        float speed = PlayerResource.Instance.speed;  //скорость движения
 
 
         step = (speed / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime; //считаем количество шагов

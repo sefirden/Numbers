@@ -102,7 +102,7 @@ public class weaponControl : MonoBehaviour
         
         float step; //количество шагов, зависит от растояния
         float moveTime = 0; //не помню зачем, но нужно
-        float speed = 2;  //скорость движения
+        float speed = PlayerResource.Instance.weaponSpeed;  //скорость движения
         Vector3 startPosition = gameObject.transform.position;
         Vector3 endPosition = new Vector3(gameObject.transform.position.x + 10f, gameObject.transform.position.y, gameObject.transform.position.z); //вектор3 стартовой и конечной позиции оружия
 

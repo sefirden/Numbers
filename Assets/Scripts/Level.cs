@@ -57,7 +57,7 @@ public class Level : MonoBehaviour
 
         float step;
         float moveTime = 0;
-        float speed = 1f;
+        float speed = PlayerResource.Instance.speed;
 
 
         step = (speed / (startPositionNewLevel - endPositionNewLevel).magnitude) * Time.fixedDeltaTime;
@@ -117,7 +117,7 @@ public class Level : MonoBehaviour
 
         float step;
         float moveTime = 0;
-        float speed = 1f;
+        float speed = PlayerResource.Instance.speed;
 
 
         step = (speed / (startPositionNewLevel - endPositionNewLevel).magnitude) * Time.fixedDeltaTime;

@@ -12,6 +12,9 @@ public class PlayerResource : MonoBehaviour
     public bool anim_board_destroy = false;
     public int id; //для борьбы с чтением из оперативки времени и дамага
 
+    public float speed;
+    public float weaponSpeed;
+
     public string gameMode; //режим игры
     public bool GameIsPaused; //если игра на паузе
     public bool TurnIsOn; //отмечаем ход

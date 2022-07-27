@@ -40,13 +40,6 @@ public class Pause : MonoBehaviour
 
         board = FindObjectOfType<Board>(); //прикрепляем к переменной скрипт 
         ui = FindObjectOfType<ui>();   
-
-       /* if (PlayerResource.Instance.isLoaded == true)
-        {
-            if(board.level > 8)
-            turorial_button.interactable = false;
-        }*/
-
         StartCoroutine(SaveGame());
     }
 
