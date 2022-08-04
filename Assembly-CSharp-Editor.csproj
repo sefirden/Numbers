@@ -63,18 +63,20 @@
      <Compile Include="Assets\GooglePlayGames\Editor\GPGSPostBuild.cs" />
      <Compile Include="Assets\GooglePlayGames\Editor\GPGSAndroidSetupUI.cs" />
      <Compile Include="Assets\GooglePlayGames\Editor\GPGSUtil.cs" />
+     <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.172_manifest.txt" />
+     <None Include="Assets\Firebase\Editor\FirebaseCrashlytics_version-9.3.0_manifest.txt" />
      <None Include="Assets\GooglePlayGames\Editor\GooglePlayGamesPluginDependencies.xml" />
-     <None Include="Assets\Firebase\Editor\FirebaseMessaging_version-8.9.0_manifest.txt" />
      <None Include="Assets\GooglePlayGames\Editor\template-GameInfo.txt" />
-     <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.170_manifest.txt" />
-     <None Include="Assets\Firebase\Editor\FirebaseAnalytics_version-8.9.0_manifest.txt" />
      <None Include="Assets\Firebase\Editor\MessagingDependencies.xml" />
      <None Include="Assets\GooglePlayGames\Editor\m2repository\com\google\games\gpgs-plugin-support\maven-metadata.xml" />
      <None Include="Assets\Firebase\Editor\AppDependencies.xml" />
+     <None Include="Assets\Firebase\Editor\FirebaseAnalytics_version-9.3.0_manifest.txt" />
      <None Include="Assets\GooglePlayGames\Editor\GooglePlayGamesPlugin_v0.10.09.txt" />
      <None Include="Assets\GooglePlayGames\Editor\template-AndroidManifest.txt" />
      <None Include="Assets\Firebase\Editor\AnalyticsDependencies.xml" />
+     <None Include="Assets\Firebase\Editor\CrashlyticsDependencies.xml" />
      <None Include="Assets\GooglePlayGames\Editor\template-Constants.txt" />
+     <None Include="Assets\Firebase\Editor\FirebaseMessaging_version-9.3.0_manifest.txt" />
  <Reference Include="UnityEditor.TestRunner">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>
@@ -348,17 +350,11 @@
  <Reference Include="UnityEditor.UWP.Extensions">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.0f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll</HintPath>
  </Reference>
- <Reference Include="Google.IOSResolver">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.IOSResolver.dll</HintPath>
+ <Reference Include="Google.VersionHandler">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/Google.VersionHandler.dll</HintPath>
  </Reference>
- <Reference Include="Google.JarResolver">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.JarResolver.dll</HintPath>
- </Reference>
- <Reference Include="Google.PackageManagerResolver">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.PackageManagerResolver.dll</HintPath>
- </Reference>
- <Reference Include="Google.VersionHandlerImpl">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.170/Google.VersionHandlerImpl.dll</HintPath>
+ <Reference Include="Firebase.Crashlytics.Editor">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Editor/Firebase.Crashlytics.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Firebase.Editor">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Editor/Firebase.Editor.dll</HintPath>
@@ -371,6 +367,9 @@
  </Reference>
  <Reference Include="Firebase.App">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
+ </Reference>
+ <Reference Include="Firebase.Crashlytics">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.Crashlytics.dll</HintPath>
  </Reference>
  <Reference Include="Firebase.Messaging">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.Messaging.dll</HintPath>
@@ -390,23 +389,20 @@
  <Reference Include="Unity.Tasks">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Parse/Plugins/dotNet45/Unity.Tasks.dll</HintPath>
  </Reference>
- <Reference Include="Google.IOSResolver_v1.2.156">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/PackageCache/com.google.external-dependency-manager@1.2.156/ExternalDependencyManager/Editor/Google.IOSResolver_v1.2.156.dll</HintPath>
- </Reference>
- <Reference Include="Google.JarResolver_v1.2.156">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/PackageCache/com.google.external-dependency-manager@1.2.156/ExternalDependencyManager/Editor/Google.JarResolver_v1.2.156.dll</HintPath>
- </Reference>
- <Reference Include="Google.PackageManagerResolver_v1.2.156">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/PackageCache/com.google.external-dependency-manager@1.2.156/ExternalDependencyManager/Editor/Google.PackageManagerResolver_v1.2.156.dll</HintPath>
- </Reference>
- <Reference Include="Google.VersionHandler">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/PackageCache/com.google.external-dependency-manager@1.2.156/ExternalDependencyManager/Editor/Google.VersionHandler.dll</HintPath>
- </Reference>
- <Reference Include="Google.VersionHandlerImpl_v1.2.156">
- <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/PackageCache/com.google.external-dependency-manager@1.2.156/ExternalDependencyManager/Editor/Google.VersionHandlerImpl_v1.2.156.dll</HintPath>
- </Reference>
  <Reference Include="ICSharpCode.NRefactory">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/PackageCache/com.unity.render-pipelines.core@8.2.0/Editor/ShaderGenerator/ICSharpCode.NRefactory.dll</HintPath>
+ </Reference>
+ <Reference Include="Google.PackageManagerResolver">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.172/Google.PackageManagerResolver.dll</HintPath>
+ </Reference>
+ <Reference Include="Google.IOSResolver">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.172/Google.IOSResolver.dll</HintPath>
+ </Reference>
+ <Reference Include="Google.JarResolver">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.172/Google.JarResolver.dll</HintPath>
+ </Reference>
+ <Reference Include="Google.VersionHandlerImpl">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/ExternalDependencyManager/Editor/1.2.172/Google.VersionHandlerImpl.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>

@@ -1,0 +1,1 @@
+firebase crashlytics:symbols:upload --app=1:432321501604:android:55b6e4f3ddc8f2bbc78931 C:\Users\sefir\Documents\GitHub\Numbers\Numbers-0.9.94-v94.symbols.zip

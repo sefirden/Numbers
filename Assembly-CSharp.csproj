@@ -147,6 +147,7 @@
      <Compile Include="Assets\GooglePlayGames\OurUtils\Misc.cs" />
      <Compile Include="Assets\GooglePlayGames\BasicApi\Nearby\ConnectionResponse.cs" />
      <Compile Include="Assets\Scripts\SettingsPause.cs" />
+     <Compile Include="Assets\Scripts\testCrash.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
@@ -168,12 +169,14 @@
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
+     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-crashlytics-unity\maven-metadata.xml" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
      <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
      <None Include="Assets\Fonts\license.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
      <None Include="Assets\Animation\anim zero sprite.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
+     <None Include="Assets\Firebase\Plugins\Crashlytics\link.xml" />
  <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
  </Reference>
@@ -422,6 +425,9 @@
  </Reference>
  <Reference Include="Firebase.App">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
+ </Reference>
+ <Reference Include="Firebase.Crashlytics">
+ <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.Crashlytics.dll</HintPath>
  </Reference>
  <Reference Include="Firebase.Messaging">
  <HintPath>C:/Users/sefir/Documents/GitHub/Numbers/Assets/Firebase/Plugins/Firebase.Messaging.dll</HintPath>

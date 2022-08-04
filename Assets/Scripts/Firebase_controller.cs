@@ -34,6 +34,7 @@ public class Firebase_controller : MonoBehaviour
                 InitializeFirebase();
                 Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
                 Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
+                FirebaseApp app = FirebaseApp.DefaultInstance;
             }
             else
             {
