@@ -12,8 +12,8 @@ public class PlayerResource : MonoBehaviour
     public bool anim_board_destroy = false;
     public int id; //для борьбы с чтением из оперативки времени и дамага
 
-    public float speed;
-    public float weaponSpeed;
+    public float speed; //скорость уровня, ноля и босса
+    public float weaponSpeed; //скорость полета оружия
 
     public string gameMode; //режим игры
     public bool GameIsPaused; //если игра на паузе
@@ -24,7 +24,8 @@ public class PlayerResource : MonoBehaviour
     public bool bossMove; //если босс двигается
     public bool zeroMove; //если ноль двигается
 
-    public bool starttimer;
+    public bool starttimer; //для отсчета кд в 60ходов на кнопке +60сек
+    public bool adsAlreadyLoading; //ставим тру когда реклама загружается, чтобы нельзя было запускать раньше времени следуюущую
 
 
     //переменные для Normal режима

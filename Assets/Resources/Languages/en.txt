@@ -28,6 +28,7 @@ tutorial:Tutorial
 rewrite_local_save:The local save file will be overwritten, continue?
 turn_left_damage:Double damage, turns remaining:
 turn_left_score:Double points, turns remaining
+ads_already_loading:The ad is already loading, please wait...
 ads_confirm_damage:Watch ads and get double damage for 30 turns?
 ads_confirm_score:Watch ads and get double points for 30 moves?
 ads_confirm_hint:Watch ads and get 3 hints?

@@ -147,6 +147,7 @@ public class MainMenu : MonoBehaviour
         Firebase.Analytics.FirebaseAnalytics.LogEvent("Button_click", "Button", "NormalModeResume");
         PlayerResource.Instance.isLoaded = true; //говорим что игра зугружена, нужно при старте сцены с доской и для уровней и прочего
         PlayerResource.Instance.GameIsPaused = false; //говорим что уже не на паузе, надо когда вышли из игры из меню паузы
+        PlayerResource.Instance.adsAlreadyLoading = false;
         PlayerResource.Instance.gameMode = "normal"; //говорим что режим нормальный
         Time.timeScale = 1f; //это для отключения паузы в игре
         SceneManager.LoadScene("Main"); //тупо загружаем основной уровень
@@ -178,6 +179,7 @@ public class MainMenu : MonoBehaviour
 
         int zeroInt = 0;
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
+        PlayerResource.Instance.adsAlreadyLoading = false;
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameN = false; //ставим что конец игры не тру
         PlayerResource.Instance.AdRewardN = false; //ставим что рекламу мы не смотрели ради перемешивания
@@ -224,6 +226,7 @@ public class MainMenu : MonoBehaviour
         Firebase.Analytics.FirebaseAnalytics.LogEvent("Button_click", "Button", "TimeModeResume");
         PlayerResource.Instance.isLoaded = true;
         PlayerResource.Instance.GameIsPaused = false;
+        PlayerResource.Instance.adsAlreadyLoading = false;
         PlayerResource.Instance.gameMode = "timetrial";
         Time.timeScale = 1f;
         Debug.LogWarning("TimeModeResume");
@@ -258,6 +261,7 @@ public class MainMenu : MonoBehaviour
         int zeroInt = 0;
 
         PlayerResource.Instance.GameIsPaused = false; //убираем паузу
+        PlayerResource.Instance.adsAlreadyLoading = false;
         PlayerResource.Instance.starttimer = false;
         Time.timeScale = 1f;        //убираем паузу
         PlayerResource.Instance.EndGameT = false; //ставим что конец игры не тру

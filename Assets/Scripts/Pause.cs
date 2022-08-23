@@ -154,6 +154,7 @@ public class Pause : MonoBehaviour
             SceneManager.LoadScene("Main"); //тупо загружаем основной уровень
             PlayerResource.Instance.GameIsPaused = false; //убираем паузу
             Time.timeScale = 1f;//убираем паузу
+            PlayerResource.Instance.adsAlreadyLoading = false;
         }
         else //если нажали нет рестарту
         {

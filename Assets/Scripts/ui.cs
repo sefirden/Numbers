@@ -28,6 +28,7 @@ public class ui : MonoBehaviour
     public GameObject EndGameLayer;
     public GameObject NoMatchLayer;
     public GameObject AdsConfirmLayer;
+    public GameObject AdsAlreadyShowLayer;
     public GameObject ButtonHolder;
 
     public Button Pause;
@@ -93,37 +94,53 @@ public class ui : MonoBehaviour
     
     public void AdsConfirmShow(string buttonNameTemp)
     {
-        buttonName = buttonNameTemp;
-        AdsConfirmLayer.SetActive(true);
-        switch (buttonName) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
+        if (PlayerResource.Instance.adsAlreadyLoading == true)
         {
-            case "damagex2":
-                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_damage");
-                break;
-
-            case "hint":
-                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_hint");
-                break;
-
-            case "refill":
-                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_refill");
-                break;
-
-            case "plustime":
-                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_plustime");
-                break;
-
-            case "scorex2":
-                adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_score");
-                break;
-
-            default:
-                Debug.LogError("not found button");
-                break;
+            AdsAlreadyLoadingShow();
         }
+        else
+        {
+            buttonName = buttonNameTemp;
+            AdsConfirmLayer.SetActive(true);
+            switch (buttonName) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
+            {
+                case "damagex2":
+                    adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_damage");
+                    break;
 
-        PlayerResource.Instance.GameIsPaused = true;
+                case "hint":
+                    adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_hint");
+                    break;
+
+                case "refill":
+                    adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_refill");
+                    break;
+
+                case "plustime":
+                    adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_plustime");
+                    break;
+
+                case "scorex2":
+                    adsConfirmText.GetComponent<Text>().text = SaveSystem.GetText("ads_confirm_score");
+                    break;
+
+                default:
+                    Debug.LogError("not found button");
+                    break;
+            }
+            PlayerResource.Instance.GameIsPaused = true;
+        }
         
+    }
+
+    private void AdsAlreadyLoadingShow()
+    {
+        AdsAlreadyShowLayer.SetActive(true);
+    }
+
+    public void AdsAlreadyLoadingClose()
+    {
+        AdsAlreadyShowLayer.SetActive(false);
     }
 
     public void AdsConfirmHide()
@@ -133,7 +150,7 @@ public class ui : MonoBehaviour
     }
 
     public void AdsStart()
-    {
+    {        
         switch (buttonName) //в зависимости от размера поля меняем сложность (для рандома цифр) и размер обьектов поля
         {
             case "damagex2":
@@ -162,10 +179,11 @@ public class ui : MonoBehaviour
         }
         PlayerResource.Instance.GameIsPaused = false;
         AdsConfirmLayer.SetActive(false);
+        PlayerResource.Instance.adsAlreadyLoading = true;
 
     }
 
-    public void SaveButtonInteractableStatus(bool status)
+   /* public void SaveButtonInteractableStatus(bool status)
     {
         if (status == false) //сохраняем текущее состояние кнопок и выключаем интерактивность
 {
@@ -185,7 +203,7 @@ public class ui : MonoBehaviour
             if(board.level < PlayerResource.Instance.scoreToNextLevel.Length && PlayerResource.Instance.bossMove == false)
             Tutorial.interactable = true;
         }
-    }
+    }*/
 
 
 
@@ -227,21 +245,20 @@ public class ui : MonoBehaviour
         }
     }
 
-    public void CheatLvlDamage()
+  /*  public void CheatLvlDamage()
     {
         board.level = 8;
         board.damage = SaveSystem.Encrypt(Convert.ToString(279900));
         board.ToPlayerResources("level");
         board.ToPlayerResources("damage");
-    }
-
-    public IEnumerator LightsOnOff(bool On)
+    }*/
+  
+    public IEnumerator LightsOnOff(bool On) //включение света на уровне
     {
         if(On)
         {
             yield return new WaitForSeconds(0.5f);
-            int i = 0;
-            Debug.Log("Lights On");
+            int i = 0;          
             while(i < Lights.Length)
             {
                 Lights[i].GetComponent<Light2D>().pointLightInnerRadius = 0.5f;
@@ -252,8 +269,7 @@ public class ui : MonoBehaviour
             }
         }
         else
-        {
-            Debug.Log("Lights Off");
+        {            
             for (int i = 0; i < Lights.Length; i++)
             {
                 Lights[i].GetComponent<Light2D>().pointLightInnerRadius = 0f;

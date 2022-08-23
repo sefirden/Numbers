@@ -66,16 +66,16 @@ public class Tutorial : MonoBehaviour
         switch (index)
         {
             case 2: //2 про дамаг
-                ui.SaveButtonInteractableStatus(false);
+                //ui.SaveButtonInteractableStatus(false);
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
                 boss.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
 
                 ui.DamageX2Button.GetComponent<ButtonController>().Finger.SetActive(true);
 
                 ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(11); //7
-                ui.DamageX2Button.interactable = true;
-                ui.HintButton.interactable = false;
-                ui.RefillButton.interactable = false;
+                //ui.DamageX2Button.interactable = true;
+                //ui.HintButton.interactable = false;
+                //ui.RefillButton.interactable = false;
 
 
                 Tips[index - 1].SetActive(false);
@@ -84,11 +84,11 @@ public class Tutorial : MonoBehaviour
             case 3: //про hint         
                 ui.HintButton.GetComponent<ButtonController>().Finger.SetActive(true);
                 ui.AdHintButton.GetComponent<ButtonController>().Finger.SetActive(true);
-                ui.AdHintButton.interactable = true;
-                ui.HintButton.interactable = true;
+                //ui.AdHintButton.interactable = true;
+                //ui.HintButton.interactable = true;
 
                 ui.DamageX2Button.GetComponent<ButtonController>().Finger.SetActive(false);
-                ui.DamageX2Button.interactable = false;
+                //ui.DamageX2Button.interactable = false;
 
                 Tips[index - 1].SetActive(false);
                 Tips[index].SetActive(true);
@@ -105,12 +105,12 @@ public class Tutorial : MonoBehaviour
                 break;
             case 4://4 про таймплюс в режиме на время
                 ui.PlusTimeButton.GetComponent<ButtonController>().Finger.SetActive(true);
-                ui.PlusTimeButton.interactable = true;
+                //ui.PlusTimeButton.interactable = true;
 
                 ui.HintButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.AdHintButton.GetComponent<ButtonController>().Finger.SetActive(false);
-                ui.HintButton.interactable = false;
-                ui.AdHintButton.interactable = false;
+                //ui.HintButton.interactable = false;
+                //ui.AdHintButton.interactable = false;
 
 
                 Tips[index - 1].SetActive(false);
@@ -120,7 +120,7 @@ public class Tutorial : MonoBehaviour
                 if (PlayerResource.Instance.gameMode == "timetrial")
                 {
                     ui.PlusTimeButton.GetComponent<ButtonController>().Finger.SetActive(false);
-                    ui.PlusTimeButton.interactable = false;
+                    //ui.PlusTimeButton.interactable = false;
                     Tips[index - 1].SetActive(false);
                     Tips[index].SetActive(true);
                 }
@@ -128,23 +128,23 @@ public class Tutorial : MonoBehaviour
                 {
                     ui.HintButton.GetComponent<ButtonController>().Finger.SetActive(false);
                     ui.AdHintButton.GetComponent<ButtonController>().Finger.SetActive(false);
-                    ui.AdHintButton.interactable = false;
-                    ui.HintButton.interactable = false;
+                    //ui.AdHintButton.interactable = false;
+                    //ui.HintButton.interactable = false;
                     Tips[index - 2].SetActive(false);
                     Tips[index].SetActive(true);
                 }
 
                 ui.RefillButton.GetComponent<ButtonController>().Finger.SetActive(true);
                 ui.AdRefillButton.GetComponent<ButtonController>().Finger.SetActive(true);
-                ui.RefillButton.interactable = true;
-                ui.AdRefillButton.interactable = true;
+                //ui.RefillButton.interactable = true;
+                //ui.AdRefillButton.interactable = true;
                 break;
             case 6: //про соединение цифр
                 ui.RefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.AdRefillButton.GetComponent<ButtonController>().Finger.SetActive(false);
                 ui.ButtonHolder.gameObject.GetComponent<Transform>().SetSiblingIndex(6); //11
-                ui.HintButton.interactable = true;
-                ui.SaveButtonInteractableStatus(true);
+                //ui.HintButton.interactable = true;
+                //ui.SaveButtonInteractableStatus(true);
 
 
                 NumbersAndLines = new SpriteRenderer[board.transform.childCount];
