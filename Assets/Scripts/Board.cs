@@ -1539,6 +1539,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
             ui.ScoreX2Button.GetComponent<ButtonController>().LoadingImage.gameObject.SetActive(false); //выключаем анимацию загрузки рекламы
             pause.Resume();
             PlayerResource.Instance.adsAlreadyLoading = false;
+            ui.AdsAlreadyLoadingClose();
         }
         else
         {
@@ -1562,6 +1563,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
         PlayerResource.Instance.adsAlreadyLoading = false;
+        ui.AdsAlreadyLoadingClose();
     }
 
 
@@ -1595,6 +1597,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
             pause.Resume();
             PlayerResource.Instance.adsAlreadyLoading = false;
+            ui.AdsAlreadyLoadingClose();
         }
         else
         {
@@ -1616,6 +1619,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
         PlayerResource.Instance.adsAlreadyLoading = false;
+        ui.AdsAlreadyLoadingClose();
     }
 
 
@@ -1651,6 +1655,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
         PlayerResource.Instance.adsAlreadyLoading = false;
+        ui.AdsAlreadyLoadingClose();
     }
 
     public void AdHintClose() //если была закрыта реклама для получения доп подсказок
@@ -1663,6 +1668,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
         PlayerResource.Instance.adsAlreadyLoading = false;
+        ui.AdsAlreadyLoadingClose();
     }
 
     public void AdRefill() //если была нажата кнопка просмотреть виде рекламу для перемешивания поля
@@ -1730,6 +1736,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
         PlayerResource.Instance.adsAlreadyLoading = false;
+        ui.AdsAlreadyLoadingClose();
     }
 
     public void AdRefillClose() //если была закрыта реклама для перемешивания поля
@@ -1755,5 +1762,6 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
 
         pause.Resume();
         PlayerResource.Instance.adsAlreadyLoading = false;
+        ui.AdsAlreadyLoadingClose();
     }
 }

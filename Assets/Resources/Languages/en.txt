@@ -4,7 +4,7 @@ settings:Settings
 board_size:Board size:
 quit:Quit
 test:Test
-game_label:Numbers_beta
+game_label:Numbers
 exit_label:Press again to exit the game
 music_off:off
 sfx_off:off

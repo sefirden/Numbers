@@ -4,7 +4,7 @@ settings:Настройки
 board_size:Размер поля:
 quit:Выход
 test:Тест
-game_label:Numbers_beta
+game_label:Numbers
 exit_label:Нажмите еще раз для выхода из игры
 music_off:выкл
 sfx_off:выкл

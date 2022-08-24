@@ -136,11 +136,13 @@ public class ui : MonoBehaviour
     private void AdsAlreadyLoadingShow()
     {
         AdsAlreadyShowLayer.SetActive(true);
+        PlayerResource.Instance.GameIsPaused = true;
     }
 
     public void AdsAlreadyLoadingClose()
     {
         AdsAlreadyShowLayer.SetActive(false);
+        PlayerResource.Instance.GameIsPaused = false;
     }
 
     public void AdsConfirmHide()

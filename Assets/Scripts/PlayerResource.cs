@@ -78,4 +78,13 @@ public class PlayerResource : MonoBehaviour
         id = UnityEngine.Random.Range(10000, 100000);
 
     }
+
+    public KeyCode screenShotButton;
+    void Update()
+    {
+        if (Input.GetKeyDown(screenShotButton))
+        {
+            ScreenCapture.CaptureScreenshot("screenshot " + System.DateTime.Now.ToString("MM - dd - yy(HH - mm - ss)") + ".png");
+        }
+    }
 }
