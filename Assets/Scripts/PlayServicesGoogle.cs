@@ -307,7 +307,7 @@ public class PlayServicesGoogle : MonoBehaviour
     //грузим из облака
     public void LoadFromCloud() //для загрузки вызываем этот метод
     {
-        LoadingCheck();
+        StartCoroutine(LoadingCheck());
 
         Debug.Log("LoadFromCloud");
 
