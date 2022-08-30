@@ -202,7 +202,7 @@ public class Board : MonoBehaviour, IPointerClickHandler //вот вотета �
         boss.ChangeBoss(level); //загружаем боссу нужный спрайт (по сути грузим нужного по порядку босса)
         ui.BossHealth(Convert.ToInt32(SaveSystem.Decrypt(damage)), level); //в зависимости от урона и уровня грузи лайфбар босса с нужными данными
 
-        FindObjectOfType<AudioManager>().Stop("music_menu");
+        FindObjectOfType<AudioManager>().FadeOutByName("music_menu", 2f);
         FindObjectOfType<AudioManager>().played = true;
         StartCoroutine(FindObjectOfType<AudioManager>().ShufflePlay());
 

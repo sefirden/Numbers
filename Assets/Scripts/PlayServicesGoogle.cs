@@ -9,6 +9,7 @@ using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.SavedGame;
 using System.Text;
 using UnityEngine.SceneManagement;
+using GoogleMobileAds.Api;
 
 
 public class PlayServicesGoogle : MonoBehaviour
@@ -306,6 +307,8 @@ public class PlayServicesGoogle : MonoBehaviour
     //грузим из облака
     public void LoadFromCloud() //для загрузки вызываем этот метод
     {
+        LoadingCheck();
+
         Debug.Log("LoadFromCloud");
 
         if (Social.localUser.authenticated)
@@ -316,7 +319,7 @@ public class PlayServicesGoogle : MonoBehaviour
              "Numbers",
              DataSource.ReadCacheOrNetwork,
              ConflictResolutionStrategy.UseLongestPlaytime, DataFromCloud);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("authenticated");
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nauthenticated");
         }
         else
         {
@@ -381,6 +384,40 @@ public class PlayServicesGoogle : MonoBehaviour
             //mainMenu.Loading_failed.SetActive(true);
             mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nReadFromCloud status:" + status) ;//failed
             Debug.LogError(SavedGameRequestStatus.Success);//failed
+        }
+    }
+
+    private IEnumerator LoadingCheck()
+    {
+        #if UNITY_ANDROID && !UNITY_EDITOR
+        path = Path.Combine(Application.persistentDataPath, "FullSave.json");
+        #else
+        path = Path.Combine(Application.dataPath, "FullSave.json");
+        #endif
+
+        mainMenu.Loading.SetActive(true);
+        mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading active");
+        int count = 0;
+
+        while (File.Exists(path) == false && count < 10)
+        {
+            yield return new WaitForSecondsRealtime(1f);
+            count++;
+        }
+
+        if (File.Exists(path))
+        {
+            mainMenu.Loading.SetActive(false);
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading deactive");
+        }
+        else
+        {
+            mainMenu.Loading.SetActive(false);
+            mainMenu.Loading_failed.SetActive(true);
+            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading failed");
+
+            yield return new WaitForSecondsRealtime(1f);
+            mainMenu.Loading_failed.SetActive(false);
         }
     }
 

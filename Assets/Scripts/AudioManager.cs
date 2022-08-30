@@ -75,7 +75,6 @@ public class AudioManager : MonoBehaviour
         }
         //s.source.PlayDelayed(s.source.clip.length);
         s.source.Play();
-
     }
 
     private void Shuffle()
@@ -92,8 +91,13 @@ public class AudioManager : MonoBehaviour
             if(indexMusicLevel < shuffleMusic.Length)
             {
                 currentMusic = shuffleMusic[indexMusicLevel];
-                currentMusic.source.Play();
-                yield return new WaitForSeconds(currentMusic.clip.length + 0.1f);
+                //currentMusic.source.Play();
+                StartCoroutine(FadeIn(currentMusic.source, 1f));
+
+                //ниже проблема, когда игра на паузе то таймер не идет, а мелодия звучит, и потом сколько секунд была пауза столько промежуток между песнями
+                yield return new WaitForSecondsRealtime(currentMusic.clip.length - 2f); 
+
+                StartCoroutine(FadeOut(currentMusic.source, 2f));
                 indexMusicLevel++;
                 StartCoroutine(ShufflePlay());
             }
@@ -106,7 +110,8 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            currentMusic.source.Stop();
+            StartCoroutine(FadeOut(currentMusic.source, 2f));
+            //currentMusic.source.Stop();
         }
 
     }
@@ -114,7 +119,8 @@ public class AudioManager : MonoBehaviour
     public void StopShuffle()
     {
         played = false;
-        currentMusic.source.Stop();
+        StartCoroutine(FadeOut(currentMusic.source, 2f));
+        //currentMusic.source.Stop();
 
     }
 
@@ -128,6 +134,64 @@ public class AudioManager : MonoBehaviour
         }
         s.source.Stop();
     }
+
+    public static IEnumerator FadeIn(AudioSource audioSource, float FadeTime)
+    {
+        float startVolume = 0.2f;
+
+        audioSource.volume = 0;
+        audioSource.Play();
+
+        while (audioSource.volume < 0.8f)
+        {
+            audioSource.volume += startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        audioSource.volume = 0.8f;
+    }
+
+    public static IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
+    {
+        float startVolume = audioSource.volume;
+
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume;
+    }
+
+    public void FadeOutByName(string name, float FadeTime)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Звук: " + name + " не найден!");            
+        }
+
+        StartCoroutine(FadeOut(s.source, FadeTime));
+    }
+
+    public void FadeInByName(string name, float FadeTime)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Звук: " + name + " не найден!");
+        }
+
+        StartCoroutine(FadeIn(s.source, FadeTime));
+    }
+
+
+
+
 
     //играть в нужном месте определенный звук
     //FindObjectOfType<AudioManager>().Play("имя аудио трека");

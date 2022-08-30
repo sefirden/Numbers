@@ -28,8 +28,8 @@ public class MainMenu : MonoBehaviour
     public GameObject ExitLabel; //всплывающее окно про выход из игры
     public GameObject QuestionCloudGame; //слой вопроса переписать ли сохранение
     public Text DebugCloudLog;
-   // public GameObject Loading; //лого загрузки из облака сейвов
-   // public GameObject Loading_failed; //лого загрузки из облака сейвов
+    public GameObject Loading; //лого загрузки из облака сейвов
+    public GameObject Loading_failed; //лого загрузки из облака сейвов
 
     [SerializeField]
     int[] BoardSize; //варианты размеров поля
@@ -66,11 +66,6 @@ public class MainMenu : MonoBehaviour
         ExitLabel.SetActive(false);
     }
 
-   /* private IEnumerator LoadingFailed()
-    {
-        yield return new WaitForSeconds(2f);
-        Loading_failed.SetActive(false);
-    }*/
 
     private void Start() //при старте игры
     {
@@ -98,7 +93,7 @@ public class MainMenu : MonoBehaviour
         size_dropN.value = width;        
         size_dropT.value = width;
 
-        FindObjectOfType<AudioManager>().Play("music_menu");
+        FindObjectOfType<AudioManager>().FadeInByName("music_menu", 2f);
     }
 
     //ниже для каждого языка свой метод, больше языков, больше методов

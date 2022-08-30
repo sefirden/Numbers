@@ -178,7 +178,7 @@ public class Pause : MonoBehaviour
     public void Menu() //кнопка в меню
     {
         FindObjectOfType<AudioManager>().StopShuffle();
-        FindObjectOfType<AudioManager>().Play("music_menu");
+        FindObjectOfType<AudioManager>().FadeInByName("music_menu", 2f);
         SceneManager.LoadScene("Menu"); //загружаем сцену меню
         AdMob_baner.Instance.Hide(); //выключаем рекламный банер
     }
