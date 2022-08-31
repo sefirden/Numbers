@@ -335,7 +335,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            //Loading.SetActive(true);
+            StartCoroutine(PlayServicesGoogle.Instance.LoadingCheck());
             PlayServicesGoogle.Instance.LoadFromCloud(); //было false
         }
     }
@@ -345,7 +345,7 @@ public class MainMenu : MonoBehaviour
         if(rewrite == true)
         {
             QuestionCloudGame.SetActive(false);
-            //Loading.SetActive(true);
+            StartCoroutine(PlayServicesGoogle.Instance.LoadingCheck());
             PlayServicesGoogle.Instance.LoadFromCloud(); //было false
         }
         else

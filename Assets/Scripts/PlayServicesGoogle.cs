@@ -307,8 +307,7 @@ public class PlayServicesGoogle : MonoBehaviour
     //грузим из облака
     public void LoadFromCloud() //для загрузки вызываем этот метод
     {
-        StartCoroutine(LoadingCheck());
-
+        
         Debug.Log("LoadFromCloud");
 
         if (Social.localUser.authenticated)
@@ -319,7 +318,7 @@ public class PlayServicesGoogle : MonoBehaviour
              "Numbers",
              DataSource.ReadCacheOrNetwork,
              ConflictResolutionStrategy.UseLongestPlaytime, DataFromCloud);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nauthenticated");
+            //mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nauthenticated");
         }
         else
         {
@@ -375,19 +374,19 @@ public class PlayServicesGoogle : MonoBehaviour
             Debug.LogWarning("saveData " + saveData);
 
             //mainMenu.Loading.SetActive(false);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nReadFromCloud status:" + status);//failed
+            //mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nReadFromCloud status:" + status);//failed
             Debug.LogError("succes ReadFromCloud");//succes
         }
         else
         {
             // mainMenu.Loading.SetActive(false);
             //mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nReadFromCloud status:" + status) ;//failed
+            //mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nReadFromCloud status:" + status) ;//failed
             Debug.LogError(SavedGameRequestStatus.Success);//failed
         }
     }
 
-    private IEnumerator LoadingCheck()
+    public IEnumerator LoadingCheck()
     {
         #if UNITY_ANDROID && !UNITY_EDITOR
         path = Path.Combine(Application.persistentDataPath, "FullSave.json");
@@ -396,7 +395,7 @@ public class PlayServicesGoogle : MonoBehaviour
         #endif
 
         mainMenu.Loading.SetActive(true);
-        mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading active");
+        //mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading active");
         int count = 0;
 
         while (File.Exists(path) == false && count < 10)
@@ -408,15 +407,15 @@ public class PlayServicesGoogle : MonoBehaviour
         if (File.Exists(path))
         {
             mainMenu.Loading.SetActive(false);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading deactive");
+            //mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading deactive");
         }
         else
         {
             mainMenu.Loading.SetActive(false);
             mainMenu.Loading_failed.SetActive(true);
-            mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading failed");
+            //mainMenu.DebugCloudLog.GetComponent<Text>().text += ("\nLoading failed");
 
-            yield return new WaitForSecondsRealtime(1f);
+            yield return new WaitForSecondsRealtime(2f);
             mainMenu.Loading_failed.SetActive(false);
         }
     }
