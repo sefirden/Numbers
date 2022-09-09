@@ -99,26 +99,59 @@ public class MainMenu : MonoBehaviour
     //ниже для каждого языка свой метод, больше языков, больше методов
     public void Ru()
     {
-        Settings.Instance.language = "ru"; //говорим что это выбранный язык
-        SaveSystem.Instance.SettingsSave(); //сохраняем настройки
-        string lvl = SceneManager.GetActiveScene().name; //берем название текущей сцены
-        SceneManager.LoadScene(lvl); //и перезагружаем его, чтобы язык поменялся
+        try
+        {
+            Settings.Instance.language = "ru"; //говорим что это выбранный язык
+            SaveSystem.Instance.SettingsSave(); //сохраняем настройки
+            string lvl = SceneManager.GetActiveScene().name; //берем название текущей сцены
+            SceneManager.LoadScene(lvl); //и перезагружаем его, чтобы язык поменялся
+        }
+        catch
+        {
+            Settings.Instance.language = "en";
+            SaveSystem.Instance.LoadLanguage("en");
+            string lvl = SceneManager.GetActiveScene().name; //берем название текущей сцены
+            SceneManager.LoadScene(lvl); //и перезагружаем его, чтобы язык поменялся
+            DebugCloudLog.GetComponent<Text>().text += ("\nError, select en language");//failed
+        }
     }
 
     public void En() //см выше
     {
-        Settings.Instance.language = "en";
-        SaveSystem.Instance.SettingsSave();
-        string lvl = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(lvl);
+        try
+        {
+            Settings.Instance.language = "en";
+            SaveSystem.Instance.SettingsSave();
+            string lvl = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(lvl);
+        }
+        catch
+        {
+            Settings.Instance.language = "en";
+            SaveSystem.Instance.LoadLanguage("en");
+            string lvl = SceneManager.GetActiveScene().name; //берем название текущей сцены
+            SceneManager.LoadScene(lvl); //и перезагружаем его, чтобы язык поменялся
+            DebugCloudLog.GetComponent<Text>().text += ("\nError, select en language");//failed
+        }
     }
 
     public void Ua() //см выше
     {
-        Settings.Instance.language = "ua";
-        SaveSystem.Instance.SettingsSave();
-        string lvl = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(lvl);
+        try
+        {
+            Settings.Instance.language = "ua";
+            SaveSystem.Instance.SettingsSave();
+            string lvl = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(lvl);
+        }
+        catch
+        {
+            Settings.Instance.language = "en";
+            SaveSystem.Instance.LoadLanguage("en");
+            string lvl = SceneManager.GetActiveScene().name; //берем название текущей сцены
+            SceneManager.LoadScene(lvl); //и перезагружаем его, чтобы язык поменялся
+            DebugCloudLog.GetComponent<Text>().text += ("\nError, select en language");//failed
+        }
     }
 
     public void NormalMode() //включаем вспл окно норм режима
